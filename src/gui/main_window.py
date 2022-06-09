@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):  # subclass QMainWindow to customize the applicat
 
         # ======== layouts ========
         main_layout = QVBoxLayout()
-        btns_layout = QHBoxLayout()
+        func_layout = QHBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
         img_label = QLabel()
@@ -35,26 +35,33 @@ class MainWindow(QMainWindow):  # subclass QMainWindow to customize the applicat
         img_label.setAlignment(Qt.AlignCenter)
         main_layout.addWidget(img_label)
         # -------------------------------------------------------------
-        # ======== buttons ========
+        # ======== functional widgets ========
+        # theme list
+        # theme_box = QComboBox()
+        # ...
         # refresh button
         btn_refresh = QPushButton("Refresh")
+        btn_refresh.setToolTip("Show a new picture.")
         btn_refresh.clicked.connect(self.refresh)
-        btns_layout.addWidget(btn_refresh)
+        func_layout.addWidget(btn_refresh)
         # choose button
         btn_choose = QPushButton("Choose")
+        btn_choose.setToolTip("Set the current picture as the desktop wallpaper.")
         btn_choose.clicked.connect(self.choose)
-        btns_layout.addWidget(btn_choose)
+        func_layout.addWidget(btn_choose)
         # download button
         btn_download = QPushButton("Download")
+        btn_download.setToolTip("Download the current picture.")
         btn_download.clicked.connect(self.download)
-        btns_layout.addWidget(btn_download)
+        func_layout.addWidget(btn_download)
         # settings button
         btn_settings = QPushButton("Settings")
+        btn_settings.setToolTip("Open the settings window.")
         btn_settings.clicked.connect(self.open_settings_window)
-        btns_layout.addWidget(btn_settings)
+        func_layout.addWidget(btn_settings)
         # -------------------------------------------------------------
         # ======== main layout styles ========
-        main_layout.addLayout(btns_layout)
+        main_layout.addLayout(func_layout)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         # -------------------------------------------------------------

@@ -1,10 +1,10 @@
-from PySide6.QtCore import Qt, QSize, Slot
+from PySide6.QtCore import Qt, QSize, Slot, QDir
 from PySide6.QtWidgets import (
     QMainWindow, QWidget,
     QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel
 )
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QIcon
 
 
 # The configuration of MainWindow
@@ -20,8 +20,9 @@ class MainWindow(QMainWindow):  # subclass QMainWindow to customize the applicat
         set the layout of MainWindow
         """
         super(MainWindow, self).__init__()
-        self.setWindowTitle("Unsplash Wallpaper")
+        self.setWindowTitle("Unsplash Wallpapers")
         self.setFixedSize(QSize(800, 600))
+        self.setWindowIcon(QIcon("resources/icons/logo.png"))
 
         # ======== layouts ========
         main_layout = QVBoxLayout()
@@ -29,7 +30,7 @@ class MainWindow(QMainWindow):  # subclass QMainWindow to customize the applicat
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
         img_label = QLabel()
-        img = QPixmap("/home/kasen/Downloads/benoit-deschasaux-JjmUwcy7HUM-unsplash.jpg")
+        img = QPixmap(QDir.homePath() + "/.local/share/unsplash_wallpapers/benoit-deschasaux-JjmUwcy7HUM-unsplash.jpg")
         img_label.setPixmap(img)
         img_label.setScaledContents(True)  # fit the window
         img_label.setAlignment(Qt.AlignCenter)
@@ -41,22 +42,26 @@ class MainWindow(QMainWindow):  # subclass QMainWindow to customize the applicat
         # ...
         # refresh button
         btn_refresh = QPushButton("Refresh")
-        btn_refresh.setToolTip("Show a new picture.")
+        btn_refresh.setToolTip("display a new picture")
+        btn_refresh.setIcon(QIcon("resources/icons/refresh.png"))
         btn_refresh.clicked.connect(self.refresh)
         func_layout.addWidget(btn_refresh)
         # choose button
         btn_choose = QPushButton("Choose")
-        btn_choose.setToolTip("Set the current picture as the desktop wallpaper.")
+        btn_choose.setToolTip("set the current picture as desktop wallpaper")
+        btn_choose.setIcon(QIcon("resources/icons/choose.png"))
         btn_choose.clicked.connect(self.choose)
         func_layout.addWidget(btn_choose)
         # download button
         btn_download = QPushButton("Download")
-        btn_download.setToolTip("Download the current picture.")
+        btn_download.setToolTip("download the current picture")
+        btn_download.setIcon(QIcon("resources/icons/download.png"))
         btn_download.clicked.connect(self.download)
         func_layout.addWidget(btn_download)
         # settings button
         btn_settings = QPushButton("Settings")
-        btn_settings.setToolTip("Open the settings window.")
+        btn_settings.setToolTip("open the settings window")
+        btn_settings.setIcon(QIcon("resources/icons/settings.png"))
         btn_settings.clicked.connect(self.open_settings_window)
         func_layout.addWidget(btn_settings)
         # -------------------------------------------------------------

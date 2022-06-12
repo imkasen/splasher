@@ -8,7 +8,7 @@ def main() -> None:
     the entry function of the application
     :return: None
     """
-    lock_file = QLockFile(QDir.tempPath() + "/unsplash_wallpaper.lock")  # make sure only one program can run
+    lock_file = QLockFile(QDir.tempPath() + "/unsplash_wallpapers.lock")  # make sure only one program can run
     try:
         app = QApplication([])  # only one QApplication instance per application, no command line arguments
         if lock_file.tryLock():

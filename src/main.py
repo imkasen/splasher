@@ -1,14 +1,15 @@
 from PySide6.QtWidgets import QApplication, QMessageBox
-from PySide6.QtCore import QLockFile, QDir
+from PySide6.QtCore import QLockFile
 from gui.main_window import MainWindow
+from utils.global_variables import LOCKFILE_PATH
 
 
 def main() -> None:
     """
-    the entry function of the application
+    The entry function of the application
     :return: None
     """
-    lock_file = QLockFile(QDir.tempPath() + "/unsplash_wallpapers.lock")  # make sure only one program can run
+    lock_file = QLockFile(LOCKFILE_PATH)  # make sure only one program can run
     try:
         app = QApplication([])  # only one QApplication instance per application, no command line arguments
         if lock_file.tryLock():

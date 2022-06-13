@@ -6,10 +6,11 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap, QIcon
 from utils.global_variables import ICONS_PATH, CACHE_PATH
+from gui.settings_window import SettingsWindow
 
 
 # The configuration of MainWindow
-class MainWindow(QMainWindow):  # subclass 'QMainWindow' to customize the application's main window
+class MainWindow(QMainWindow):
     """
     The MainWindow class which contains following functions:
     1. display a wallpaper,
@@ -22,11 +23,11 @@ class MainWindow(QMainWindow):  # subclass 'QMainWindow' to customize the applic
         wallpaper display is on the top side and takes up most of the space,
         with all buttons displayed in a row at the bottom.
 
-        ------------------ 800 -------------------
+        ------------------ 960 -------------------
         |                                        |
         |                                        |
         |                                        |
-        |               wallpaper               600
+        |               wallpaper               540
         |                                        |
         |                                        |
         | -------------------------------------- |
@@ -35,8 +36,9 @@ class MainWindow(QMainWindow):  # subclass 'QMainWindow' to customize the applic
         """
         # ======== main window attributes ========
         super(MainWindow, self).__init__()
+        self.settings_window = None
         self.setWindowTitle("Unsplash Wallpapers for Linux")
-        self.setFixedSize(QSize(800, 600))
+        self.setFixedSize(QSize(960, 540))
         self.setWindowIcon(QIcon(ICONS_PATH + "logo.png"))
         # -------------------------------------------------------------
         # ======== layouts ========
@@ -105,4 +107,10 @@ class MainWindow(QMainWindow):  # subclass 'QMainWindow' to customize the applic
 
     @Slot()
     def open_settings_window(self) -> None:
-        print("Open the window of Settings!")
+        """
+        Open the settings window if it does not exist.
+        :return: None
+        """
+        if self.settings_window is None:
+            self.settings_window = SettingsWindow()
+        self.settings_window.show()

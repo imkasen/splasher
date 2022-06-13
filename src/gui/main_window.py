@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.global_variables import APP_TITLE, CACHE_PATH
+from utils.global_variables import ICONS_PATH, CACHE_PATH
 
 
 # The configuration of MainWindow
@@ -33,12 +33,11 @@ class MainWindow(QMainWindow):  # subclass 'QMainWindow' to customize the applic
         | refresh | choose | download | settings |
         ------------------------------------------
         """
-        icons_path = "resources/icons/"
         # ======== main window attributes ========
         super(MainWindow, self).__init__()
-        self.setWindowTitle(APP_TITLE)
+        self.setWindowTitle("Unsplash Wallpapers for Linux")
         self.setFixedSize(QSize(800, 600))
-        self.setWindowIcon(QIcon(icons_path + "logo.png"))
+        self.setWindowIcon(QIcon(ICONS_PATH + "logo.png"))
         # -------------------------------------------------------------
         # ======== layouts ========
         main_layout = QVBoxLayout()
@@ -58,25 +57,25 @@ class MainWindow(QMainWindow):  # subclass 'QMainWindow' to customize the applic
         # refresh button
         btn_refresh = QPushButton("Refresh")
         btn_refresh.setToolTip("display a new picture")
-        btn_refresh.setIcon(QIcon(icons_path + "buttons/refresh.png"))
+        btn_refresh.setIcon(QIcon(ICONS_PATH + "buttons/refresh.png"))
         btn_refresh.clicked.connect(self.refresh)
         func_layout.addWidget(btn_refresh)
         # choose button
         btn_choose = QPushButton("Choose")
         btn_choose.setToolTip("set the current picture as desktop wallpaper")
-        btn_choose.setIcon(QIcon(icons_path + "buttons/choose.png"))
+        btn_choose.setIcon(QIcon(ICONS_PATH + "buttons/choose.png"))
         btn_choose.clicked.connect(self.choose)
         func_layout.addWidget(btn_choose)
         # download button
         btn_download = QPushButton("Download")
         btn_download.setToolTip("download the current picture")
-        btn_download.setIcon(QIcon(icons_path + "buttons/download.png"))
+        btn_download.setIcon(QIcon(ICONS_PATH + "buttons/download.png"))
         btn_download.clicked.connect(self.download)
         func_layout.addWidget(btn_download)
         # settings button
         btn_settings = QPushButton("Settings")
         btn_settings.setToolTip("open the settings window")
-        btn_settings.setIcon(QIcon(icons_path + "buttons/settings.png"))
+        btn_settings.setIcon(QIcon(ICONS_PATH + "buttons/settings.png"))
         btn_settings.clicked.connect(self.open_settings_window)
         func_layout.addWidget(btn_settings)
         # -------------------------------------------------------------

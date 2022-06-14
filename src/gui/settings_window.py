@@ -14,7 +14,7 @@ from utils.global_variables import (
 class SettingsWindow(QTabWidget):
     """
     The SettingsWindow class which contains following functions:
-    1. display and set the file save path,
+    1. display and set the file path,
     2. update wallpapers regularly and set the resolution of the preview image,
     3. display the app info,
     """
@@ -29,12 +29,24 @@ class SettingsWindow(QTabWidget):
         # -------------------------------------------------------------
         # ======== tabs design ========
         # declarations
+        self.path_tab = QWidget()
+        self.update_tab = QWidget()
         self.info_tab = QWidget()
         # draw tabs
+        self.draw_path_tab()
+        self.draw_update_tab()
         self.draw_info_tab()
         # add tabs
+        self.addTab(self.path_tab, QIcon(ICONS_PATH + "tabs/path.png"), "Path")
+        self.addTab(self.update_tab, QIcon(ICONS_PATH + "tabs/update.png"), "Update")
         self.addTab(self.info_tab, QIcon(ICONS_PATH + "tabs/info.png"), "About")
         # -------------------------------------------------------------
+
+    def draw_path_tab(self) -> None:
+        pass
+
+    def draw_update_tab(self) -> None:
+        pass
 
     def draw_info_tab(self) -> None:
         """

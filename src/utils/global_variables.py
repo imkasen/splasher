@@ -1,9 +1,9 @@
 from PySide6.QtCore import QDir
 
-APP_NAME = "Unsplash Wallpaper for Linux"
+APP_NAME = "Unsplash Wallpapers for Linux"
 APP_VERSION = "v0.0.1"
 APP_AUTHOR = "Kasen"
-APP_ADDR = "https://github.com/imkasen/unsplash-wallpaper"
+APP_ADDR = "https://github.com/imkasen/unsplash-wallpapers-for-linux"
 APP_DIR: str = "unsplash_wallpapers/"
 
 ICONS_PATH: str = "resources/icons/"

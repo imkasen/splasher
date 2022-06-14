@@ -1,11 +1,11 @@
-from PySide6.QtCore import Qt, QSize, Slot
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
     QMainWindow, QWidget,
     QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.global_variables import ICONS_PATH, CACHE_PATH
+from utils.global_variables import APP_NAME, ICONS_PATH, CACHE_PATH
 from gui.settings_window import SettingsWindow
 
 
@@ -37,8 +37,8 @@ class MainWindow(QMainWindow):
         # ======== main window attributes ========
         super(MainWindow, self).__init__()
         self.settings_window = None
-        self.setWindowTitle("Unsplash Wallpapers for Linux")
-        self.setFixedSize(QSize(960, 540))
+        self.setWindowTitle(APP_NAME)
+        self.setFixedSize(960, 540)
         self.setWindowIcon(QIcon(ICONS_PATH + "logo.png"))
         # -------------------------------------------------------------
         # ======== layouts ========

@@ -1,5 +1,13 @@
-from PySide6.QtCore import QSize
-from PySide6.QtWidgets import QTabWidget
+from PySide6.QtCore import Qt
+from PySide6.QtWidgets import (
+    QVBoxLayout, QHBoxLayout,
+    QWidget, QTabWidget, QLabel
+)
+from PySide6.QtGui import QPixmap, QIcon
+from utils.global_variables import (
+    APP_NAME, APP_VERSION, APP_AUTHOR, APP_ADDR,
+    ICONS_PATH
+)
 
 
 # The configuration of SettingsWindow
@@ -17,5 +25,67 @@ class SettingsWindow(QTabWidget):
         # ======== settings window attributes ========
         super(SettingsWindow, self).__init__()
         self.setWindowTitle("Settings")
-        self.setFixedSize(QSize(480, 270))
+        self.setFixedSize(480, 270)
         # -------------------------------------------------------------
+        # ======== tabs design ========
+        # declarations
+        self.info_tab = QWidget()
+        # draw tabs
+        self.draw_info_tab()
+        # add tabs
+        self.addTab(self.info_tab, QIcon(ICONS_PATH + "tabs/info.png"), "About")
+        # -------------------------------------------------------------
+
+    def draw_info_tab(self) -> None:
+        """
+        Set the info tab layout
+        :return: None
+        """
+        # ======== layout ========
+        layout = QVBoxLayout()
+        ico_layout = QHBoxLayout()
+        layout.setSpacing(10)
+        self.info_tab.setLayout(layout)
+        # -------------------------------------------------------------
+        # ======== widgets ========
+        # icon
+        ico_label = QLabel()
+        ico_label.setPixmap(QPixmap(ICONS_PATH + "logo.png"))
+        ico_label.setFixedSize(50, 50)
+        ico_label.setScaledContents(True)
+        ico_label.setAlignment(Qt.AlignCenter)
+        # app name
+        name_label = QLabel(APP_NAME)
+        name_label.setScaledContents(True)
+        name_label.setAlignment(Qt.AlignCenter)
+        name_label.setStyleSheet("font-weight: bold")
+        name_label.setFixedHeight(name_label.fontMetrics().height())
+        # version
+        ver_label = QLabel("Version: " + APP_VERSION)
+        ver_label.setScaledContents(True)
+        ver_label.setAlignment(Qt.AlignCenter)
+        ver_label.setFixedHeight(name_label.fontMetrics().height())
+        # author
+        author_label = QLabel("Author: " + APP_AUTHOR)
+        author_label.setAlignment(Qt.AlignCenter)
+        author_label.setFixedHeight(name_label.fontMetrics().height())
+        # web address
+        addr_label = QLabel()
+        addr_label.setText(f"<a href='{APP_ADDR}'>GitHub</a>")
+        addr_label.setOpenExternalLinks(True)
+        addr_label.setAlignment(Qt.AlignCenter)
+        addr_label.setFixedHeight(addr_label.fontMetrics().height())
+        # add widgets into the layout
+        layout.addStretch()
+        ico_layout.addStretch()
+        ico_layout.addWidget(ico_label)
+        ico_layout.addStretch()
+        layout.addLayout(ico_layout)
+        layout.addWidget(name_label)
+        layout.addWidget(ver_label)
+        layout.addWidget(author_label)
+        layout.addWidget(addr_label)
+        layout.addStretch()
+        # -------------------------------------------------------------
+
+

@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
     QMainWindow, QWidget,
     QVBoxLayout, QHBoxLayout,
-    QPushButton, QLabel
+    QPushButton, QLabel, QStatusBar
 )
 from PySide6.QtGui import QPixmap, QIcon
 from utils.global_variables import APP_NAME, ICONS_PATH, CACHE_PATH
@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
     1. display a wallpaper,
     2. refresh, choose and download the displayed wallpaper,
     3. go to the settings window
+    4. show messages in the status bar
     """
     def __init__(self) -> None:
         """
@@ -27,19 +28,21 @@ class MainWindow(QMainWindow):
         |                                        |
         |                                        |
         |                                        |
-        |               wallpaper               540
-        |                                        |
+        |               wallpaper                |
+        |                                       540
         |                                        |
         | -------------------------------------- |
         | refresh | choose | download | settings |
+        | -------------------------------------- |
+        |              status bar                |
         ------------------------------------------
         """
-        # ======== main window attributes ========
         super(MainWindow, self).__init__()
+        # ======== main window attributes ========
         self.settings_window = None
         self.setWindowTitle(APP_NAME)
         self.setFixedSize(960, 540)
-        self.setWindowIcon(QIcon(ICONS_PATH + "logo.png"))
+        self.setWindowIcon(QIcon(ICONS_PATH + "logo.ico"))
         # -------------------------------------------------------------
         # ======== layouts ========
         main_layout = QVBoxLayout()
@@ -81,9 +84,14 @@ class MainWindow(QMainWindow):
         settings_btn.clicked.connect(self.open_settings_window)
         func_layout.addWidget(settings_btn)
         # -------------------------------------------------------------
+        # ======== status bar ========
+        self.status_bar = QStatusBar()
+        self.status_bar.setSizeGripEnabled(False)
+        # -------------------------------------------------------------
         # ======== main layout styles ========
         main_layout.addWidget(img_label)
         main_layout.addLayout(func_layout)
+        main_layout.addWidget(self.status_bar)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         # -------------------------------------------------------------
@@ -95,15 +103,15 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def refresh(self) -> None:
-        print("Refresh the picture!")
+        self.status_bar.showMessage("Refresh the picture!", 5000)
 
     @Slot()
     def choose(self) -> None:
-        print("Set the picture as wallpaper")
+        self.status_bar.showMessage("Set the picture as wallpaper!", 5000)
 
     @Slot()
     def download(self) -> None:
-        print("Download the wallpaper!")
+        self.status_bar.showMessage("Download the wallpaper!", 5000)
 
     @Slot()
     def open_settings_window(self) -> None:

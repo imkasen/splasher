@@ -16,7 +16,7 @@ class SettingsWindow(QTabWidget):
     The SettingsWindow class which contains following functions:
     1. display and set the file path,
     2. update wallpapers regularly and set the resolution of the preview image,
-    3. display the app info,
+    3. display the app info.
     """
     def __init__(self) -> None:
         """
@@ -50,7 +50,7 @@ class SettingsWindow(QTabWidget):
 
     def draw_info_tab(self) -> None:
         """
-        Set the info tab layout
+        Set the info tab layout.
         :return: None
         """
         # ======== layout ========

@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import (
     QMainWindow, QWidget,
     QVBoxLayout, QHBoxLayout,
-    QPushButton, QLabel, QStatusBar
+    QPushButton, QLabel, QStatusBar, QComboBox
 )
 from PySide6.QtGui import QPixmap, QIcon
 from utils.global_variables import APP_NAME, ICONS_PATH, CACHE_PATH
@@ -15,8 +15,8 @@ class MainWindow(QMainWindow):
     The MainWindow class which contains following functions:
     1. display a wallpaper,
     2. refresh, choose and download the displayed wallpaper,
-    3. go to the settings window
-    4. show messages in the status bar
+    3. go to the settings window,
+    4. show messages in the status bar.
     """
     def __init__(self) -> None:
         """
@@ -56,9 +56,10 @@ class MainWindow(QMainWindow):
         img_label.setAlignment(Qt.AlignCenter)
         # -------------------------------------------------------------
         # ======== functional widgets ========
-        # theme list
-        # theme_box = QComboBox()
+        # theme lists
+        theme_box = QComboBox()
         # ...
+        func_layout.addWidget(theme_box)
         # refresh button
         refresh_btn = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")

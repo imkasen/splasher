@@ -1,3 +1,4 @@
+from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
 from utils.global_variables import ICONS_PATH
@@ -27,6 +28,7 @@ class SystemTray(QSystemTrayIcon):
         self.setContextMenu(self.menu)  # add the menu to the tray
         # refresh and set a picture as the desktop wallpaper
         self.refresh_set_opt = QAction("Refresh and Set")
+        self.refresh_set_opt.triggered.connect(self.refresh_and_set)
         self.menu.addAction(self.refresh_set_opt)
         # show the main window
         self.show_opt = QAction("Show")
@@ -38,13 +40,15 @@ class SystemTray(QSystemTrayIcon):
         self.menu.addAction(self.quit_opt)
         # -------------------------------------------------------------
 
-    def refresh_set(self) -> None:
+    @Slot()
+    def refresh_and_set(self) -> None:
         """
         Refresh and set a picture as the desktop wallpaper
         :return: None
         """
         pass
 
+    @Slot()
     def show_app(self) -> None:
         """
         Display the main window if it does not exist.
@@ -55,6 +59,7 @@ class SystemTray(QSystemTrayIcon):
         else:
             self.app.main_window.status_bar.showMessage("The main window already exists!", 5000)
 
+    @Slot()
     def quit_app(self) -> None:
         """
         Exit the app.

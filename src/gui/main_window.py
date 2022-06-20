@@ -45,17 +45,49 @@ class MainWindow(QMainWindow):
         self.setWindowIcon(QIcon(ICONS_PATH + "logo.ico"))
         # -------------------------------------------------------------
         # ======== layouts ========
-        main_layout = QVBoxLayout()
-        func_layout = QHBoxLayout()
+        self.main_layout = QVBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
+        self.draw_wallpaper_ui()
+        # -------------------------------------------------------------
+        # ======== functional widgets ========
+        self.draw_functional_bar()
+        # -------------------------------------------------------------
+        # ======== status bar ========
+        self.status_bar = QStatusBar()
+        self.status_bar.setSizeGripEnabled(False)
+        # -------------------------------------------------------------
+        # ======== main layout styles ========
+        self.main_layout.addWidget(self.status_bar)
+        self.main_layout.setContentsMargins(0, 0, 0, 0)
+        self.main_layout.setSpacing(0)
+        # -------------------------------------------------------------
+        # ======== main widget ========
+        main_widget = QWidget()
+        main_widget.setLayout(self.main_layout)
+        self.setCentralWidget(main_widget)
+        # -------------------------------------------------------------
+
+    def draw_wallpaper_ui(self) -> None:
+        """
+        Display the wallpaper
+        :return: None
+        """
         img_label = QLabel()
         img = QPixmap(CACHE_PATH + "photo-1652889946318-9085b5a2d4e7.jpeg")
         img_label.setPixmap(img)
         img_label.setScaledContents(True)  # adjust the image size to fit the window
         img_label.setAlignment(Qt.AlignCenter)
-        # -------------------------------------------------------------
-        # ======== functional widgets ========
+        # add to main layout
+        self.main_layout.addWidget(img_label)
+
+    def draw_functional_bar(self) -> None:
+        """
+        Functional widgets
+        :return: None
+        """
+        # layout
+        func_layout = QHBoxLayout()
         # theme lists
         theme_box = QComboBox()
         # ...
@@ -84,23 +116,8 @@ class MainWindow(QMainWindow):
         settings_btn.setIcon(QIcon(ICONS_PATH + "buttons/settings.png"))
         settings_btn.clicked.connect(self.open_settings_window)
         func_layout.addWidget(settings_btn)
-        # -------------------------------------------------------------
-        # ======== status bar ========
-        self.status_bar = QStatusBar()
-        self.status_bar.setSizeGripEnabled(False)
-        # -------------------------------------------------------------
-        # ======== main layout styles ========
-        main_layout.addWidget(img_label)
-        main_layout.addLayout(func_layout)
-        main_layout.addWidget(self.status_bar)
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
-        # -------------------------------------------------------------
-        # ======== main widget ========
-        main_widget = QWidget()
-        main_widget.setLayout(main_layout)
-        self.setCentralWidget(main_widget)
-        # -------------------------------------------------------------
+        # add to main layout
+        self.main_layout.addLayout(func_layout)
 
     @Slot()
     def refresh(self) -> None:

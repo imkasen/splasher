@@ -1,7 +1,7 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
-from utils.global_variables import ICONS_PATH
+from utils.global_variables import APP_NAME, ICONS_PATH
 
 
 # The configuration of SystemTray
@@ -22,6 +22,8 @@ class SystemTray(QSystemTrayIcon):
         self.app = QApplication.instance()  # get the current QApplication instance
         # ======== tray attributes ========
         self.setIcon(QIcon(ICONS_PATH + "logo.ico"))
+        self.setToolTip(APP_NAME)
+        self.activated.connect(self.handle_mouse_click)
         # -------------------------------------------------------------
         # ======== menu list ========
         self.menu = QMenu()
@@ -39,6 +41,16 @@ class SystemTray(QSystemTrayIcon):
         self.quit_opt.triggered.connect(self.quit_app)
         self.menu.addAction(self.quit_opt)
         # -------------------------------------------------------------
+
+    @Slot()
+    def handle_mouse_click(self, reason: QSystemTrayIcon.ActivationReason) -> None:
+        """
+        Handle the mouse click, left click to open the main window;
+        right click to open the menu, which is the default behavior.
+        :param reason: mouse click behavior.
+        """
+        if reason == QSystemTrayIcon.ActivationReason.Trigger:  # left click
+            self.show_app()
 
     @Slot()
     def refresh_and_set(self) -> None:

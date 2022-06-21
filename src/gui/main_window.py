@@ -70,8 +70,7 @@ class MainWindow(QMainWindow):
 
     def draw_wallpaper_ui(self) -> None:
         """
-        Display the wallpaper
-        :return: None
+        Display the wallpaper.
         """
         img_label = QLabel()
         img = QPixmap(CACHE_PATH + "5f7563b1538140c5931ba0a773aac650.jpg")
@@ -85,8 +84,7 @@ class MainWindow(QMainWindow):
 
     def draw_functional_bar(self) -> None:
         """
-        Functional widgets
-        :return: None
+        Functional widgets.
         """
         # layout
         func_layout = QHBoxLayout()
@@ -137,7 +135,6 @@ class MainWindow(QMainWindow):
     def open_settings_window(self) -> None:
         """
         Open the settings window if it does not exist.
-        :return: None
         """
         if self.settings_window is None:
             self.settings_window = SettingsWindow()

@@ -55,8 +55,7 @@ class SystemTray(QSystemTrayIcon):
     @Slot()
     def refresh_and_set(self) -> None:
         """
-        Refresh and set a picture as the desktop wallpaper
-        :return: None
+        Refresh and set a picture as the desktop wallpaper.
         """
         pass
 
@@ -64,7 +63,6 @@ class SystemTray(QSystemTrayIcon):
     def show_app(self) -> None:
         """
         Display the main window if it does not exist.
-        :return: None
         """
         if self.app.main_window.isVisible() is False:
             self.app.main_window.show()
@@ -75,6 +73,5 @@ class SystemTray(QSystemTrayIcon):
     def quit_app(self) -> None:
         """
         Exit the app.
-        :return: None
         """
         self.app.quit()

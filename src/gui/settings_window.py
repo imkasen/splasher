@@ -20,7 +20,7 @@ class SettingsWindow(QTabWidget):
     """
     def __init__(self) -> None:
         """
-        Set the layout of SettingsWindow
+        Set the layout of SettingsWindow.
         """
         # ======== settings window attributes ========
         super(SettingsWindow, self).__init__()
@@ -51,7 +51,6 @@ class SettingsWindow(QTabWidget):
     def draw_info_tab(self) -> None:
         """
         Set the info tab layout.
-        :return: None
         """
         # ======== layout ========
         layout = QVBoxLayout()

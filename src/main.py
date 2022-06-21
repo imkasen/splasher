@@ -8,7 +8,6 @@ from utils.global_variables import LOCKFILE_PATH
 def main() -> None:
     """
     The entry function of the application.
-    :return: None
     """
     lock_file = QLockFile(LOCKFILE_PATH)  # make sure only one program can run
     try:

@@ -74,7 +74,9 @@ class MainWindow(QMainWindow):
         :return: None
         """
         img_label = QLabel()
-        img = QPixmap(CACHE_PATH + "photo-1652889946318-9085b5a2d4e7.jpeg")
+        img = QPixmap(CACHE_PATH + "5f7563b1538140c5931ba0a773aac650.jpg")
+        if img.isNull():  # if the image can not be found
+            img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
         img_label.setPixmap(img)
         img_label.setScaledContents(True)  # adjust the image size to fit the window
         img_label.setAlignment(Qt.AlignCenter)

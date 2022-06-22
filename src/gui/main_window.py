@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel, QStatusBar, QComboBox
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.global_variables import APP_NAME, ICONS_PATH, CACHE_PATH
+from utils.env import APP_NAME, ICONS_PATH, CACHE_PATH
 from gui.settings_window import SettingsWindow
 
 
@@ -39,36 +39,36 @@ class MainWindow(QMainWindow):
         """
         super(MainWindow, self).__init__()
         # ======== main window attributes ========
-        self.settings_window = None
+        self.__settings_window = None
         self.setWindowTitle(APP_NAME)
         self.setFixedSize(960, 540)
         self.setWindowIcon(QIcon(ICONS_PATH + "logo.ico"))
         # -------------------------------------------------------------
         # ======== layouts ========
-        self.main_layout = QVBoxLayout()
+        main_layout = QVBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
-        self.draw_wallpaper_ui()
+        self.__draw_wallpaper_ui(main_layout)
         # -------------------------------------------------------------
         # ======== functional widgets ========
-        self.draw_functional_bar()
+        self.__draw_functional_bar(main_layout)
         # -------------------------------------------------------------
         # ======== status bar ========
-        self.status_bar = QStatusBar()
-        self.status_bar.setSizeGripEnabled(False)
+        self.__status_bar = QStatusBar()
+        self.__status_bar.setSizeGripEnabled(False)
         # -------------------------------------------------------------
         # ======== main layout styles ========
-        self.main_layout.addWidget(self.status_bar)
-        self.main_layout.setContentsMargins(0, 0, 0, 0)
-        self.main_layout.setSpacing(0)
+        main_layout.addWidget(self.__status_bar)
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
         # -------------------------------------------------------------
         # ======== main widget ========
         main_widget = QWidget()
-        main_widget.setLayout(self.main_layout)
+        main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
         # -------------------------------------------------------------
 
-    def draw_wallpaper_ui(self) -> None:
+    def __draw_wallpaper_ui(self, main_layout: QVBoxLayout) -> None:
         """
         Display the wallpaper.
         """
@@ -80,9 +80,9 @@ class MainWindow(QMainWindow):
         img_label.setScaledContents(True)  # adjust the image size to fit the window
         img_label.setAlignment(Qt.AlignCenter)
         # add to main layout
-        self.main_layout.addWidget(img_label)
+        main_layout.addWidget(img_label)
 
-    def draw_functional_bar(self) -> None:
+    def __draw_functional_bar(self, main_layout: QVBoxLayout) -> None:
         """
         Functional widgets.
         """
@@ -114,28 +114,28 @@ class MainWindow(QMainWindow):
         settings_btn = QPushButton("Settings")
         settings_btn.setToolTip("open the settings window")
         settings_btn.setIcon(QIcon(ICONS_PATH + "buttons/settings.png"))
-        settings_btn.clicked.connect(self.open_settings_window)
+        settings_btn.clicked.connect(self.__open_settings_window)
         func_layout.addWidget(settings_btn)
         # add to main layout
-        self.main_layout.addLayout(func_layout)
+        main_layout.addLayout(func_layout)
 
     @Slot()
     def refresh(self) -> None:
-        self.status_bar.showMessage("Refresh the picture!", 5000)
+        self.__status_bar.showMessage("Refresh the picture!", 5000)
 
     @Slot()
     def choose(self) -> None:
-        self.status_bar.showMessage("Set the picture as wallpaper!", 5000)
+        self.__status_bar.showMessage("Set the picture as wallpaper!", 5000)
 
     @Slot()
     def download(self) -> None:
-        self.status_bar.showMessage("Download the wallpaper!", 5000)
+        self.__status_bar.showMessage("Download the wallpaper!", 5000)
 
     @Slot()
-    def open_settings_window(self) -> None:
+    def __open_settings_window(self) -> None:
         """
         Open the settings window if it does not exist.
         """
-        if self.settings_window is None:
-            self.settings_window = SettingsWindow()
-        self.settings_window.show()
+        if self.__settings_window is None:
+            self.__settings_window = SettingsWindow()
+        self.__settings_window.show()

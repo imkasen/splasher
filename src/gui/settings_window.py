@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QWidget, QTabWidget, QLabel
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.global_variables import (
+from utils.env import (
     APP_NAME, APP_VERSION, APP_AUTHOR, APP_ADDR,
     ICONS_PATH
 )
@@ -28,35 +28,45 @@ class SettingsWindow(QTabWidget):
         self.setFixedSize(480, 270)
         # -------------------------------------------------------------
         # ======== tabs design ========
-        # declarations
-        self.path_tab = QWidget()
-        self.update_tab = QWidget()
-        self.info_tab = QWidget()
-        # draw tabs
-        self.draw_path_tab()
-        self.draw_update_tab()
-        self.draw_info_tab()
-        # add tabs
-        self.addTab(self.path_tab, QIcon(ICONS_PATH + "tabs/path.png"), "Path")
-        self.addTab(self.update_tab, QIcon(ICONS_PATH + "tabs/update.png"), "Update")
-        self.addTab(self.info_tab, QIcon(ICONS_PATH + "tabs/info.png"), "About")
+        self.__draw_path_tab()
+        self.__draw_update_tab()
+        self.__draw_info_tab()
         # -------------------------------------------------------------
 
-    def draw_path_tab(self) -> None:
-        pass
-
-    def draw_update_tab(self) -> None:
-        pass
-
-    def draw_info_tab(self) -> None:
+    def __draw_path_tab(self) -> None:
         """
-        Set the info tab layout.
+        Set the path tab layout,
+        here the paths to files are displayed and can be modified.
         """
+        # ======== declaration and add the tab ========
+        path_tab = QWidget()
+        self.addTab(path_tab, QIcon(ICONS_PATH + "tabs/path.png"), "Path")
+        # -------------------------------------------------------------
+
+    def __draw_update_tab(self) -> None:
+        """
+        Set the update tab layout,
+        here users can set the update frequency and the preview resolution.
+        """
+        # ======== declaration and add the tab ========
+        update_tab = QWidget()
+        self.addTab(update_tab, QIcon(ICONS_PATH + "tabs/update.png"), "Update")
+        # -------------------------------------------------------------
+
+    def __draw_info_tab(self) -> None:
+        """
+        Set the info tab layout,
+        here shows the app's information.
+        """
+        # ======== declaration and add the tab ========
+        info_tab = QWidget()
+        self.addTab(info_tab, QIcon(ICONS_PATH + "tabs/info.png"), "About")
+        # -------------------------------------------------------------
         # ======== layout ========
         layout = QVBoxLayout()
         ico_layout = QHBoxLayout()
         layout.setSpacing(10)
-        self.info_tab.setLayout(layout)
+        info_tab.setLayout(layout)
         # -------------------------------------------------------------
         # ======== widgets ========
         # icon

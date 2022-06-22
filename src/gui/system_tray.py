@@ -1,7 +1,7 @@
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication, QMessageBox
 from PySide6.QtGui import QIcon, QAction
-from utils.global_variables import APP_NAME, ICONS_PATH
+from utils.env import APP_NAME, ICONS_PATH
 
 
 # The configuration of SystemTray
@@ -19,59 +19,66 @@ class SystemTray(QSystemTrayIcon):
         :return: None
         """
         super(SystemTray, self).__init__()
-        self.app = QApplication.instance()  # get the current QApplication instance
+        self.__app = QApplication.instance()  # get the current QApplication instance
         # ======== tray attributes ========
         self.setIcon(QIcon(ICONS_PATH + "logo.ico"))
         self.setToolTip(APP_NAME)
-        self.activated.connect(self.handle_mouse_click)
+        self.activated.connect(self.__handle_mouse_click)
         # -------------------------------------------------------------
         # ======== menu list ========
-        self.menu = QMenu()
-        self.setContextMenu(self.menu)  # add the menu to the tray
+        menu = QMenu()
+        self.setContextMenu(menu)  # add the menu to the system tray
         # refresh and set a picture as the desktop wallpaper
-        self.refresh_set_opt = QAction("Refresh and Set")
-        self.refresh_set_opt.triggered.connect(self.refresh_and_set)
-        self.menu.addAction(self.refresh_set_opt)
+        refresh_set_act = QAction("Refresh and Set", parent=menu)
+        refresh_set_act.triggered.connect(self.__refresh_and_set)
+        menu.addAction(refresh_set_act)
         # show the main window
-        self.show_opt = QAction("Show")
-        self.show_opt.triggered.connect(self.show_app)
-        self.menu.addAction(self.show_opt)
+        show_act = QAction("Show", parent=menu)
+        show_act.triggered.connect(self.__show_app)
+        menu.addAction(show_act)
         # quit the app
-        self.quit_opt = QAction("Quit")
-        self.quit_opt.triggered.connect(self.quit_app)
-        self.menu.addAction(self.quit_opt)
+        quit_act = QAction("Quit", parent=menu)
+        quit_act.triggered.connect(self.__quit_app)
+        menu.addAction(quit_act)
         # -------------------------------------------------------------
 
     @Slot()
-    def handle_mouse_click(self, reason: QSystemTrayIcon.ActivationReason) -> None:
+    def __handle_mouse_click(self, reason: QSystemTrayIcon.ActivationReason) -> None:
         """
         Handle the mouse click, left click to open the main window;
         right click to open the menu, which is the default behavior.
         :param reason: mouse click behavior.
         """
         if reason == QSystemTrayIcon.ActivationReason.Trigger:  # left click
-            self.show_app()
+            self.__show_app()
 
     @Slot()
-    def refresh_and_set(self) -> None:
+    def __refresh_and_set(self) -> None:
         """
         Refresh and set a picture as the desktop wallpaper.
         """
         pass
 
     @Slot()
-    def show_app(self) -> None:
+    def __show_app(self) -> None:
         """
         Display the main window if it does not exist.
         """
-        if self.app.main_window.isVisible() is False:
-            self.app.main_window.show()
+        if self.__app.main_window.isVisible() is False:
+            self.__app.main_window.show()
         else:
-            self.app.main_window.status_bar.showMessage("The main window already exists!", 5000)
+            # ======== show a warning message ========
+            err_msg = QMessageBox()
+            err_msg.setIcon(QMessageBox.Warning)
+            err_msg.setWindowTitle("Error")
+            err_msg.setText("The main window already exists!")
+            err_msg.setStandardButtons(QMessageBox.Ok)
+            err_msg.exec()
+            # -------------------------------------------------------------
 
     @Slot()
-    def quit_app(self) -> None:
+    def __quit_app(self) -> None:
         """
         Exit the app.
         """
-        self.app.quit()
+        self.__app.quit()

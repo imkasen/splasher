@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QLockFile
 from gui.main_window import MainWindow
 from gui.system_tray import SystemTray
-from utils.global_variables import LOCKFILE_PATH
+from utils.env import LOCKFILE_PATH
 
 
 def main() -> None:
@@ -18,11 +18,11 @@ def main() -> None:
             app.main_window.show()  # windows are hidden by default
             # -------------------------------------------------------------
             # ======== display the system tray ========
-            tray = SystemTray()
+            app.tray = SystemTray()
             # display
-            if tray.isSystemTrayAvailable():
+            if app.tray.isSystemTrayAvailable():
                 app.setQuitOnLastWindowClosed(False)  # keep app running after closing all windows
-                tray.show()
+                app.tray.show()
             else:
                 app.main_window.status_bar.showMessage("The system tray can not be displayed!")
             # -------------------------------------------------------------

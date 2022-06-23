@@ -1,8 +1,9 @@
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtCore import QLockFile
+from PySide6.QtGui import QIcon
 from gui.main_window import MainWindow
 from gui.system_tray import SystemTray
-from utils.env import LOCKFILE_PATH
+from utils.env import LOCKFILE_PATH, ICONS_PATH
 
 
 def main() -> None:
@@ -12,14 +13,15 @@ def main() -> None:
     lock_file = QLockFile(LOCKFILE_PATH)  # make sure only one program can run
     try:
         app = QApplication([])  # only one QApplication instance per application, no command line arguments
+        app_icon = QIcon(ICONS_PATH + "logo.ico")
         if lock_file.tryLock():
+            app.setWindowIcon(app_icon)
             # ======== display the main window ========
             app.main_window = MainWindow()
             app.main_window.show()  # windows are hidden by default
             # -------------------------------------------------------------
             # ======== display the system tray ========
             app.tray = SystemTray()
-            # display
             if app.tray.isSystemTrayAvailable():
                 app.setQuitOnLastWindowClosed(False)  # keep app running after closing all windows
                 app.tray.show()
@@ -30,10 +32,10 @@ def main() -> None:
         else:
             # ======== show a warning message ========
             err_msg = QMessageBox()
+            err_msg.setWindowIcon(app_icon)
             err_msg.setIcon(QMessageBox.Warning)
             err_msg.setWindowTitle("Error")
             err_msg.setText("The application is already running!")
-            err_msg.setStandardButtons(QMessageBox.Ok)
             err_msg.exec()
             # -------------------------------------------------------------
     finally:

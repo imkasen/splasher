@@ -1,5 +1,5 @@
 from PySide6.QtCore import Slot
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication, QMessageBox
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
 from utils.env import APP_NAME, ICONS_PATH
 
@@ -62,19 +62,13 @@ class SystemTray(QSystemTrayIcon):
     @Slot()
     def __show_app(self) -> None:
         """
-        Display the main window if it does not exist.
+        Display the main window if it does not exist, otherwise show the main window on the top.
         """
         if self.__app.main_window.isVisible() is False:
             self.__app.main_window.show()
         else:
-            # ======== show a warning message ========
-            err_msg = QMessageBox()
-            err_msg.setIcon(QMessageBox.Warning)
-            err_msg.setWindowTitle("Error")
-            err_msg.setText("The main window already exists!")
-            err_msg.setStandardButtons(QMessageBox.Ok)
-            err_msg.exec()
-            # -------------------------------------------------------------
+            self.__app.main_window.activateWindow()
+            self.__app.main_window.raise_()
 
     @Slot()
     def __quit_app(self) -> None:

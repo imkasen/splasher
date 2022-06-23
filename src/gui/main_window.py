@@ -42,7 +42,6 @@ class MainWindow(QMainWindow):
         self.__settings_window = None
         self.setWindowTitle(APP_NAME)
         self.setFixedSize(960, 540)
-        self.setWindowIcon(QIcon(ICONS_PATH + "logo.ico"))
         # -------------------------------------------------------------
         # ======== layouts ========
         main_layout = QVBoxLayout()
@@ -54,11 +53,11 @@ class MainWindow(QMainWindow):
         self.__draw_functional_bar(main_layout)
         # -------------------------------------------------------------
         # ======== status bar ========
-        self.__status_bar = QStatusBar()
-        self.__status_bar.setSizeGripEnabled(False)
+        self.status_bar = QStatusBar()
+        self.status_bar.setSizeGripEnabled(False)
         # -------------------------------------------------------------
         # ======== main layout styles ========
-        main_layout.addWidget(self.__status_bar)
+        main_layout.addWidget(self.status_bar)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         # -------------------------------------------------------------
@@ -121,21 +120,25 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def refresh(self) -> None:
-        self.__status_bar.showMessage("Refresh the picture!", 5000)
+        self.status_bar.showMessage("Refresh the picture!", 5000)
 
     @Slot()
     def choose(self) -> None:
-        self.__status_bar.showMessage("Set the picture as wallpaper!", 5000)
+        self.status_bar.showMessage("Set the picture as wallpaper!", 5000)
 
     @Slot()
     def download(self) -> None:
-        self.__status_bar.showMessage("Download the wallpaper!", 5000)
+        self.status_bar.showMessage("Download the wallpaper!", 5000)
 
     @Slot()
     def __open_settings_window(self) -> None:
         """
         Open the settings window if it does not exist.
         """
-        if self.__settings_window is None:
+        if self.__settings_window is None \
+                or self.__settings_window.isVisible() is False:
             self.__settings_window = SettingsWindow()
-        self.__settings_window.show()
+            self.__settings_window.show()
+        elif self.__settings_window.isActiveWindow() is False:  # put the settings window on the top
+            self.__settings_window.activateWindow()
+            self.__settings_window.raise_()

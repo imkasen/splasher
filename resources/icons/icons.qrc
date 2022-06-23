@@ -1,0 +1,21 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file alias="logo.png">logo.png</file>
+    </qresource>
+    <qresource prefix="buttons">
+        <file alias="choose.png">buttons/choose.png</file>
+        <file alias="download.png">buttons/download.png</file>
+        <file alias="refresh.png">buttons/refresh.png</file>
+        <file alias="settings.png">buttons/settings.png</file>
+    </qresource>
+    <qresource prefix="tabs">
+        <file alias="info.png">tabs/info.png</file>
+        <file alias="path.png">tabs/path.png</file>
+        <file alias="update.png">tabs/update.png</file>
+    </qresource>
+</RCC>
+
+<!--
+pyside6-rcc resources/icons/icons.qrc -o src/gui/icons.py
+-->

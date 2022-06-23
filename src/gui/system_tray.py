@@ -1,7 +1,8 @@
 from PySide6.QtCore import Slot
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
-from utils.env import APP_NAME, ICONS_PATH
+from utils.env import APP_NAME
+import gui.icons
 
 
 # The configuration of SystemTray
@@ -21,7 +22,7 @@ class SystemTray(QSystemTrayIcon):
         super(SystemTray, self).__init__()
         self.__app = QApplication.instance()  # get the current QApplication instance
         # ======== tray attributes ========
-        self.setIcon(QIcon(ICONS_PATH + "logo.ico"))
+        self.setIcon(QIcon(":/logo.png"))
         self.setToolTip(APP_NAME)
         self.activated.connect(self.__handle_mouse_click)
         # -------------------------------------------------------------

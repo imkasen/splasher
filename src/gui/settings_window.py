@@ -6,8 +6,8 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QPixmap, QIcon
 from utils.env import (
     APP_NAME, APP_VERSION, APP_AUTHOR, APP_ADDR,
-    ICONS_PATH
 )
+import gui.icons
 
 
 # The configuration of SettingsWindow
@@ -40,7 +40,7 @@ class SettingsWindow(QTabWidget):
         """
         # ======== declaration and add the tab ========
         path_tab = QWidget()
-        self.addTab(path_tab, QIcon(ICONS_PATH + "tabs/path.png"), "Path")
+        self.addTab(path_tab, QIcon(":/tabs/path.png"), "Path")
         # -------------------------------------------------------------
 
     def __draw_update_tab(self) -> None:
@@ -50,7 +50,7 @@ class SettingsWindow(QTabWidget):
         """
         # ======== declaration and add the tab ========
         update_tab = QWidget()
-        self.addTab(update_tab, QIcon(ICONS_PATH + "tabs/update.png"), "Update")
+        self.addTab(update_tab, QIcon(":/tabs/update.png"), "Update")
         # -------------------------------------------------------------
 
     def __draw_info_tab(self) -> None:
@@ -60,7 +60,7 @@ class SettingsWindow(QTabWidget):
         """
         # ======== declaration and add the tab ========
         info_tab = QWidget()
-        self.addTab(info_tab, QIcon(ICONS_PATH + "tabs/info.png"), "About")
+        self.addTab(info_tab, QIcon(":/tabs/info.png"), "About")
         # -------------------------------------------------------------
         # ======== layout ========
         layout = QVBoxLayout()
@@ -71,7 +71,7 @@ class SettingsWindow(QTabWidget):
         # ======== widgets ========
         # icon
         ico_label = QLabel()
-        ico_label.setPixmap(QPixmap(ICONS_PATH + "logo.png"))
+        ico_label.setPixmap(QPixmap(":/logo.png"))
         ico_label.setFixedSize(50, 50)
         ico_label.setScaledContents(True)
         ico_label.setAlignment(Qt.AlignCenter)

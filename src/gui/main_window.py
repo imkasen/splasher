@@ -5,8 +5,9 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel, QStatusBar, QComboBox
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.env import APP_NAME, ICONS_PATH, CACHE_PATH
+from utils.env import APP_NAME, CACHE_PATH
 from gui.settings_window import SettingsWindow
+import gui.icons
 
 
 # The configuration of MainWindow
@@ -94,25 +95,25 @@ class MainWindow(QMainWindow):
         # refresh button
         refresh_btn = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")
-        refresh_btn.setIcon(QIcon(ICONS_PATH + "buttons/refresh.png"))
+        refresh_btn.setIcon(QIcon(":/buttons/refresh.png"))
         refresh_btn.clicked.connect(self.refresh)
         func_layout.addWidget(refresh_btn)
         # choose button
         choose_btn = QPushButton("Choose")
         choose_btn.setToolTip("set the current picture as desktop wallpaper")
-        choose_btn.setIcon(QIcon(ICONS_PATH + "buttons/choose.png"))
+        choose_btn.setIcon(QIcon(":/buttons/choose.png"))
         choose_btn.clicked.connect(self.choose)
         func_layout.addWidget(choose_btn)
         # download button
         download_btn = QPushButton("Download")
         download_btn.setToolTip("download the current picture")
-        download_btn.setIcon(QIcon(ICONS_PATH + "buttons/download.png"))
+        download_btn.setIcon(QIcon(":/buttons/download.png"))
         download_btn.clicked.connect(self.download)
         func_layout.addWidget(download_btn)
         # settings button
         settings_btn = QPushButton("Settings")
         settings_btn.setToolTip("open the settings window")
-        settings_btn.setIcon(QIcon(ICONS_PATH + "buttons/settings.png"))
+        settings_btn.setIcon(QIcon(":/buttons/settings.png"))
         settings_btn.clicked.connect(self.__open_settings_window)
         func_layout.addWidget(settings_btn)
         # add to main layout

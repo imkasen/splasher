@@ -3,7 +3,8 @@ from PySide6.QtCore import QLockFile
 from PySide6.QtGui import QIcon
 from gui.main_window import MainWindow
 from gui.system_tray import SystemTray
-from utils.env import LOCKFILE_PATH, ICONS_PATH
+import gui.icons
+from utils.env import LOCKFILE_PATH
 
 
 def main() -> None:
@@ -13,7 +14,7 @@ def main() -> None:
     lock_file = QLockFile(LOCKFILE_PATH)  # make sure only one program can run
     try:
         app = QApplication([])  # only one QApplication instance per application, no command line arguments
-        app_icon = QIcon(ICONS_PATH + "logo.ico")
+        app_icon = QIcon(":/logo.png")  # QResource system
         if lock_file.tryLock():
             app.setWindowIcon(app_icon)
             # ======== display the main window ========

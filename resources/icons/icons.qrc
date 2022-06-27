@@ -17,5 +17,5 @@
 </RCC>
 
 <!--
-pyside6-rcc resources/icons/icons.qrc -o src/gui/icons.py
+$ pyside6-rcc resources/icons/icons.qrc -o src/gui/icons.py
 -->

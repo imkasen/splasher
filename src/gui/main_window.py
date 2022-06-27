@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel, QStatusBar, QComboBox
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.env import APP_NAME, CACHE_PATH
+from config.env import APP_NAME, CACHE_PATH
 from gui.settings_window import SettingsWindow
 import gui.icons
 

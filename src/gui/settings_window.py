@@ -4,7 +4,7 @@ from PySide6.QtWidgets import (
     QWidget, QTabWidget, QLabel
 )
 from PySide6.QtGui import QPixmap, QIcon
-from utils.env import (
+from config.env import (
     APP_NAME, APP_VERSION, APP_AUTHOR, APP_ADDR,
 )
 import gui.icons

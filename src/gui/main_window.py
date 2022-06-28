@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
     QPushButton, QLabel, QStatusBar, QComboBox
 )
 from PySide6.QtGui import QPixmap, QIcon
-from config.env import APP_NAME, CACHE_PATH
+from config.env import APP, PATH
 from gui.settings_window import SettingsWindow
 import gui.icons
 
@@ -41,7 +41,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         # ======== main window attributes ========
         self.__settings_window = None
-        self.setWindowTitle(APP_NAME)
+        self.setWindowTitle(APP["name"])
         self.setFixedSize(960, 540)
         # -------------------------------------------------------------
         # ======== layouts ========
@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
         Display the wallpaper.
         """
         img_label = QLabel()
-        img = QPixmap(CACHE_PATH + "5f7563b1538140c5931ba0a773aac650.jpg")
+        img = QPixmap(PATH["cache"] + "5f7563b1538140c5931ba0a773aac650.jpg")
         if img.isNull():  # if the image can not be found
             img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
         img_label.setPixmap(img)

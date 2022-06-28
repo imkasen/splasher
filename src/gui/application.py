@@ -4,7 +4,7 @@ from PySide6.QtCore import QDir
 from gui.main_window import MainWindow
 from gui.system_tray import SystemTray
 import gui.icons
-from config.env import CACHE_PATH
+from config.env import PATH
 
 
 # The configuration of Application
@@ -31,9 +31,9 @@ class Application(QApplication):
         1. check if the cache folder exists, if not, create it.
         """
         # ======== check the cache dir ========
-        cache_dir = QDir(CACHE_PATH)
+        cache_dir = QDir(PATH["cache"])
         if not cache_dir.exists():
-            cache_dir.mkpath(CACHE_PATH)
+            cache_dir.mkpath(PATH["cache"])
         # -------------------------------------------------------------
 
     def draw_main_window(self) -> None:

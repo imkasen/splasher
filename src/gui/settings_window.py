@@ -4,9 +4,7 @@ from PySide6.QtWidgets import (
     QWidget, QTabWidget, QLabel
 )
 from PySide6.QtGui import QPixmap, QIcon
-from config.env import (
-    APP_NAME, APP_VERSION, APP_AUTHOR, APP_ADDR,
-)
+from config.env import APP
 import gui.icons
 
 
@@ -76,23 +74,23 @@ class SettingsWindow(QTabWidget):
         ico_label.setScaledContents(True)
         ico_label.setAlignment(Qt.AlignCenter)
         # app name
-        name_label = QLabel(APP_NAME)
+        name_label = QLabel(APP["name"])
         name_label.setScaledContents(True)
         name_label.setAlignment(Qt.AlignCenter)
         name_label.setStyleSheet("font-weight: bold")
         name_label.setFixedHeight(name_label.fontMetrics().height())
         # version
-        ver_label = QLabel("Version: " + APP_VERSION)
+        ver_label = QLabel("Version: " + APP["version"])
         ver_label.setScaledContents(True)
         ver_label.setAlignment(Qt.AlignCenter)
         ver_label.setFixedHeight(name_label.fontMetrics().height())
         # author
-        author_label = QLabel("Author: " + APP_AUTHOR)
+        author_label = QLabel("Author: " + APP["author"])
         author_label.setAlignment(Qt.AlignCenter)
         author_label.setFixedHeight(name_label.fontMetrics().height())
         # web address
         addr_label = QLabel()
-        addr_label.setText(f"<a href='{APP_ADDR}'>GitHub</a>")
+        addr_label.setText(f"<a href='{APP['addr']}'>GitHub</a>")
         addr_label.setOpenExternalLinks(True)
         addr_label.setAlignment(Qt.AlignCenter)
         addr_label.setFixedHeight(addr_label.fontMetrics().height())

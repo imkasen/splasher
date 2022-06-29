@@ -20,8 +20,8 @@ class Application(QApplication):
         """
         super(Application, self).__init__([])  # no command line arguments
         self.setWindowIcon(QIcon(":/logo.png"))  # QResource system
-        self.main_window = None
-        self.tray = None
+        self.main_window: MainWindow = MainWindow()
+        self.tray: SystemTray = SystemTray()
         self.__init_env()
 
     @staticmethod
@@ -31,37 +31,32 @@ class Application(QApplication):
         1. check if the cache folder exists, if not, create it.
         """
         # ======== check the cache dir ========
-        cache_dir = QDir(PATH["cache"])
+        cache_dir: QDir = QDir(PATH["cache"])
         if not cache_dir.exists():
             cache_dir.mkpath(PATH["cache"])
         # -------------------------------------------------------------
 
-    def draw_main_window(self) -> None:
+    def display_widgets(self) -> None:
         """
-        Display the main window.
+        Display the main window and the system tray.
         """
-        if self.main_window is None:
-            self.main_window = MainWindow()
-            self.main_window.show()  # windows are hidden by default
-
-    def draw_system_tray(self) -> None:
-        """
-        Display the system tray.
-        """
-        if self.tray is None:
-            self.tray = SystemTray()
-            if self.tray.isSystemTrayAvailable():
-                self.setQuitOnLastWindowClosed(False)  # keep app running after closing all windows
-                self.tray.show()
-            else:
-                self.main_window.status_bar.showMessage("The system tray can not be displayed!")
+        # ======== display the main window ========
+        self.main_window.show()  # windows are hidden by default
+        # -------------------------------------------------------------
+        # ======== display the system tray ========
+        if self.tray.isSystemTrayAvailable():
+            self.setQuitOnLastWindowClosed(False)  # keep app running after closing all windows
+            self.tray.show()
+        else:
+            self.main_window.status_bar.showMessage("The system tray can not be displayed!")
+        # -------------------------------------------------------------
 
     @staticmethod
     def singleton_app_warning_msg() -> None:
         """
         Show a warning message if there is an app already.
         """
-        err_msg = QMessageBox()
+        err_msg: QMessageBox = QMessageBox()
         err_msg.setIcon(QMessageBox.Warning)
         err_msg.setWindowTitle("Error")
         err_msg.setText("The application is already running!")

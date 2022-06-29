@@ -1,6 +1,6 @@
 from PySide6.QtCore import QDir
 
-APP = {
+APP: dict[str, str] = {
     "name": "Unsplash Wallpapers for Linux",
     "version": "v0.1.4",
     "author": "Kasen",
@@ -8,7 +8,7 @@ APP = {
     "dir": "unsplash_wallpapers/",
 }
 
-PATH = {
+PATH: dict[str, str] = {
     "applock": QDir.tempPath() + "/unsplash_wallpapers.lock",
     "cache": QDir.homePath() + "/.cache/" + APP["dir"],
 }

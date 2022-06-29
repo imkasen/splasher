@@ -37,7 +37,7 @@ class SettingsWindow(QTabWidget):
         here the paths to files are displayed and can be modified.
         """
         # ======== declaration and add the tab ========
-        path_tab = QWidget()
+        path_tab: QWidget = QWidget()
         self.addTab(path_tab, QIcon(":/tabs/path.png"), "Path")
         # -------------------------------------------------------------
 
@@ -47,7 +47,7 @@ class SettingsWindow(QTabWidget):
         here users can set the update frequency and the preview resolution.
         """
         # ======== declaration and add the tab ========
-        update_tab = QWidget()
+        update_tab: QWidget = QWidget()
         self.addTab(update_tab, QIcon(":/tabs/update.png"), "Update")
         # -------------------------------------------------------------
 
@@ -57,39 +57,39 @@ class SettingsWindow(QTabWidget):
         here shows the app's information.
         """
         # ======== declaration and add the tab ========
-        info_tab = QWidget()
+        info_tab: QWidget = QWidget()
         self.addTab(info_tab, QIcon(":/tabs/info.png"), "About")
         # -------------------------------------------------------------
         # ======== layout ========
-        layout = QVBoxLayout()
-        ico_layout = QHBoxLayout()
+        layout: QVBoxLayout = QVBoxLayout()
+        ico_layout: QHBoxLayout = QHBoxLayout()
         layout.setSpacing(10)
         info_tab.setLayout(layout)
         # -------------------------------------------------------------
         # ======== widgets ========
         # icon
-        ico_label = QLabel()
+        ico_label: QLabel = QLabel()
         ico_label.setPixmap(QPixmap(":/logo.png"))
         ico_label.setFixedSize(50, 50)
         ico_label.setScaledContents(True)
         ico_label.setAlignment(Qt.AlignCenter)
         # app name
-        name_label = QLabel(APP["name"])
+        name_label: QLabel = QLabel(APP["name"])
         name_label.setScaledContents(True)
         name_label.setAlignment(Qt.AlignCenter)
         name_label.setStyleSheet("font-weight: bold")
         name_label.setFixedHeight(name_label.fontMetrics().height())
         # version
-        ver_label = QLabel("Version: " + APP["version"])
+        ver_label: QLabel = QLabel("Version: " + APP["version"])
         ver_label.setScaledContents(True)
         ver_label.setAlignment(Qt.AlignCenter)
         ver_label.setFixedHeight(name_label.fontMetrics().height())
         # author
-        author_label = QLabel("Author: " + APP["author"])
+        author_label: QLabel = QLabel("Author: " + APP["author"])
         author_label.setAlignment(Qt.AlignCenter)
         author_label.setFixedHeight(name_label.fontMetrics().height())
         # web address
-        addr_label = QLabel()
+        addr_label: QLabel = QLabel()
         addr_label.setText(f"<a href='{APP['addr']}'>GitHub</a>")
         addr_label.setOpenExternalLinks(True)
         addr_label.setAlignment(Qt.AlignCenter)

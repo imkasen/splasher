@@ -7,12 +7,11 @@ def main() -> None:
     """
     The entry function of the application.
     """
-    applock = QLockFile(PATH["applock"])  # make sure only one program can run
+    applock: QLockFile = QLockFile(PATH["applock"])  # make sure only one program can run
     try:
-        app = Application()  # only one QApplication instance per application
+        app: Application = Application()  # only one QApplication instance per application
         if applock.tryLock():
-            app.draw_main_window()
-            app.draw_system_tray()
+            app.display_widgets()
             app.exec()  # start the event loop
         else:
             app.singleton_app_warning_msg()

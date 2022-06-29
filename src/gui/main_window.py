@@ -40,12 +40,12 @@ class MainWindow(QMainWindow):
         """
         super(MainWindow, self).__init__()
         # ======== main window attributes ========
-        self.__settings_window = None
+        self.__settings_window: SettingsWindow | None = None
         self.setWindowTitle(APP["name"])
         self.setFixedSize(960, 540)
         # -------------------------------------------------------------
         # ======== layouts ========
-        main_layout = QVBoxLayout()
+        main_layout: QVBoxLayout = QVBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
         self.__draw_wallpaper_ui(main_layout)
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         self.__draw_functional_bar(main_layout)
         # -------------------------------------------------------------
         # ======== status bar ========
-        self.status_bar = QStatusBar()
+        self.status_bar: QStatusBar = QStatusBar()
         self.status_bar.setSizeGripEnabled(False)
         # -------------------------------------------------------------
         # ======== main layout styles ========
@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
         main_layout.setSpacing(0)
         # -------------------------------------------------------------
         # ======== main widget ========
-        main_widget = QWidget()
+        main_widget: QWidget = QWidget()
         main_widget.setLayout(main_layout)
         self.setCentralWidget(main_widget)
         # -------------------------------------------------------------
@@ -72,8 +72,8 @@ class MainWindow(QMainWindow):
         """
         Display the wallpaper.
         """
-        img_label = QLabel()
-        img = QPixmap(PATH["cache"] + "5f7563b1538140c5931ba0a773aac650.jpg")
+        img_label: QLabel = QLabel()
+        img: QPixmap = QPixmap(PATH["cache"] + "5f7563b1538140c5931ba0a773aac650.jpg")
         if img.isNull():  # if the image can not be found
             img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
         img_label.setPixmap(img)
@@ -87,31 +87,31 @@ class MainWindow(QMainWindow):
         Functional widgets.
         """
         # layout
-        func_layout = QHBoxLayout()
+        func_layout: QHBoxLayout = QHBoxLayout()
         # theme lists
-        theme_box = QComboBox()
+        theme_box: QComboBox = QComboBox()
         # ...
         func_layout.addWidget(theme_box)
         # refresh button
-        refresh_btn = QPushButton("Refresh")
+        refresh_btn: QPushButton = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")
         refresh_btn.setIcon(QIcon(":/buttons/refresh.png"))
         refresh_btn.clicked.connect(self.refresh)
         func_layout.addWidget(refresh_btn)
         # choose button
-        choose_btn = QPushButton("Choose")
+        choose_btn: QPushButton = QPushButton("Choose")
         choose_btn.setToolTip("set the current picture as desktop wallpaper")
         choose_btn.setIcon(QIcon(":/buttons/choose.png"))
         choose_btn.clicked.connect(self.choose)
         func_layout.addWidget(choose_btn)
         # download button
-        download_btn = QPushButton("Download")
+        download_btn: QPushButton = QPushButton("Download")
         download_btn.setToolTip("download the current picture")
         download_btn.setIcon(QIcon(":/buttons/download.png"))
         download_btn.clicked.connect(self.download)
         func_layout.addWidget(download_btn)
         # settings button
-        settings_btn = QPushButton("Settings")
+        settings_btn: QPushButton = QPushButton("Settings")
         settings_btn.setToolTip("open the settings window")
         settings_btn.setIcon(QIcon(":/buttons/settings.png"))
         settings_btn.clicked.connect(self.__open_settings_window)

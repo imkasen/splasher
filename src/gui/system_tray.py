@@ -1,4 +1,4 @@
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, QCoreApplication
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
 from config.env import APP
@@ -20,25 +20,25 @@ class SystemTray(QSystemTrayIcon):
         :return: None
         """
         super(SystemTray, self).__init__()
-        self.__app = QApplication.instance()  # get the current QApplication instance
+        self.__app: QCoreApplication | None = QApplication.instance()  # get the current QApplication instance
         # ======== tray attributes ========
         self.setIcon(QIcon(":/logo.png"))
         self.setToolTip(APP["name"])
         self.activated.connect(self.__handle_mouse_click)
         # -------------------------------------------------------------
         # ======== menu list ========
-        menu = QMenu()
+        menu: QMenu = QMenu()
         self.setContextMenu(menu)  # add the menu to the system tray
         # refresh and set a picture as the desktop wallpaper
-        refresh_set_act = QAction("Refresh and Set", parent=menu)
+        refresh_set_act: QAction = QAction("Refresh and Set", parent=menu)
         refresh_set_act.triggered.connect(self.__refresh_and_set)
         menu.addAction(refresh_set_act)
         # show the main window
-        show_act = QAction("Show", parent=menu)
+        show_act: QAction = QAction("Show", parent=menu)
         show_act.triggered.connect(self.__show_app)
         menu.addAction(show_act)
         # quit the app
-        quit_act = QAction("Quit", parent=menu)
+        quit_act: QAction = QAction("Quit", parent=menu)
         quit_act.triggered.connect(self.__quit_app)
         menu.addAction(quit_act)
         # -------------------------------------------------------------

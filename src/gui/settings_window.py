@@ -1,8 +1,5 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import (
-    QVBoxLayout, QHBoxLayout,
-    QWidget, QTabWidget, QLabel
-)
+from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QLabel
 from PySide6.QtGui import QPixmap, QIcon
 from config.env import APP
 import gui.icons
@@ -16,6 +13,7 @@ class SettingsWindow(QTabWidget):
     2. update wallpapers regularly and set the resolution of the preview image,
     3. display the app info.
     """
+
     def __init__(self) -> None:
         """
         Set the layout of SettingsWindow.
@@ -106,5 +104,3 @@ class SettingsWindow(QTabWidget):
         layout.addWidget(addr_label)
         layout.addStretch()
         # -------------------------------------------------------------
-
-

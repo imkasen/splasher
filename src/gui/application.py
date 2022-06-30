@@ -14,6 +14,7 @@ class Application(QApplication):
     1. draw the main window
     2. draw the system tray
     """
+
     def __init__(self) -> None:
         """
         Draw the main window and the system tray.

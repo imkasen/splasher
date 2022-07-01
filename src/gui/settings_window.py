@@ -1,8 +1,8 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QLabel
 from PySide6.QtGui import QPixmap, QIcon
-from config import APP
-import gui.icons
+from . import icons
+from ..config import APP
 
 
 # The configuration of SettingsWindow

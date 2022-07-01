@@ -1,6 +1,6 @@
 from PySide6.QtCore import QLockFile
-from config import PATH
-from gui import Application
+from .gui import Application
+from .config import PATH
 
 
 def main() -> None:
@@ -17,7 +17,3 @@ def main() -> None:
             app.singleton_app_warning_msg()
     finally:
         applock.unlock()
-
-
-if __name__ == "__main__":
-    main()

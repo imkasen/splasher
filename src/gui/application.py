@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QDir
-from gui.main_window import MainWindow
-from gui.system_tray import SystemTray
-import gui.icons
-from config import PATH
+from .main_window import MainWindow
+from .system_tray import SystemTray
+from . import icons
+from ..config import PATH
 
 
 # The configuration of Application

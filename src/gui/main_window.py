@@ -1,9 +1,9 @@
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar, QComboBox
 from PySide6.QtGui import QPixmap, QIcon
-from config import APP, PATH
-from gui.settings_window import SettingsWindow
-import gui.icons
+from .settings_window import SettingsWindow
+from . import icons
+from ..config import APP, PATH
 
 
 # The configuration of MainWindow

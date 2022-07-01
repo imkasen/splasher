@@ -1,8 +1,8 @@
 from PySide6.QtCore import Slot, QCoreApplication
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
-from config import APP
-import gui.icons
+from . import icons
+from ..config import APP
 
 
 # The configuration of SystemTray

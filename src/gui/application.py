@@ -4,7 +4,7 @@ from PySide6.QtCore import QDir
 from gui.main_window import MainWindow
 from gui.system_tray import SystemTray
 import gui.icons
-from config.env import PATH
+from config import PATH
 
 
 # The configuration of Application

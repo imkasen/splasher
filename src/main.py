@@ -1,6 +1,6 @@
 from PySide6.QtCore import QLockFile
-from config.env import PATH
-from gui.application import Application
+from config import PATH
+from gui import Application
 
 
 def main() -> None:

@@ -1,7 +1,7 @@
 from PySide6.QtCore import Slot, QCoreApplication
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
-from config.env import APP
+from config import APP
 import gui.icons
 
 

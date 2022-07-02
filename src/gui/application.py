@@ -4,7 +4,7 @@ from PySide6.QtCore import QDir
 from .main_window import MainWindow
 from .system_tray import SystemTray
 from . import icons
-from ..config import PATH
+from ..config import setup_env
 
 
 # The configuration of Application
@@ -23,19 +23,7 @@ class Application(QApplication):
         self.setWindowIcon(QIcon(":/logo.png"))  # QResource system
         self.main_window: MainWindow = MainWindow()
         self.tray: SystemTray = SystemTray()
-        self.__init_env()
-
-    @staticmethod
-    def __init_env():
-        """
-        Initialize various environment settings:
-        1. check if the cache folder exists, if not, create it.
-        """
-        # ======== check the cache dir ========
-        cache_dir: QDir = QDir(PATH["cache"])
-        if not cache_dir.exists():
-            cache_dir.mkpath(PATH["cache"])
-        # -------------------------------------------------------------
+        setup_env()
 
     def display_widgets(self) -> None:
         """

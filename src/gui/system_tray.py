@@ -1,7 +1,7 @@
 from PySide6.QtCore import Slot, QCoreApplication
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
 from PySide6.QtGui import QIcon, QAction
-from . import icons
+from . import icons_rc
 from ..config import APP
 
 
@@ -9,9 +9,8 @@ from ..config import APP
 class SystemTray(QSystemTrayIcon):
     """
     The SystemTray class which contains following functions:
-    1. refresh and set a wallpaper
-    2. show the app
-    3. quit the app
+    1. show the app
+    2. quit the app
     """
 
     def __init__(self) -> None:
@@ -29,10 +28,6 @@ class SystemTray(QSystemTrayIcon):
         # ======== menu list ========
         menu: QMenu = QMenu()
         self.setContextMenu(menu)  # add the menu to the system tray
-        # refresh and set a picture as the desktop wallpaper
-        refresh_set_act: QAction = QAction("Refresh and Set", parent=menu)
-        refresh_set_act.triggered.connect(self.__refresh_and_set)
-        menu.addAction(refresh_set_act)
         # show the main window
         show_act: QAction = QAction("Show", parent=menu)
         show_act.triggered.connect(self.__show_app)
@@ -52,13 +47,6 @@ class SystemTray(QSystemTrayIcon):
         """
         if reason == QSystemTrayIcon.ActivationReason.Trigger:  # left click
             self.__show_app()
-
-    @Slot()
-    def __refresh_and_set(self) -> None:
-        """
-        Refresh and set a picture as the desktop wallpaper.
-        """
-        pass
 
     @Slot()
     def __show_app(self) -> None:

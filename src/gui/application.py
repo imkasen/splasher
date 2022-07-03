@@ -3,7 +3,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtCore import QDir
 from .main_window import MainWindow
 from .system_tray import SystemTray
-from . import icons
+from . import icons_rc
 from ..config import setup_env
 
 
@@ -45,8 +45,4 @@ class Application(QApplication):
         """
         Show a warning message if there is an app already.
         """
-        err_msg: QMessageBox = QMessageBox()
-        err_msg.setIcon(QMessageBox.Warning)
-        err_msg.setWindowTitle("Error")
-        err_msg.setText("The application is already running!")
-        err_msg.exec()
+        QMessageBox.warning(None, "Error", "The application is already running!")

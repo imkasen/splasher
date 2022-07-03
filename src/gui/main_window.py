@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar, QComboBox
 from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
-from . import icons
+from . import icons_rc
 from ..config import APP, PATH
 
 
@@ -45,17 +45,17 @@ class MainWindow(QMainWindow):
         main_layout: QVBoxLayout = QVBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
-        self.__draw_wallpaper_ui(main_layout)
+        main_layout.addWidget(self.__draw_wallpaper_ui())
         # -------------------------------------------------------------
         # ======== functional widgets ========
-        self.__draw_functional_bar(main_layout)
+        main_layout.addLayout(self.__draw_functional_bar())
         # -------------------------------------------------------------
         # ======== status bar ========
         self.status_bar: QStatusBar = QStatusBar()
         self.status_bar.setSizeGripEnabled(False)
+        main_layout.addWidget(self.status_bar)
         # -------------------------------------------------------------
         # ======== main layout styles ========
-        main_layout.addWidget(self.status_bar)
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
         # -------------------------------------------------------------
@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(main_widget)
         # -------------------------------------------------------------
 
-    def __draw_wallpaper_ui(self, main_layout: QVBoxLayout) -> None:
+    def __draw_wallpaper_ui(self) -> QLabel:
         """
         Display the wallpaper.
         """
@@ -76,19 +76,15 @@ class MainWindow(QMainWindow):
         img_label.setPixmap(img)
         img_label.setScaledContents(True)  # adjust the image size to fit the window
         img_label.setAlignment(Qt.AlignCenter)
-        # add to main layout
-        main_layout.addWidget(img_label)
+        # return label
+        return img_label
 
-    def __draw_functional_bar(self, main_layout: QVBoxLayout) -> None:
+    def __draw_functional_bar(self) -> QHBoxLayout:
         """
         Functional widgets.
         """
         # layout
         func_layout: QHBoxLayout = QHBoxLayout()
-        # theme lists
-        theme_box: QComboBox = QComboBox()
-        # ...
-        func_layout.addWidget(theme_box)
         # refresh button
         refresh_btn: QPushButton = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")
@@ -113,8 +109,8 @@ class MainWindow(QMainWindow):
         settings_btn.setIcon(QIcon(":/buttons/settings.png"))
         settings_btn.clicked.connect(self.__open_settings_window)
         func_layout.addWidget(settings_btn)
-        # add to main layout
-        main_layout.addLayout(func_layout)
+        # return layout
+        return func_layout
 
     @Slot()
     def refresh(self) -> None:

@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QApplication, QMessageBox
+from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QIcon
 from .main_window import MainWindow
 from .system_tray import SystemTray
@@ -38,10 +38,3 @@ class Application(QApplication):
         else:
             self.main_window.status_bar.showMessage("The system tray can not be displayed!")
         # -------------------------------------------------------------
-
-    @staticmethod
-    def singleton_app_warning_msg() -> None:
-        """
-        Show a warning message if there is an app already.
-        """
-        QMessageBox.warning(None, "Error", "The application is already running!")

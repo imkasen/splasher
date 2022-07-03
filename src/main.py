@@ -1,4 +1,5 @@
 from PySide6.QtCore import QLockFile
+from PySide6.QtWidgets import QMessageBox
 from .gui import Application
 from .config import PATH
 
@@ -14,6 +15,6 @@ def main() -> None:
             app.display_widgets()
             app.exec()  # start the event loop
         else:
-            app.singleton_app_warning_msg()
+            QMessageBox.warning(None, "Error", "The application is already running!")
     finally:
         applock.unlock()

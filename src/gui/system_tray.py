@@ -55,6 +55,8 @@ class SystemTray(QSystemTrayIcon):
         """
         if self.__app.main_window.isVisible() is False:
             self.__app.main_window.show()
+        elif self.__app.main_window.isMinimized():
+            self.__app.main_window.showNormal()
         else:
             self.__app.main_window.activateWindow()
             self.__app.main_window.raise_()

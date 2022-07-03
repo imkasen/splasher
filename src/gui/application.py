@@ -1,6 +1,5 @@
 from PySide6.QtWidgets import QApplication, QMessageBox
 from PySide6.QtGui import QIcon
-from PySide6.QtCore import QDir
 from .main_window import MainWindow
 from .system_tray import SystemTray
 from . import icons_rc

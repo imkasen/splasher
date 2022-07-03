@@ -1,5 +1,5 @@
 from PySide6.QtCore import QDir
-from . import PATH
+from .args import PATH
 
 
 def setup_env() -> None:

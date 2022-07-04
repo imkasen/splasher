@@ -57,7 +57,7 @@ class SystemTray(QSystemTrayIcon):
             self.__app.main_window.show()
         elif self.__app.main_window.isMinimized():
             self.__app.main_window.showNormal()
-        else:
+        elif self.__app.main_window.isActiveWindow() is False:  # put the settings window on the top
             self.__app.main_window.activateWindow()
             self.__app.main_window.raise_()
 

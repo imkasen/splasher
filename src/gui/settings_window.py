@@ -22,6 +22,7 @@ class SettingsWindow(QTabWidget):
         super(SettingsWindow, self).__init__()
         self.setWindowTitle("Settings")
         self.setFixedSize(480, 270)
+        self.setWindowFlag(Qt.WindowStaysOnTopHint)  # always stays on top of other windows
         # -------------------------------------------------------------
         # ======== tabs design ========
         self.__draw_path_tab()

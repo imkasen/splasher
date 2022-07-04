@@ -133,6 +133,5 @@ class MainWindow(QMainWindow):
                 or self.__settings_window.isVisible() is False:
             self.__settings_window = SettingsWindow()
             self.__settings_window.show()
-        elif self.__settings_window.isActiveWindow() is False:  # put the settings window on the top
-            self.__settings_window.activateWindow()
-            self.__settings_window.raise_()
+        elif self.__settings_window.isMinimized():
+            self.__settings_window.showNormal()

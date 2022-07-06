@@ -1,2 +1,3 @@
 from .args import APP, PATH
-from .setup import setup_env
+from .setup_env import setup_env
+from .log import init_log

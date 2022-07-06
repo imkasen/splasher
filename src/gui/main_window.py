@@ -4,6 +4,7 @@ from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
 from . import icons_rc
 from ..config import APP, PATH
+import logging
 
 
 # The configuration of MainWindow
@@ -36,6 +37,7 @@ class MainWindow(QMainWindow):
         ------------------------------------------
         """
         super(MainWindow, self).__init__()
+        self.__logger: logging.Logger = logging.getLogger("main")
         # ======== main window attributes ========
         self.__settings_window: SettingsWindow | None = None
         self.setWindowTitle(APP["name"])
@@ -115,14 +117,17 @@ class MainWindow(QMainWindow):
     @Slot()
     def refresh(self) -> None:
         self.status_bar.showMessage("Refresh the picture!", 5000)
+        self.__logger.info("Refresh the picture.")
 
     @Slot()
     def choose(self) -> None:
         self.status_bar.showMessage("Set the picture as wallpaper!", 5000)
+        self.__logger.info("Set the picture as wallpaper.")
 
     @Slot()
     def download(self) -> None:
         self.status_bar.showMessage("Download the wallpaper!", 5000)
+        self.__logger.info("Download the wallpaper.")
 
     @Slot()
     def __open_settings_window(self) -> None:

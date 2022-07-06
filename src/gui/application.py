@@ -3,7 +3,7 @@ from PySide6.QtGui import QIcon
 from .main_window import MainWindow
 from .system_tray import SystemTray
 from . import icons_rc
-from ..config import setup_env
+import logging
 
 
 # The configuration of Application
@@ -22,7 +22,6 @@ class Application(QApplication):
         self.setWindowIcon(QIcon(":/logo.png"))  # QResource system
         self.main_window: MainWindow = MainWindow()
         self.tray: SystemTray = SystemTray()
-        setup_env()
 
     def display_widgets(self) -> None:
         """
@@ -37,4 +36,5 @@ class Application(QApplication):
             self.tray.show()
         else:
             self.main_window.status_bar.showMessage("The system tray can not be displayed!")
+            logging.getLogger("main").critical("The system tray can not be displayed!")
         # -------------------------------------------------------------

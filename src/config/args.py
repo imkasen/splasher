@@ -11,5 +11,5 @@ APP: dict[str, str] = {
 PATH: dict[str, str] = {
     "applock": QDir.tempPath() + "/unsplash_wallpapers.lock",
     "cache": QDir.homePath() + "/.cache/" + APP["dir"],
-    "config": QDir.homePath() + "/.config/" + APP["dir"],
+    "log": QDir.tempPath() + "/" + APP["dir"],
 }

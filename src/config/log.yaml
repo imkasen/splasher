@@ -1,8 +1,10 @@
 # The configuration used in 'log.py'
 version: 1
 formatters:
+  simple:
+    format: "%(asctime)s - %(levelname)s - %(message)s"
   standard:
-    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    format: "%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s"
   detailed:
     format: "%(asctime)s - %(levelname)s - %(name)s - %(lineno)d - %(module)s - %(funcName)s - %(message)s"
 handlers:
@@ -14,7 +16,7 @@ handlers:
   app_info:
     class: logging.handlers.RotatingFileHandler
     level: INFO
-    formatter: standard
+    formatter: simple
     filename: /tmp/unsplash_wallpapers/info.log
     maxBytes: 10485760  # 10MB
     backupCount: 20
@@ -22,7 +24,7 @@ handlers:
   app_warning:
     class: logging.handlers.RotatingFileHandler
     level: WARNING
-    formatter: detailed
+    formatter: standard
     filename: /tmp/unsplash_wallpapers/warning.log
     maxBytes: 10485760  # 10MB
     backupCount: 20
@@ -30,7 +32,7 @@ handlers:
   app_error:
     class: logging.handlers.RotatingFileHandler
     level: ERROR
-    formatter: detailed
+    formatter: standard
     filename: /tmp/unsplash_wallpapers/error.log
     maxBytes: 10485760  # 10MB
     backupCount: 20
@@ -38,7 +40,7 @@ handlers:
   app_critical:
     class: logging.handlers.RotatingFileHandler
     level: CRITICAL
-    formatter: detailed
+    formatter: standard
     filename: /tmp/unsplash_wallpapers/critical.log
     maxBytes: 10485760  # 10MB
     backupCount: 20

@@ -1,19 +1,20 @@
 from typing import Any
+from .args import PATH
 import logging
 import logging.config
 import os
-import yaml
+import json
 
 
-def init_log(file_path: str = "src/config/log.yaml") -> None:
+def init_log(file_path: str = PATH["logfile"]) -> None:
     """
     Read the logging configuration.
-    :param file_path: the path of 'log.yaml'
+    :param file_path: the path of 'log.json'
     """
     if os.path.exists(path=file_path):
         with open(file_path, 'r', encoding='utf-8') as file:
             try:
-                file_config: Any = yaml.safe_load(file)
+                file_config: Any = json.load(file)
                 logging.config.dictConfig(file_config)
             except (IOError, Exception, BaseException):
                 fallback_config("Error in loading configuration, using default configuration.")
@@ -23,7 +24,7 @@ def init_log(file_path: str = "src/config/log.yaml") -> None:
 
 def fallback_config(msg: str) -> None:
     """
-    Default configuration when loading 'log.yaml' fails.
+    Default configuration when loading 'log.json' fails.
     :param msg:
     """
     logging.basicConfig(level=logging.WARNING,

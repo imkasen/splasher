@@ -36,5 +36,5 @@ class Application(QApplication):
             self.tray.show()
         else:
             self.main_window.status_bar.showMessage("The system tray can not be displayed!")
-            logging.getLogger("main").critical("The system tray can not be displayed!")
+            logging.getLogger(__name__).critical("The system tray can not be displayed!")
         # -------------------------------------------------------------

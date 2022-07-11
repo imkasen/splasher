@@ -37,7 +37,7 @@ class MainWindow(QMainWindow):
         ------------------------------------------
         """
         super(MainWindow, self).__init__()
-        self.__logger: logging.Logger = logging.getLogger("main")
+        self.__logger: logging.Logger = logging.getLogger(__name__)
         # ======== main window attributes ========
         self.__settings_window: SettingsWindow | None = None
         self.setWindowTitle(APP["name"])

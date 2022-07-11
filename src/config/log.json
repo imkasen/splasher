@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "formatters": {
+    "simple": {
+      "datefmt": "%Y/%m/%d %H:%M:%S",
+      "format": "%(asctime)s - %(levelname)s - %(message)s"
+    },
+    "standard": {
+      "datefmt": "%Y/%m/%d %H:%M:%S",
+      "format": "%(asctime)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s"
+    },
+    "detailed": {
+      "datefmt": "%Y/%m/%d %H:%M:%S",
+      "format": "%(asctime)s - %(levelname)s - %(name)s - %(lineno)d - %(module)s - %(funcName)s - %(message)s"
+    }
+  },
+  "handlers": {
+    "console": {
+      "class": "logging.StreamHandler",
+      "formatter": "detailed",
+      "level": "DEBUG",
+      "stream": "ext://sys.stdout"
+    },
+    "app_info": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "INFO",
+      "formatter": "simple",
+      "filename": "/tmp/unsplash_wallpapers/info.log",
+      "maxBytes": 10485760,
+      "backupCount": 20,
+      "encoding": "utf8"
+    },
+    "app_warning": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "WARNING",
+      "formatter": "standard",
+      "filename": "/tmp/unsplash_wallpapers/warning.log",
+      "maxBytes": 10485760,
+      "backupCount": 20,
+      "encoding": "utf8"
+    },
+    "app_error": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "ERROR",
+      "formatter": "standard",
+      "filename": "/tmp/unsplash_wallpapers/error.log",
+      "maxBytes": 10485760,
+      "backupCount": 20,
+      "encoding": "utf8"
+    },
+    "app_critical": {
+      "class": "logging.handlers.RotatingFileHandler",
+      "level": "CRITICAL",
+      "formatter": "standard",
+      "filename": "/tmp/unsplash_wallpapers/critical.log",
+      "maxBytes": 10485760,
+      "backupCount": 20,
+      "encoding": "utf8"
+    }
+  },
+  "loggers": {
+    "<module>": {
+      "level": "INFO",
+      "handlers": [
+        "app_info",
+        "app_warning",
+        "app_error",
+        "app_critical"
+      ]
+    }
+  },
+  "root": {
+    "level": "NOTSET",
+    "handlers": [
+      "console"
+    ]
+  }
+}

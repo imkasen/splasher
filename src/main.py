@@ -10,9 +10,9 @@ def main() -> None:
     The main function of the application.
     """
     setup_env()
-    init_log("src/config/log.yaml")
+    init_log()
     # -------------------------------------------------------------
-    logger: logging.Logger = logging.getLogger("main")
+    logger: logging.Logger = logging.getLogger(__name__)
     logger.info("App starts.")
     applock: QLockFile = QLockFile(PATH["applock"])  # make sure only one program can run
     try:

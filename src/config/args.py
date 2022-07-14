@@ -14,3 +14,7 @@ PATH: dict[str, str] = {
     "logfile": "src/config/log.json",
     "log": QDir.tempPath() + "/" + APP["dir"],
 }
+
+URL: dict[str, str] = {
+    "source": "https://source.unsplash.com/random/960x540",
+}

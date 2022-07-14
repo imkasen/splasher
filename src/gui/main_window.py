@@ -2,6 +2,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar, QComboBox
 from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
+from ..downloader import ImgDownloader
 from . import icons_rc
 from ..config import APP, PATH
 import logging
@@ -38,6 +39,7 @@ class MainWindow(QMainWindow):
         """
         super(MainWindow, self).__init__()
         self.__logger: logging.Logger = logging.getLogger(__name__)
+        self.__downloader: ImgDownloader = ImgDownloader()
         # ======== main window attributes ========
         self.__settings_window: SettingsWindow | None = None
         self.setWindowTitle(APP["name"])
@@ -118,6 +120,7 @@ class MainWindow(QMainWindow):
     def refresh(self) -> None:
         self.status_bar.showMessage("Refresh the picture!", 5000)
         self.__logger.info("Refresh the picture.")
+        self.__downloader.send_request()
 
     @Slot()
     def choose(self) -> None:

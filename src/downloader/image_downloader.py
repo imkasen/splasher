@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice, QByteArray
+from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from ..config import URL, PATH
 import logging
@@ -41,10 +41,10 @@ class ImgDownloader(QObject):
         if reply.error() != QNetworkReply.NoError:
             self.__logger.error("QNetworkReply Error: " + reply.errorString())
             return
-        img_name: str = reply.url().path()[1:] + ".jpg"  # "image-xxxxx.jpg"
-        img_path: str = PATH["cache"] + img_name
-        img_data: QByteArray = reply.readAll()
+        img_path: str = PATH["cache"] + reply.url().path()[1:] + ".jpg"
         img_file: QFile = QFile(img_path)
         if img_file.open(QIODevice.WriteOnly):
-            img_file.write(img_data)
-        self.__logger.info(f"Write an image to: '{img_path}'")
+            img_file.write(reply.readAll())
+            self.__logger.info(f"Write an image to: '{img_path}'")
+        else:
+            self.__logger.error(f"Fail to write an image to: '{img_path}'")

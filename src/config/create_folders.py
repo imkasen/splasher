@@ -3,9 +3,9 @@ from .args import PATH
 import logging
 
 
-def setup_env() -> None:
+def create_folders() -> None:
     """
-    Initialize various environment settings:
+    Create multiple folders for the application:
     1. create a single directory where app cache is stored if it does not exist.(~/.cache/<dir>)
     2. create a single directory where app logs are stored if it does not exist.(~/tmp/<dir>)
     """

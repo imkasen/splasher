@@ -1,7 +1,7 @@
 from PySide6.QtCore import QLockFile
 from PySide6.QtWidgets import QMessageBox
 from .gui import Application
-from .config import PATH, setup_env, init_log
+from .config import PATH, init_app
 import logging
 
 
@@ -9,8 +9,7 @@ def main() -> None:
     """
     The main function of the application.
     """
-    setup_env()
-    init_log()
+    init_app()
     # -------------------------------------------------------------
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info("App starts.")

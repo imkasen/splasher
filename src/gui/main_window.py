@@ -118,8 +118,8 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def refresh(self) -> None:
-        self.status_bar.showMessage("Refresh the picture!", 5000)
-        self.__logger.info("Refresh the picture.")
+        self.status_bar.showMessage("Fetch a new wallpaper.", 5000)
+        self.__logger.info("Fetch a new wallpaper.")
         self.__downloader.send_request()
 
     @Slot()

@@ -35,6 +35,6 @@ class Application(QApplication):
             self.setQuitOnLastWindowClosed(False)  # keep app running after closing all windows
             self.tray.show()
         else:
-            self.main_window.status_bar.showMessage("The system tray can not be displayed!")
+            self.main_window.show_message("The system tray can not be displayed!", 0)
             logging.getLogger(__name__).critical("The system tray can not be displayed!")
         # -------------------------------------------------------------

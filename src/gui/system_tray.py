@@ -1,6 +1,7 @@
 from PySide6.QtCore import Slot, QCoreApplication
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu, QApplication
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QAction
+from .main_window import MainWindow
 from . import icons_rc
 from ..config import APP
 
@@ -19,7 +20,9 @@ class SystemTray(QSystemTrayIcon):
         :return: None
         """
         super(SystemTray, self).__init__()
-        self.__app: QCoreApplication | None = QApplication.instance()  # get the current QApplication instance
+        self.__app: QCoreApplication | None = QCoreApplication.instance()  # get the current QApplication instance
+        if self.__app is not None:
+            self.__main_window: MainWindow = self.__app.main_window
         # ======== tray attributes ========
         self.setIcon(QIcon(":/logo.png"))
         self.setToolTip(APP["name"])
@@ -53,13 +56,13 @@ class SystemTray(QSystemTrayIcon):
         """
         Display the main window if it does not exist, otherwise show the main window on the top.
         """
-        if self.__app.main_window.isVisible() is False:
-            self.__app.main_window.show()
-        elif self.__app.main_window.isMinimized():
-            self.__app.main_window.showNormal()
-        elif self.__app.main_window.isActiveWindow() is False:  # put the settings window on the top
-            self.__app.main_window.activateWindow()
-            self.__app.main_window.raise_()
+        if self.__main_window.isVisible() is False:
+            self.__main_window.show()
+        elif self.__main_window.isMinimized():
+            self.__main_window.showNormal()
+        elif self.__main_window.isActiveWindow() is False:  # put the settings window on the top
+            self.__main_window.activateWindow()
+            self.__main_window.raise_()
 
     @Slot()
     def __quit_app(self) -> None:

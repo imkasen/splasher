@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         """
         super(MainWindow, self).__init__()
         self.__logger: logging.Logger = logging.getLogger(__name__)
-        self.__downloader: ImgDownloader = ImgDownloader()
+        self.__downloader: ImgDownloader = ImgDownloader(self)
         # ======== main window attributes ========
         self.__settings_window: SettingsWindow | None = None
         self.setWindowTitle(APP["name"])
@@ -55,9 +55,9 @@ class MainWindow(QMainWindow):
         main_layout.addLayout(self.__draw_functional_bar())
         # -------------------------------------------------------------
         # ======== status bar ========
-        self.status_bar: QStatusBar = QStatusBar()
-        self.status_bar.setSizeGripEnabled(False)
-        main_layout.addWidget(self.status_bar)
+        self.__status_bar: QStatusBar = QStatusBar()
+        self.__status_bar.setSizeGripEnabled(False)
+        main_layout.addWidget(self.__status_bar)
         # -------------------------------------------------------------
         # ======== main layout styles ========
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -72,6 +72,7 @@ class MainWindow(QMainWindow):
     def __draw_wallpaper_ui(self) -> QLabel:
         """
         Display the wallpaper.
+        :return: QLabel
         """
         img_label: QLabel = QLabel()
         img: QPixmap = QPixmap(PATH["cache"] + "5f7563b1538140c5931ba0a773aac650.jpg")
@@ -86,6 +87,7 @@ class MainWindow(QMainWindow):
     def __draw_functional_bar(self) -> QHBoxLayout:
         """
         Functional widgets.
+        :return: QHBoxLayout
         """
         # layout
         func_layout: QHBoxLayout = QHBoxLayout()
@@ -118,18 +120,21 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def refresh(self) -> None:
-        self.status_bar.showMessage("Fetch a new wallpaper.", 5000)
-        self.__logger.info("Fetch a new wallpaper.")
+        """
+        Use 'ImgDownloader' to load a preview image.
+        """
+        self.show_message("Attempt to fetch a new preview wallpaper.")
+        self.__logger.info("Attempt to fetch a new preview wallpaper.")
         self.__downloader.send_request()
 
     @Slot()
     def choose(self) -> None:
-        self.status_bar.showMessage("Set the picture as wallpaper!", 5000)
+        self.show_message("Set the picture as wallpaper!")
         self.__logger.info("Set the picture as wallpaper.")
 
     @Slot()
     def download(self) -> None:
-        self.status_bar.showMessage("Download the wallpaper!", 5000)
+        self.show_message("Download the wallpaper!")
         self.__logger.info("Download the wallpaper.")
 
     @Slot()
@@ -143,3 +148,11 @@ class MainWindow(QMainWindow):
             self.__settings_window.show()
         elif self.__settings_window.isMinimized():
             self.__settings_window.showNormal()
+
+    def show_message(self, msg: str, timeout: int = 5000) -> None:
+        """
+        Show some messages in the status bar.
+        :param msg: message string.
+        :param timeout: default timeout is 5000 ms.
+        """
+        self.__status_bar.showMessage(msg, timeout)

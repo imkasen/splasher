@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from ..config import URL, PATH
+from ..config import API, PATH
 import logging
 
 
@@ -21,7 +21,7 @@ class ImgDownloader(QObject):
         self.__mgr.setAutoDeleteReplies(True)
         self.__mgr.setTransferTimeout()
 
-    def send_request(self, api: str = URL["source"]) -> None:
+    def send_request(self, api: str = API["SOURCE"] + "960x540") -> None:
         """
         Init a network request and send the request to Unsplash api.
         :param api: Unsplash api url
@@ -43,14 +43,13 @@ class ImgDownloader(QObject):
             self.__show_message("Failed to fetch a preview wallpaper.")
             self.__logger.error("QNetworkReply Error: " + reply.errorString())
             return
-        img_path: str = PATH["cache"] + reply.url().path()[1:] + ".jpg"
+        img_path: str = PATH["CACHE"] + reply.url().path()[1:] + ".jpg"
         img_file: QFile = QFile(img_path)
         if img_file.open(QIODevice.WriteOnly):
             img_file.write(reply.readAll())
-            self.__show_message("Successfully load a new preview wallpaper.")
             self.__logger.info(f"Write an image to: '{img_path}'")
         else:
-            self.__show_message("Failed to load a new preview wallpaper.")
+            self.__show_message("Failed to write a preview image to cache.")
             self.__logger.error(f"Failed to write an image to: '{img_path}'")
 
     def __show_message(self, msg: str) -> None:

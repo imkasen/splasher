@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt, Slot
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar, QComboBox
+from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar
 from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
 from ..downloader import ImgDownloader
@@ -38,13 +38,21 @@ class MainWindow(QMainWindow):
         ------------------------------------------
         """
         super(MainWindow, self).__init__()
+        # ======== main window attributes ========
+        self.setWindowTitle(APP["NAME"])
+        self.setFixedSize(960, 540)
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__downloader: ImgDownloader = ImgDownloader(self)
-        # ======== main window attributes ========
         self.__settings_window: SettingsWindow | None = None
-        self.setWindowTitle(APP["name"])
-        self.setFixedSize(960, 540)
         # -------------------------------------------------------------
+        # ======== draw ui ========
+        self.__draw_window_ui()
+        # -------------------------------------------------------------
+
+    def __draw_window_ui(self) -> None:
+        """
+        Draw the layouts, wallpaper, buttons and status bar.
+        """
         # ======== layouts ========
         main_layout: QVBoxLayout = QVBoxLayout()
         # -------------------------------------------------------------
@@ -71,11 +79,11 @@ class MainWindow(QMainWindow):
 
     def __draw_wallpaper_ui(self) -> QLabel:
         """
-        Display the wallpaper.
+        Display a wallpaper.
         :return: QLabel
         """
         img_label: QLabel = QLabel()
-        img: QPixmap = QPixmap(PATH["cache"] + "5f7563b1538140c5931ba0a773aac650.jpg")
+        img: QPixmap = QPixmap(PATH["CACHE"] + "5f7563b1538140c5931ba0a773aac650.jpg")
         if img.isNull():  # if the image can not be found
             img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
         img_label.setPixmap(img)
@@ -86,7 +94,7 @@ class MainWindow(QMainWindow):
 
     def __draw_functional_bar(self) -> QHBoxLayout:
         """
-        Functional widgets.
+        Draw some functional widgets.
         :return: QHBoxLayout
         """
         # layout

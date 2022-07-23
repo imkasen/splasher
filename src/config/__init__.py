@@ -1,2 +1,2 @@
-from .args import APP, PATH, URL
+from .args import APP, PATH, API
 from .init_app import init_app

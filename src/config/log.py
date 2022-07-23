@@ -6,7 +6,7 @@ import os
 import json
 
 
-def init_log(file_path: str = PATH["logfile"]) -> None:
+def init_log(file_path: str = PATH["LOGFILE"]) -> None:
     """
     Read the logging configuration.
     :param file_path: the path of 'log.json'

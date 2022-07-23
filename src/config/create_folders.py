@@ -10,18 +10,18 @@ def create_folders() -> None:
     2. create a single directory where app logs are stored if it does not exist.(~/tmp/<dir>)
     """
     # ======== check the cache dir ========
-    cache_dir: QDir = QDir(PATH["cache"])
+    cache_dir: QDir = QDir(PATH["CACHE"])
     if not cache_dir.exists():
-        if cache_dir.mkpath(PATH["cache"]) is not True:
-            logging.error(f"Failed to create folder: '{PATH['cache']}'")
+        if cache_dir.mkpath(PATH["CACHE"]) is not True:
+            logging.error(f"Failed to create folder: '{PATH['CACHE']}'")
         else:
-            logging.warning(f"Create folder: '{PATH['cache']}'")
+            logging.warning(f"Create folder: '{PATH['CACHE']}'")
     # -------------------------------------------------------------
     # ======== check the log dir ========
-    log_dir: QDir = QDir(PATH["log"])
+    log_dir: QDir = QDir(PATH["LOG"])
     if not log_dir.exists():
-        if log_dir.mkpath(PATH["log"]) is not True:
-            logging.error(f"Failed to create folder: '{PATH['log']}'")
+        if log_dir.mkpath(PATH["LOG"]) is not True:
+            logging.error(f"Failed to create folder: '{PATH['LOG']}'")
         else:
-            logging.warning(f"Create folder: '{PATH['log']}'")
+            logging.warning(f"Create folder: '{PATH['LOG']}'")
     # -------------------------------------------------------------

@@ -13,7 +13,7 @@ def main() -> None:
     # -------------------------------------------------------------
     logger: logging.Logger = logging.getLogger(__name__)
     logger.info("App starts.")
-    applock: QLockFile = QLockFile(PATH["applock"])  # make sure only one program can run
+    applock: QLockFile = QLockFile(PATH["APPLOCK"])  # make sure only one program can run
     try:
         app: Application = Application()  # only one QApplication instance per application
         if applock.tryLock():

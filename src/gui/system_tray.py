@@ -25,7 +25,7 @@ class SystemTray(QSystemTrayIcon):
             self.__main_window: MainWindow = self.__app.main_window
         # ======== tray attributes ========
         self.setIcon(QIcon(":/logo.png"))
-        self.setToolTip(APP["name"])
+        self.setToolTip(APP["NAME"])
         self.activated.connect(self.__handle_mouse_click)
         # -------------------------------------------------------------
         # ======== menu list ========

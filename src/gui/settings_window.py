@@ -73,23 +73,23 @@ class SettingsWindow(QTabWidget):
         ico_label.setScaledContents(True)
         ico_label.setAlignment(Qt.AlignCenter)
         # app name
-        name_label: QLabel = QLabel(APP["name"])
+        name_label: QLabel = QLabel(APP["NAME"])
         name_label.setScaledContents(True)
         name_label.setAlignment(Qt.AlignCenter)
         name_label.setStyleSheet("font-weight: bold")
         name_label.setFixedHeight(name_label.fontMetrics().height())
         # version
-        ver_label: QLabel = QLabel("Version: " + APP["version"])
+        ver_label: QLabel = QLabel("Version: " + APP["VERSION"])
         ver_label.setScaledContents(True)
         ver_label.setAlignment(Qt.AlignCenter)
         ver_label.setFixedHeight(name_label.fontMetrics().height())
         # author
-        author_label: QLabel = QLabel("Author: " + APP["author"])
+        author_label: QLabel = QLabel("Author: " + APP["AUTHOR"])
         author_label.setAlignment(Qt.AlignCenter)
         author_label.setFixedHeight(name_label.fontMetrics().height())
         # web address
         addr_label: QLabel = QLabel()
-        addr_label.setText(f"<a href='{APP['addr']}'>GitHub</a>")
+        addr_label.setText(f"<a href='{APP['ADDR']}'>GitHub</a>")
         addr_label.setOpenExternalLinks(True)
         addr_label.setAlignment(Qt.AlignCenter)
         addr_label.setFixedHeight(addr_label.fontMetrics().height())

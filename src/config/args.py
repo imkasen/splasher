@@ -1,20 +1,23 @@
 from PySide6.QtCore import QDir
 
+# Some information about the application
 APP: dict[str, str] = {
-    "name": "Unsplash Wallpapers for Linux",
-    "version": "v0.1.4",
-    "author": "Kasen",
-    "addr": "https://github.com/imkasen/unsplash-wallpapers-for-linux",
-    "dir": "unsplash_wallpapers/",
+    "NAME": "Unsplash Wallpapers for Linux",
+    "VERSION": "v0.1.0",
+    "AUTHOR": "Kasen",
+    "ADDR": "https://github.com/imkasen/unsplash-wallpapers-for-linux",
+    "DIR": "unsplash_wallpapers/",
 }
 
+# PATH for storing file
 PATH: dict[str, str] = {
-    "applock": QDir.tempPath() + "/unsplash_wallpapers.lock",
-    "cache": QDir.homePath() + "/.cache/" + APP["dir"],
-    "logfile": "src/config/log.json",
-    "log": QDir.tempPath() + "/" + APP["dir"],
+    "APPLOCK": QDir.tempPath() + "/unsplash_wallpapers.lock",
+    "CACHE": QDir.homePath() + "/.cache/" + APP["DIR"],
+    "LOGFILE": "src/config/log.json",
+    "LOG": QDir.tempPath() + "/" + APP["DIR"],
 }
 
-URL: dict[str, str] = {
-    "source": "https://source.unsplash.com/random/960x540",
+# API for fetching images
+API: dict[str, str] = {
+    "SOURCE": "https://source.unsplash.com/random/",
 }

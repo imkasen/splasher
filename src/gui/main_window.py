@@ -131,7 +131,7 @@ class MainWindow(QMainWindow):
         """
         Use 'ImgDownloader' to load a preview image.
         """
-        self.show_message("Attempt to fetch a new preview wallpaper.")
+        self.show_message("Attempt to fetch a new preview wallpaper.", 0)
         self.__logger.info("Attempt to fetch a new preview wallpaper.")
         self.__downloader.send_request()
 

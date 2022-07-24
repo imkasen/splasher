@@ -1,4 +1,4 @@
-from .init_log import init_log
+from .log import init_log
 from .create_folders import create_folders
 
 

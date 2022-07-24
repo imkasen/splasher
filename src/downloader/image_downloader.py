@@ -51,6 +51,7 @@ class ImgDownloader(QObject):
         else:
             self.__show_message("Failed to write a preview image to cache.")
             self.__logger.error(f"Failed to write an image to: '{img_path}'")
+        img_file.close()
 
     def __show_message(self, msg: str) -> None:
         """

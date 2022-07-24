@@ -59,7 +59,7 @@
     }
   },
   "loggers": {
-    "<module>": {
+    "src": {
       "level": "INFO",
       "handlers": [
         "app_info",

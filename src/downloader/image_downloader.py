@@ -45,7 +45,7 @@ class ImgDownloader(QObject):
             return
         img_path: str = PATH["CACHE"] + reply.url().path()[1:] + ".jpg"
         img_file: QFile = QFile(img_path)
-        if img_file.open(QIODevice.WriteOnly):
+        if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
             img_file.write(reply.readAll())
             self.__logger.info(f"Write an image to: '{img_path}'")
         else:

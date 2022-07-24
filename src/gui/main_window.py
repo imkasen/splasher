@@ -151,7 +151,7 @@ class MainWindow(QMainWindow):
         Open the settings window if it does not exist.
         """
         if self.__settings_window is None \
-                or self.__settings_window.isVisible() is False:
+                or not self.__settings_window.isVisible():
             self.__settings_window = SettingsWindow()
             self.__settings_window.show()
         elif self.__settings_window.isMinimized():

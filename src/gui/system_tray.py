@@ -56,11 +56,11 @@ class SystemTray(QSystemTrayIcon):
         """
         Display the main window if it does not exist, otherwise show the main window on the top.
         """
-        if self.__main_window.isVisible() is False:
+        if not self.__main_window.isVisible():
             self.__main_window.show()
         elif self.__main_window.isMinimized():
             self.__main_window.showNormal()
-        elif self.__main_window.isActiveWindow() is False:  # put the settings window on the top
+        elif not self.__main_window.isActiveWindow():  # put the settings window on the top
             self.__main_window.activateWindow()
             self.__main_window.raise_()
 

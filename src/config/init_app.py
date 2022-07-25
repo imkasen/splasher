@@ -1,5 +1,6 @@
 from .log import init_log
 from .create_folders import create_folders
+from .settings import create_settings
 
 
 def init_app() -> None:
@@ -8,3 +9,4 @@ def init_app() -> None:
     """
     create_folders()
     init_log()
+    create_settings()

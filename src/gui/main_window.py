@@ -129,10 +129,10 @@ class MainWindow(QMainWindow):
     @Slot()
     def refresh(self) -> None:
         """
-        Use 'ImgDownloader' to load a preview image.
+        Use 'ImgDownloader' to load a previewed image.
         """
-        self.show_message("Attempt to fetch a new preview wallpaper.", 0)
-        self.__logger.info("Attempt to fetch a new preview wallpaper.")
+        self.show_message("Attempt to fetch a new previewed image.", 0)
+        self.__logger.info("Attempt to fetch a new previewed image.")
         self.__downloader.send_request()
 
     @Slot()

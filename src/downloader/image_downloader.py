@@ -40,7 +40,7 @@ class ImgDownloader(QObject):
             reply.readAll(): binary data
         """
         if reply.error() != QNetworkReply.NoError:
-            self.__show_message("Failed to fetch a preview wallpaper.")
+            self.__show_message("Failed to fetch a previewed image.")
             self.__logger.error("QNetworkReply Error: " + reply.errorString())
             return
         img_path: str = PATH["CACHE"] + reply.url().path()[1:] + ".jpg"
@@ -49,7 +49,7 @@ class ImgDownloader(QObject):
             img_file.write(reply.readAll())
             self.__logger.info(f"Write an image to: '{img_path}'")
         else:
-            self.__show_message("Failed to write a preview image to cache.")
+            self.__show_message("Failed to write a previewed image to cache.")
             self.__logger.error(f"Failed to write an image to: '{img_path}'")
         img_file.close()
 

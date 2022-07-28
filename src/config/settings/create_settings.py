@@ -10,8 +10,6 @@ def create_settings() -> None:
     """
     # QJsonObject is missing in PySide 6.3.1, use dict and json to construct directly.
     settings: dict[str, str] = {
-        "CACHE": PATH["CACHE"],
-        "LOG": PATH["LOG"],
         "PREVIEW": ""
     }
 

@@ -4,14 +4,14 @@ import logging
 import json
 
 
-def get_settings_arg(arg_key: str) -> (bool, str):
+def get_settings_arg(arg_key: str) -> tuple[bool, str]:
     """
     Get the configuration in the settings based on the input string.
     :param arg_key: configuration key
     :return tuple: (bool, configuration value)
     """
     logger: logging.Logger = logging.getLogger(__name__)
-    res: tuple = (False, "")
+    res: tuple[bool, str] = (False, "")
     settings_file: QFile = QFile(PATH["CONFIG"] + "settings.json")
     if settings_file.exists():
         if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):

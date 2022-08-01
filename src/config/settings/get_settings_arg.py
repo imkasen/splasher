@@ -2,6 +2,7 @@ from PySide6.QtCore import QFile, QIODevice, QTextStream
 from ..args import PATH
 import logging
 import json
+from typing import Any
 
 
 def get_settings_arg(arg_key: str) -> tuple[bool, str]:
@@ -16,14 +17,14 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
     if settings_file.exists():
         if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
             stream: QTextStream = QTextStream(settings_file)
-            val: str = json.loads(stream.readAll()).get(arg_key, "")
-            if val:
-                res = (True, val)
+            settings_dict: Any = json.loads(stream.readAll())
+            if arg_key in settings_dict:
+                res = (True, settings_dict[arg_key])
             else:
                 logger.error("Fail to get the argument because the key is not existed")
         else:
             logger.error("Fail to open 'settings.json' when trying to read an argument")
+        settings_file.close()
     else:
         logger.error("'settings.json' is not existed when trying to read an argument")
-    settings_file.close()
     return res

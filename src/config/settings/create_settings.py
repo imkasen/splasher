@@ -23,4 +23,4 @@ def create_settings() -> NoReturn:
             logger.info("Create 'settings.json'")
         else:
             logger.error("Fail to open 'settings.json' when trying to create it")
-    settings_file.close()
+        settings_file.close()

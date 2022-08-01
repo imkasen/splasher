@@ -1,10 +1,9 @@
 from PySide6.QtCore import QDir
 from .args import PATH
-from typing import NoReturn
 import logging
 
 
-def create_folders() -> NoReturn:
+def create_folders() -> None:
     """
     Create multiple folders for the application:
     1. create a directory where cache is stored if it does not exist.(~/.cache/<dir>)

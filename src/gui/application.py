@@ -3,7 +3,6 @@ from PySide6.QtGui import QIcon
 from .main_window import MainWindow
 from .system_tray import SystemTray
 from . import icons_rc
-from typing import NoReturn
 import logging
 
 
@@ -15,7 +14,7 @@ class Application(QApplication):
     2. draw the system tray
     """
 
-    def __init__(self) -> NoReturn:
+    def __init__(self) -> None:
         """
         Draw the main window and the system tray.
         """
@@ -24,7 +23,7 @@ class Application(QApplication):
         self.main_window: MainWindow = MainWindow()
         self.tray: SystemTray = SystemTray()
 
-    def display_widgets(self) -> NoReturn:
+    def display_widgets(self) -> None:
         """
         Display the main window and the system tray.
         """

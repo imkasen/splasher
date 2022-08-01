@@ -2,7 +2,6 @@ from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from ..config import API, PATH
-from typing import NoReturn
 import logging
 
 
@@ -12,7 +11,7 @@ class ImgDownloader(QObject):
     1. Fetch a preview image and write to the cache folder.
     """
 
-    def __init__(self, main_window: QMainWindow) -> NoReturn:
+    def __init__(self, main_window: QMainWindow) -> None:
         """
         Init a network access manager.
         """
@@ -22,7 +21,7 @@ class ImgDownloader(QObject):
         self.__mgr.setAutoDeleteReplies(True)
         self.__mgr.setTransferTimeout()
 
-    def send_request(self, api: str = API["SOURCE"] + "960x540") -> NoReturn:
+    def send_request(self, api: str = API["SOURCE"] + "960x540") -> None:
         """
         Init a network request and send the request to Unsplash api.
         :param api: Unsplash api url
@@ -32,7 +31,7 @@ class ImgDownloader(QObject):
         self.__mgr.get(req)
 
     @Slot()
-    def handle_response(self, reply: QNetworkReply) -> NoReturn:
+    def handle_response(self, reply: QNetworkReply) -> None:
         """
         Read the reply data and write the image to the cache folder.
         :param reply: download contents and headers.
@@ -54,7 +53,7 @@ class ImgDownloader(QObject):
             self.__logger.error(f"Failed to write an image to: '{img_path}'")
         img_file.close()
 
-    def __show_message(self, msg: str) -> NoReturn:
+    def __show_message(self, msg: str) -> None:
         """
         Show some messages in the status bar of 'MainWindow' using its show_message() function.
         :param msg: message string.

@@ -3,7 +3,6 @@ from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QLa
 from PySide6.QtGui import QPixmap, QIcon
 from . import icons_rc
 from ..config import APP
-from typing import NoReturn
 
 
 # The configuration of SettingsWindow
@@ -15,7 +14,7 @@ class SettingsWindow(QTabWidget):
     3. display the app info.
     """
 
-    def __init__(self) -> NoReturn:
+    def __init__(self) -> None:
         """
         Set the layout of SettingsWindow.
         """
@@ -31,7 +30,7 @@ class SettingsWindow(QTabWidget):
         self.__draw_info_tab()
         # -------------------------------------------------------------
 
-    def __draw_path_tab(self) -> NoReturn:
+    def __draw_path_tab(self) -> None:
         """
         Set the path tab layout,
         here the paths to files are displayed and can be modified.
@@ -41,7 +40,7 @@ class SettingsWindow(QTabWidget):
         self.addTab(path_tab, QIcon(":/tabs/path.png"), "Path")
         # -------------------------------------------------------------
 
-    def __draw_update_tab(self) -> NoReturn:
+    def __draw_update_tab(self) -> None:
         """
         Set the update tab layout,
         here users can set the update frequency and the preview resolution.
@@ -51,7 +50,7 @@ class SettingsWindow(QTabWidget):
         self.addTab(update_tab, QIcon(":/tabs/update.png"), "Update")
         # -------------------------------------------------------------
 
-    def __draw_info_tab(self) -> NoReturn:
+    def __draw_info_tab(self) -> None:
         """
         Set the info tab layout,
         here shows the app's information.

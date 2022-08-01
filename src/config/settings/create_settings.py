@@ -1,10 +1,11 @@
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 from ..args import PATH
+from typing import NoReturn
 import json
 import logging
 
 
-def create_settings() -> None:
+def create_settings() -> NoReturn:
     """
     Create 'settings.json' in the configuration folder.(~/.config/<dir>/settings.json)
     """

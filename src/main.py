@@ -3,9 +3,10 @@ from PySide6.QtWidgets import QMessageBox
 from .gui import Application
 from .config import PATH, init_app
 import logging
+from typing import NoReturn
 
 
-def main() -> None:
+def main() -> NoReturn:
     """
     The main function of the application.
     """

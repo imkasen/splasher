@@ -1,10 +1,11 @@
 from PySide6.QtCore import QFile, QIODevice, QTextStream
+from typing import NoReturn
 import logging
 import logging.config
 import json
 
 
-def init_log(file_path: str = "src/config/log/log.json",) -> None:
+def init_log(file_path: str = "src/config/log/log.json") -> NoReturn:
     """
     Read the logging configuration.
     :param file_path: the path of 'log.json'
@@ -22,7 +23,7 @@ def init_log(file_path: str = "src/config/log/log.json",) -> None:
     log_file.close()
 
 
-def fallback_config(msg: str) -> None:
+def fallback_config(msg: str) -> NoReturn:
     """
     Default configuration when loading 'log.json' fails.
     :param msg:

@@ -4,6 +4,7 @@ from PySide6.QtGui import QIcon, QAction
 from .main_window import MainWindow
 from . import icons_rc
 from ..config import APP
+from typing import NoReturn, Optional
 
 
 # The configuration of SystemTray
@@ -14,13 +15,13 @@ class SystemTray(QSystemTrayIcon):
     2. quit the app
     """
 
-    def __init__(self) -> None:
+    def __init__(self) -> NoReturn:
         """
         Set the content of system tray, add multiple functions into the menu.
         :return: None
         """
         super(SystemTray, self).__init__()
-        self.__app: QCoreApplication | None = QCoreApplication.instance()  # get the current QApplication instance
+        self.__app: Optional[QCoreApplication] = QCoreApplication.instance()  # get the current QApplication instance
         if self.__app is not None:
             self.__main_window: MainWindow = self.__app.main_window
         # ======== tray attributes ========

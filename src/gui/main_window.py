@@ -5,6 +5,7 @@ from .settings_window import SettingsWindow
 from ..downloader import ImgDownloader
 from . import icons_rc
 from ..config import APP, PATH
+from typing import NoReturn, Optional
 import logging
 
 
@@ -18,7 +19,7 @@ class MainWindow(QMainWindow):
     4. show messages in the status bar.
     """
 
-    def __init__(self) -> None:
+    def __init__(self) -> NoReturn:
         """
         Set the layout of MainWindow,
         wallpaper display is on the top side and takes up most of the space,
@@ -43,13 +44,13 @@ class MainWindow(QMainWindow):
         self.setFixedSize(960, 540)
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__downloader: ImgDownloader = ImgDownloader(self)
-        self.__settings_window: SettingsWindow | None = None
+        self.__settings_window: Optional[SettingsWindow] = None
         # -------------------------------------------------------------
         # ======== draw ui ========
         self.__draw_window_ui()
         # -------------------------------------------------------------
 
-    def __draw_window_ui(self) -> None:
+    def __draw_window_ui(self) -> NoReturn:
         """
         Draw the layouts, wallpaper, buttons and status bar.
         """
@@ -157,7 +158,7 @@ class MainWindow(QMainWindow):
         elif self.__settings_window.isMinimized():
             self.__settings_window.showNormal()
 
-    def show_message(self, msg: str, timeout: int = 5000) -> None:
+    def show_message(self, msg: str, timeout: int = 5000) -> NoReturn:
         """
         Show some messages in the status bar.
         :param msg: message string.

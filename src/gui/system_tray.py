@@ -4,6 +4,7 @@ from PySide6.QtGui import QIcon, QAction
 from .main_window import MainWindow
 from . import icons_rc
 from ..config import APP
+from typing import Optional
 
 
 # The configuration of SystemTray
@@ -20,7 +21,7 @@ class SystemTray(QSystemTrayIcon):
         :return: None
         """
         super(SystemTray, self).__init__()
-        self.__app: QCoreApplication | None = QCoreApplication.instance()  # get the current QApplication instance
+        self.__app: Optional[QCoreApplication] = QCoreApplication.instance()  # get the current QApplication instance
         if self.__app is not None:
             self.__main_window: MainWindow = self.__app.main_window
         # ======== tray attributes ========

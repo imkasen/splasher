@@ -15,13 +15,12 @@ def set_settings_arg(arg_key: str, arg_value: str) -> bool:
     :return: bool
     """
     res: bool = False
-    setting_dict: Optional[dict]
     file: QFile = QFile(PATH["CONFIG"] + "settings.json")
     if file.exists():
         res, settings_dict = read_settings(file)
         if res and arg_key in settings_dict:
             settings_dict[arg_key] = arg_value
-            res = write_settings(file, settings_dict)
+            res: bool = write_settings(file, settings_dict)
         else:
             logger.error(f"Key: {arg_key} does not exist in 'settings.json'")
     else:
@@ -40,7 +39,7 @@ def read_settings(settings_file: QFile) -> tuple[bool, Optional[dict]]:
         stream: QTextStream = QTextStream(settings_file)
         settings_dict: Any = json.loads(stream.readAll())
         if settings_dict:
-            tup_res = (True, settings_dict)
+            tup_res: tuple[bool, dict] = (True, settings_dict)
         else:
             logger.warning("'settings.json' is empty")
     else:
@@ -60,6 +59,6 @@ def write_settings(settings_file: QFile, settings_dict: dict) -> bool:
     if settings_file.open(QIODevice.WriteOnly | QIODevice.Text | QIODevice.ExistingOnly):
         stream: QTextStream = QTextStream(settings_file)
         stream << json.dumps(settings_dict, indent=2)
-        res = True
+        res: bool = True
     settings_file.close()
     return res

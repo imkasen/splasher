@@ -5,6 +5,7 @@ from .settings_window import SettingsWindow
 from ..downloader import ImgDownloader
 from . import icons_rc
 from ..config import APP, PATH
+from typing import Optional
 import logging
 
 
@@ -43,7 +44,7 @@ class MainWindow(QMainWindow):
         self.setFixedSize(960, 540)
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__downloader: ImgDownloader = ImgDownloader(self)
-        self.__settings_window: SettingsWindow | None = None
+        self.__settings_window: Optional[SettingsWindow] = None
         # -------------------------------------------------------------
         # ======== draw ui ========
         self.__draw_window_ui()

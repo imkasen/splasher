@@ -19,7 +19,7 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
             stream: QTextStream = QTextStream(settings_file)
             settings_dict: Any = json.loads(stream.readAll())
             if arg_key in settings_dict:
-                res = (True, settings_dict[arg_key])
+                res: tuple[bool, str] = (True, settings_dict[arg_key])
             else:
                 logger.error("Fail to get the argument because the key is not existed")
         else:

@@ -43,7 +43,7 @@ def read_settings(settings_file: QFile) -> tuple[bool, Optional[dict]]:
         else:
             logger.warning("'settings.json' is empty")
     else:
-        logger.error("Fail to open 'settings.json' when trying to set an argument")
+        logger.error("Failed to open 'settings.json' when trying to set an argument")
     settings_file.close()
     return tup_res
 

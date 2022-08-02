@@ -4,7 +4,7 @@ import logging.config
 import json
 
 
-def init_log(file_path: str = "src/config/log/log.json",) -> None:
+def init_log(file_path: str = "src/config/log/log.json") -> None:
     """
     Read the logging configuration.
     :param file_path: the path of 'log.json'
@@ -16,9 +16,9 @@ def init_log(file_path: str = "src/config/log/log.json",) -> None:
             context: str = stream.readAll()
             logging.config.dictConfig(json.loads(context))
         else:
-            fallback_config(f"Fail to open the configuration file: '{file_path}', using default configuration.")
+            fallback_config(f"Failed to open the configuration file: '{file_path}', using default configuration.")
     else:
-        fallback_config(f"Fail to find the configuration file: '{file_path}', using default configuration.")
+        fallback_config(f"Failed to find the configuration file: '{file_path}', using default configuration.")
     log_file.close()
 
 

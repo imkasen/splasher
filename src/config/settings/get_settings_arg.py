@@ -21,9 +21,9 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
             if arg_key in settings_dict:
                 res: tuple[bool, str] = (True, settings_dict[arg_key])
             else:
-                logger.error("Fail to get the argument because the key is not existed")
+                logger.error("Failed to get the argument because the key is not existed")
         else:
-            logger.error("Fail to open 'settings.json' when trying to read an argument")
+            logger.error("Failed to open 'settings.json' when trying to read an argument")
         settings_file.close()
     else:
         logger.error("'settings.json' is not existed when trying to read an argument")

@@ -3,7 +3,7 @@ from PySide6.QtCore import QDir
 # Some information about the application
 APP: dict[str, str] = {
     "NAME": "Unsplash Wallpapers for Linux",
-    "VERSION": "v0.1.0",
+    "VERSION": "v0.2.0",
     "AUTHOR": "Kasen",
     "ADDR": "https://github.com/imkasen/unsplash-wallpapers-for-linux",
     "DIR": "unsplash_wallpapers/",

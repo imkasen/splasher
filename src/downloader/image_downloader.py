@@ -1,14 +1,15 @@
 from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from ..config import API, PATH
+from ..config import API, PATH, set_settings_arg
 import logging
 
 
 class ImgDownloader(QObject):
     """
     The ImgFetcher class which contains following functions:
-    1. Fetch a preview image and write to the cache folder.
+    1. Send a request using API in order to get a low resolution image.
+    2. Write the image to cache and update ui to show it.
     """
 
     def __init__(self, main_window: QMainWindow) -> None:
@@ -43,10 +44,15 @@ class ImgDownloader(QObject):
             self.__show_message("Failed to fetch a previewed image.")
             self.__logger.error("QNetworkReply Error: " + reply.errorString())
             return
-        img_path: str = PATH["CACHE"] + reply.url().path()[1:] + ".jpg"
+        img_name: str = reply.url().path()[1:] + ".jpg"
+        img_path: str = PATH["CACHE"] + img_name
         img_file: QFile = QFile(img_path)
         if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
             img_file.write(reply.readAll())
+            if set_settings_arg("PREVIEW", img_name):
+                self.parent().set_image()  # refresh and update the image
+            else:
+                self.__logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
             self.__logger.info(f"Write an image to: '{img_path}'")
         else:
             self.__show_message("Failed to write a previewed image to cache.")

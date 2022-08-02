@@ -4,7 +4,7 @@ from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
 from ..downloader import ImgDownloader
 from . import icons_rc
-from ..config import APP, PATH
+from ..config import APP, PATH, get_settings_arg
 from typing import Optional
 import logging
 
@@ -78,20 +78,32 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(main_widget)
         # -------------------------------------------------------------
 
+    def set_image(self) -> None:
+        """
+        Set a preivew image for QLabel and refresh.
+        """
+        res: bool = False
+        img_name: str = ""
+        res, img_name = get_settings_arg("PREVIEW")
+        if not res:
+            self.__logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
+        img: QPixmap = QPixmap(PATH["CACHE"] + img_name)
+        if img.isNull():  # if the image can not be found
+            self.img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
+        self.img_label.setPixmap(img)
+        self.img_label.repaint()
+
     def __draw_wallpaper_ui(self) -> QLabel:
         """
-        Display a wallpaper.
+        Draw a QLabel widget for displaying wallpapers.
         :return: QLabel
         """
-        img_label: QLabel = QLabel()
-        img: QPixmap = QPixmap(PATH["CACHE"] + "5f7563b1538140c5931ba0a773aac650.jpg")
-        if img.isNull():  # if the image can not be found
-            img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
-        img_label.setPixmap(img)
-        img_label.setScaledContents(True)  # adjust the image size to fit the window
-        img_label.setAlignment(Qt.AlignCenter)
+        self.img_label: QLabel = QLabel()
+        self.set_image()
+        self.img_label.setScaledContents(True)  # adjust the image size to fit the window
+        self.img_label.setAlignment(Qt.AlignCenter)
         # return label
-        return img_label
+        return self.img_label
 
     def __draw_functional_bar(self) -> QHBoxLayout:
         """

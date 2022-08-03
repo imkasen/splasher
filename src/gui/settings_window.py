@@ -26,7 +26,6 @@ class SettingsWindow(QTabWidget):
         # -------------------------------------------------------------
         # ======== tabs design ========
         self.__draw_path_tab()
-        self.__draw_update_tab()
         self.__draw_info_tab()
         # -------------------------------------------------------------
 
@@ -38,16 +37,6 @@ class SettingsWindow(QTabWidget):
         # ======== declaration and add the tab ========
         path_tab: QWidget = QWidget()
         self.addTab(path_tab, QIcon(":/tabs/path.png"), "Path")
-        # -------------------------------------------------------------
-
-    def __draw_update_tab(self) -> None:
-        """
-        Set the update tab layout,
-        here users can set the update frequency and the preview resolution.
-        """
-        # ======== declaration and add the tab ========
-        update_tab: QWidget = QWidget()
-        self.addTab(update_tab, QIcon(":/tabs/update.png"), "Update")
         # -------------------------------------------------------------
 
     def __draw_info_tab(self) -> None:

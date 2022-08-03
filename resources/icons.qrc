@@ -12,7 +12,6 @@
     <qresource prefix="tabs">
         <file alias="info.png">icons/tabs/info.png</file>
         <file alias="path.png">icons/tabs/path.png</file>
-        <file alias="update.png">icons/tabs/update.png</file>
     </qresource>
 </RCC>
 

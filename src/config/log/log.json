@@ -25,7 +25,7 @@
       "class": "logging.handlers.RotatingFileHandler",
       "level": "INFO",
       "formatter": "simple",
-      "filename": "/tmp/unsplash_wallpapers/info.log",
+      "filename": "/tmp/splasher/info.log",
       "maxBytes": 10485760,
       "backupCount": 20,
       "encoding": "utf8"
@@ -34,7 +34,7 @@
       "class": "logging.handlers.RotatingFileHandler",
       "level": "WARNING",
       "formatter": "standard",
-      "filename": "/tmp/unsplash_wallpapers/warning.log",
+      "filename": "/tmp/splasher/warning.log",
       "maxBytes": 10485760,
       "backupCount": 20,
       "encoding": "utf8"
@@ -43,7 +43,7 @@
       "class": "logging.handlers.RotatingFileHandler",
       "level": "ERROR",
       "formatter": "standard",
-      "filename": "/tmp/unsplash_wallpapers/error.log",
+      "filename": "/tmp/splasher/error.log",
       "maxBytes": 10485760,
       "backupCount": 20,
       "encoding": "utf8"
@@ -52,7 +52,7 @@
       "class": "logging.handlers.RotatingFileHandler",
       "level": "CRITICAL",
       "formatter": "standard",
-      "filename": "/tmp/unsplash_wallpapers/critical.log",
+      "filename": "/tmp/splasher/critical.log",
       "maxBytes": 10485760,
       "backupCount": 20,
       "encoding": "utf8"

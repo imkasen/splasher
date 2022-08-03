@@ -22,7 +22,7 @@ class ImgDownloader(QObject):
         self.__mgr.setAutoDeleteReplies(True)
         self.__mgr.setTransferTimeout()
 
-    def send_request(self, api: str = API["SOURCE"] + "960x540") -> None:
+    def send_request(self, api: str = API["SOURCE"]) -> None:
         """
         Init a network request and send the request to Unsplash api.
         :param api: Unsplash api url

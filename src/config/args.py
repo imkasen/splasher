@@ -14,7 +14,6 @@ PATH: dict[str, str] = {
     "APPLOCK": QDir.tempPath() + "/splasher.lock",
     "CONFIG": QDir.homePath() + "/.config/" + APP["DIR"],
     "CACHE": QDir.homePath() + "/.cache/" + APP["DIR"],
-    "LOG": QDir.tempPath() + "/" + APP["DIR"],
 }
 
 # API for fetching images

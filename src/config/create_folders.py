@@ -8,7 +8,7 @@ def create_folders() -> None:
     Create multiple folders for the application:
     1. create a directory where cache is stored if it does not exist.(~/.cache/<dir>)
     2. create a directory where configuration is stored if it does not exist.(~/.config/<dir>)
-    3. create a directory where logs are stored if it does not exist.(~/tmp/<dir>)
+    3. create a directory where logs are stored if it does not exist.(<project>/logs/)
     """
     # ======== create the cache dir ========
     cache_dir: QDir = QDir(PATH["CACHE"])
@@ -23,8 +23,8 @@ def create_folders() -> None:
             logging.error(f"Failed to create folder: '{PATH['CONFIG']}'")
     # -------------------------------------------------------------
     # ======== create the log dir ========
-    log_dir: QDir = QDir(PATH["LOG"])
+    log_dir: QDir = QDir("logs")
     if not log_dir.exists():
-        if not log_dir.mkpath(PATH["LOG"]):
-            logging.error(f"Failed to create folder: '{PATH['LOG']}'")
+        if not log_dir.mkpath("."):
+            logging.error(f"Failed to create folder: 'logs/'")
     # -------------------------------------------------------------

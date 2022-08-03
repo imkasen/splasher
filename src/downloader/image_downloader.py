@@ -20,7 +20,7 @@ class ImgDownloader(QObject):
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__mgr: QNetworkAccessManager = QNetworkAccessManager()
         self.__mgr.setAutoDeleteReplies(True)
-        self.__mgr.setTransferTimeout()
+        self.__mgr.setTransferTimeout(10000)  # 10s
 
     def send_request(self, api: str = API["SOURCE"]) -> None:
         """

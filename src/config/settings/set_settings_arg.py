@@ -1,8 +1,8 @@
-from PySide6.QtCore import QFile, QIODevice, QTextStream
-from ..args import PATH
 from typing import Optional, Any
 import logging
 import json
+from PySide6.QtCore import QFile, QIODevice, QTextStream
+from ..args import PATH
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def set_settings_arg(arg_key: str, arg_value: str) -> bool:
             settings_dict[arg_key] = arg_value
             res: bool = write_settings(file, settings_dict)
         else:
-            logger.error(f"Key: {arg_key} does not exist in 'settings.json'")
+            logger.error("Key: %s does not exist in 'settings.json'", arg_key)
     else:
         logger.error("'settings.json' is not existed when trying to set an argument")
     return res
@@ -58,7 +58,7 @@ def write_settings(settings_file: QFile, settings_dict: dict) -> bool:
     res: bool = False
     if settings_file.open(QIODevice.WriteOnly | QIODevice.Text | QIODevice.ExistingOnly):
         stream: QTextStream = QTextStream(settings_file)
-        stream << json.dumps(settings_dict, indent=2)
+        stream << json.dumps(settings_dict, indent=2)  # pylint: disable=expression-not-assigned
         res: bool = True
     settings_file.close()
     return res

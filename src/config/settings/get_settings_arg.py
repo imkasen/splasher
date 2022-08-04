@@ -1,8 +1,8 @@
-from PySide6.QtCore import QFile, QIODevice, QTextStream
-from ..args import PATH
 import logging
 import json
 from typing import Any
+from PySide6.QtCore import QFile, QIODevice, QTextStream
+from ..args import PATH
 
 
 def get_settings_arg(arg_key: str) -> tuple[bool, str]:

@@ -6,3 +6,5 @@ An application that uses photos from [Unsplash](https://unsplash.com/) to change
 
 * Python 3.10.5
 * PySide 6.3.1
+* pylint 2.14.5
+* yapf 0.32.0

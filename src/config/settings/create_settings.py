@@ -1,14 +1,13 @@
+import json  # QJsonObject is missing in PySide 6.3.1, use dict and json to construct directly.
+import logging
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 from ..args import PATH
-import json
-import logging
 
 
 def create_settings() -> None:
     """
     Create 'settings.json' in the configuration folder.(~/.config/<dir>/settings.json)
     """
-    # QJsonObject is missing in PySide 6.3.1, use dict and json to construct directly.
     settings: dict[str, str] = {"PREVIEW": ""}
 
     logger: logging.Logger = logging.getLogger(__name__)
@@ -16,7 +15,7 @@ def create_settings() -> None:
     if not settings_file.exists():
         if settings_file.open(QIODevice.WriteOnly | QIODevice.Text | QIODevice.NewOnly):
             stream: QTextStream = QTextStream(settings_file)
-            stream << json.dumps(settings, indent=2)
+            stream << json.dumps(settings, indent=2)  # pylint: disable=expression-not-assigned
             logger.info("Create 'settings.json'")
         else:
             logger.error("Failed to open 'settings.json' when trying to create it")

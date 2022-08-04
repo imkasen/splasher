@@ -1,10 +1,10 @@
+from typing import Optional
 from PySide6.QtCore import Slot, QCoreApplication
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from PySide6.QtGui import QIcon, QAction
 from .main_window import MainWindow
-from . import icons_rc
+from . import icons_rc  # pylint: disable=unused-import
 from ..config import APP
-from typing import Optional
 
 
 # The configuration of SystemTray
@@ -27,18 +27,18 @@ class SystemTray(QSystemTrayIcon):
         # ======== tray attributes ========
         self.setIcon(QIcon(":/logo.png"))
         self.setToolTip(APP["NAME"])
-        self.activated.connect(self.__handle_mouse_click)
+        self.activated.connect(self.__handle_mouse_click)  # pylint: disable=no-member
         # -------------------------------------------------------------
         # ======== menu list ========
         menu: QMenu = QMenu()
         self.setContextMenu(menu)  # add the menu to the system tray
         # show the main window
         show_act: QAction = QAction("Show", parent=menu)
-        show_act.triggered.connect(self.__show_app)
+        show_act.triggered.connect(self.__show_app)  # pylint: disable=no-member
         menu.addAction(show_act)
         # quit the app
         quit_act: QAction = QAction("Quit", parent=menu)
-        quit_act.triggered.connect(self.__quit_app)
+        quit_act.triggered.connect(self.__quit_app)  # pylint: disable=no-member
         menu.addAction(quit_act)
         # -------------------------------------------------------------
 

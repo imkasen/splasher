@@ -1,8 +1,8 @@
+import logging
 from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from ..config import API, PATH, set_settings_arg
-import logging
 
 
 class ImgDownloader(QObject):
@@ -28,7 +28,7 @@ class ImgDownloader(QObject):
         :param api: Unsplash api url
         """
         req: QNetworkRequest = QNetworkRequest(QUrl(api))
-        self.__mgr.finished.connect(self.handle_response)
+        self.__mgr.finished.connect(self.handle_response)  # pylint: disable=no-member
         self.__mgr.get(req)
 
     @Slot()
@@ -42,7 +42,7 @@ class ImgDownloader(QObject):
         """
         if reply.error() != QNetworkReply.NoError:
             self.__show_message("Failed to fetch a previewed image.")
-            self.__logger.error("QNetworkReply Error: " + reply.errorString())
+            self.__logger.error("QNetworkReply Error: %s", reply.errorString())
             return
         img_name: str = reply.url().path()[1:] + ".jpg"
         img_path: str = PATH["CACHE"] + img_name
@@ -53,10 +53,10 @@ class ImgDownloader(QObject):
                 self.parent().set_image()  # refresh and update the image
             else:
                 self.__logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
-            self.__logger.info(f"Write an image to: '{img_path}'")
+            self.__logger.info("Write an image to: '%s'", img_path)
         else:
             self.__show_message("Failed to write a previewed image to cache.")
-            self.__logger.error(f"Failed to write an image to: '{img_path}'")
+            self.__logger.error("Failed to write an image to: '%s'", img_path)
         img_file.close()
 
     def __show_message(self, msg: str) -> None:

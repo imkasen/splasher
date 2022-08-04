@@ -1,7 +1,7 @@
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QLabel
 from PySide6.QtGui import QPixmap, QIcon
-from . import icons_rc
+from . import icons_rc  # pylint: disable=unused-import
 from ..config import APP
 
 

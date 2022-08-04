@@ -1,7 +1,7 @@
-from PySide6.QtCore import QFile, QIODevice, QTextStream
 import logging
 import logging.config
 import json
+from PySide6.QtCore import QFile, QIODevice, QTextStream
 
 
 def init_log(file_path: str = "src/config/log/log.json") -> None:

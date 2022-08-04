@@ -1,6 +1,6 @@
+import logging
 from PySide6.QtCore import QDir
 from .args import PATH
-import logging
 
 
 def create_folders() -> None:
@@ -14,17 +14,17 @@ def create_folders() -> None:
     cache_dir: QDir = QDir(PATH["CACHE"])
     if not cache_dir.exists():
         if not cache_dir.mkpath("."):
-            logging.error(f"Failed to create folder: '{PATH['CACHE']}'")
+            logging.error("Failed to create folder: '%s'", PATH["CACHE"])
     # -------------------------------------------------------------
     # ======== create the cache dir ========
     config_dir: QDir = QDir(PATH["CONFIG"])
     if not config_dir.exists():
         if not config_dir.mkpath("."):
-            logging.error(f"Failed to create folder: '{PATH['CONFIG']}'")
+            logging.error("Failed to create folder: '%s'", PATH["CONFIG"])
     # -------------------------------------------------------------
     # ======== create the log dir ========
     log_dir: QDir = QDir("logs")
     if not log_dir.exists():
         if not log_dir.mkpath("."):
-            logging.error(f"Failed to create folder: 'logs/'")
+            logging.error("Failed to create folder: 'logs/'")
     # -------------------------------------------------------------

@@ -1,8 +1,8 @@
+import logging
 from PySide6.QtCore import QLockFile
 from PySide6.QtWidgets import QMessageBox
 from .gui import Application
 from .config import PATH, init_app
-import logging
 
 
 def main() -> None:
@@ -22,7 +22,7 @@ def main() -> None:
         else:
             QMessageBox.warning(None, "Error", "The application is already running!")
             logger.error("The application is already running!")
-    except (RuntimeError, Exception, BaseException):
+    except (RuntimeError, Exception):  # pylint: disable=broad-except
         logger.exception("Error when running the app.")
     finally:
         applock.unlock()

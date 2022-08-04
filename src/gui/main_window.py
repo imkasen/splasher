@@ -1,12 +1,12 @@
+from typing import Optional
+import logging
 from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar
 from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
 from ..downloader import ImgDownloader
-from . import icons_rc
+from . import icons_rc  # pylint: disable=unused-import
 from ..config import APP, PATH, get_settings_arg
-from typing import Optional
-import logging
 
 
 # The configuration of MainWindow
@@ -47,6 +47,7 @@ class MainWindow(QMainWindow):
         self.__settings_window: Optional[SettingsWindow] = None
         # -------------------------------------------------------------
         # ======== draw ui ========
+        self.__display_wallpaper()
         self.__draw_window_ui()
         # -------------------------------------------------------------
 
@@ -58,7 +59,7 @@ class MainWindow(QMainWindow):
         main_layout: QVBoxLayout = QVBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
-        main_layout.addWidget(self.__draw_wallpaper_ui())
+        main_layout.addWidget(self.img_label)
         # -------------------------------------------------------------
         # ======== functional widgets ========
         main_layout.addLayout(self.__draw_functional_bar())
@@ -93,17 +94,14 @@ class MainWindow(QMainWindow):
         self.img_label.setPixmap(img)
         self.img_label.repaint()
 
-    def __draw_wallpaper_ui(self) -> QLabel:
+    def __display_wallpaper(self) -> None:
         """
         Draw a QLabel widget for displaying wallpapers.
-        :return: QLabel
         """
         self.img_label: QLabel = QLabel()
         self.set_image()
         self.img_label.setScaledContents(True)  # adjust the image size to fit the window
         self.img_label.setAlignment(Qt.AlignCenter)
-        # return label
-        return self.img_label
 
     def __draw_functional_bar(self) -> QHBoxLayout:
         """
@@ -116,25 +114,25 @@ class MainWindow(QMainWindow):
         refresh_btn: QPushButton = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")
         refresh_btn.setIcon(QIcon(":/buttons/refresh.png"))
-        refresh_btn.clicked.connect(self.refresh)
+        refresh_btn.clicked.connect(self.refresh)  # pylint: disable=no-member
         func_layout.addWidget(refresh_btn)
         # choose button
         choose_btn: QPushButton = QPushButton("Choose")
         choose_btn.setToolTip("set the current picture as desktop wallpaper")
         choose_btn.setIcon(QIcon(":/buttons/choose.png"))
-        choose_btn.clicked.connect(self.choose)
+        choose_btn.clicked.connect(self.choose)  # pylint: disable=no-member
         func_layout.addWidget(choose_btn)
         # download button
         download_btn: QPushButton = QPushButton("Download")
         download_btn.setToolTip("download the current picture")
         download_btn.setIcon(QIcon(":/buttons/download.png"))
-        download_btn.clicked.connect(self.download)
+        download_btn.clicked.connect(self.download)  # pylint: disable=no-member
         func_layout.addWidget(download_btn)
         # settings button
         settings_btn: QPushButton = QPushButton("Settings")
         settings_btn.setToolTip("open the settings window")
         settings_btn.setIcon(QIcon(":/buttons/settings.png"))
-        settings_btn.clicked.connect(self.__open_settings_window)
+        settings_btn.clicked.connect(self.__open_settings_window)  # pylint: disable=no-member
         func_layout.addWidget(settings_btn)
         # return layout
         return func_layout
@@ -150,11 +148,17 @@ class MainWindow(QMainWindow):
 
     @Slot()
     def choose(self) -> None:
+        """
+        Set the current image as the desktop wallpaper.
+        """
         self.show_message("Set the picture as wallpaper!")
         self.__logger.info("Set the picture as wallpaper.")
 
     @Slot()
     def download(self) -> None:
+        """
+        Download the current image to the user-specified path.
+        """
         self.show_message("Download the wallpaper!")
         self.__logger.info("Download the wallpaper.")
 

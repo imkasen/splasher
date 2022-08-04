@@ -13,13 +13,13 @@ def create_folders() -> None:
     # ======== create the cache dir ========
     cache_dir: QDir = QDir(PATH["CACHE"])
     if not cache_dir.exists():
-        if not cache_dir.mkpath(PATH["CACHE"]):
+        if not cache_dir.mkpath("."):
             logging.error(f"Failed to create folder: '{PATH['CACHE']}'")
     # -------------------------------------------------------------
     # ======== create the cache dir ========
     config_dir: QDir = QDir(PATH["CONFIG"])
     if not config_dir.exists():
-        if not config_dir.mkpath(PATH["CONFIG"]):
+        if not config_dir.mkpath("."):
             logging.error(f"Failed to create folder: '{PATH['CONFIG']}'")
     # -------------------------------------------------------------
     # ======== create the log dir ========

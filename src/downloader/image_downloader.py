@@ -42,7 +42,7 @@ class ImgDownloader(QObject):
             reply.readAll(): binary data
         """
         if reply.error() != QNetworkReply.NoError:
-            self.__show_message("Failed to fetch a previewed image.")
+            self.__show_message("Failed to fetch an image.", 0)
             self.__logger.error("QNetworkReply Error: %s", reply.errorString())
             return
         img_name: str = reply.url().path()[1:] + ".jpg"
@@ -51,18 +51,20 @@ class ImgDownloader(QObject):
         if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
             img_file.write(reply.readAll())
             if set_settings_arg("PREVIEW", img_name):
-                self.parent().set_image()  # refresh and update the image
+                self.parent().set_image()  # refresh and update an image
+                self.__show_message("")  # clear messages
             else:
                 self.__logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
             self.__logger.info("Write an image to: '%s'", img_path)
         else:
-            self.__show_message("Failed to write a previewed image to cache.")
+            self.__show_message("Failed to write an image to cache.")
             self.__logger.error("Failed to write an image to: '%s'", img_path)
         img_file.close()
 
-    def __show_message(self, msg: str) -> None:
+    def __show_message(self, msg: str, timeout: int = 5000) -> None:
         """
         Show some messages in the status bar of 'MainWindow' using its show_message() function.
         :param msg: message string.
+        :param timeout: default timeout is 5000 ms.
         """
-        self.parent().show_message(msg)
+        self.parent().show_message(msg, timeout)

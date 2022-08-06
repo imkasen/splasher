@@ -143,7 +143,7 @@ class MainWindow(QMainWindow):
         """
         Use 'ImgDownloader' to load a previewed image.
         """
-        self.show_message("Attempt to fetch a new previewed image.", 0)
+        self.show_message("Attempt to fetch a new image.", 0)
         self.__logger.info("The refresh button is clicked.")
         img_resolution: str = str(self.img_label.size().width()) + "x" + str(self.img_label.size().height())
         self.__downloader.send_request(API["SOURCE"] + img_resolution)
@@ -182,4 +182,7 @@ class MainWindow(QMainWindow):
         :param msg: message string.
         :param timeout: default timeout is 5000 ms.
         """
+        # if message if empty, clear the status bar
+        if not msg:
+            self.__status_bar.clearMessage()
         self.__status_bar.showMessage(msg, timeout)

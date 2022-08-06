@@ -3,6 +3,7 @@ import json
 from typing import Any
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 from ..args import PATH
+from . import lock
 
 
 def get_settings_arg(arg_key: str) -> tuple[bool, str]:
@@ -15,6 +16,7 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
     res: tuple[bool, str] = (False, "")
     settings_file: QFile = QFile(PATH["CONFIG"] + "settings.json")
     if settings_file.exists():
+        lock.lockForRead()
         if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
             stream: QTextStream = QTextStream(settings_file)
             settings_dict: Any = json.loads(stream.readAll())
@@ -25,6 +27,7 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
         else:
             logger.error("Failed to open 'settings.json' when trying to read an argument")
         settings_file.close()
+        lock.unlock()
     else:
         logger.error("'settings.json' is not existed when trying to read an argument")
     return res

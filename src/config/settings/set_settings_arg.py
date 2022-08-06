@@ -3,6 +3,7 @@ import logging
 import json
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 from ..args import PATH
+from . import lock
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -35,6 +36,7 @@ def read_settings(settings_file: QFile) -> tuple[bool, Optional[dict]]:
     :return tuple: (bool, dictionary | None)
     """
     tup_res: tuple[bool, Optional[dict]] = (False, None)
+    lock.lockForRead()
     if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
         stream: QTextStream = QTextStream(settings_file)
         settings_dict: Any = json.loads(stream.readAll())
@@ -45,6 +47,7 @@ def read_settings(settings_file: QFile) -> tuple[bool, Optional[dict]]:
     else:
         logger.error("Failed to open 'settings.json' when trying to set an argument")
     settings_file.close()
+    lock.unlock()
     return tup_res
 
 
@@ -56,9 +59,11 @@ def write_settings(settings_file: QFile, settings_dict: dict) -> bool:
     :return: bool
     """
     res: bool = False
+    lock.lockForWrite()
     if settings_file.open(QIODevice.WriteOnly | QIODevice.Text | QIODevice.ExistingOnly):
         stream: QTextStream = QTextStream(settings_file)
         stream << json.dumps(settings_dict, indent=2)  # pylint: disable=expression-not-assigned
         res: bool = True
     settings_file.close()
+    lock.unlock()
     return res

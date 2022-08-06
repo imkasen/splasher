@@ -6,7 +6,7 @@ from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
 from ..downloader import ImgDownloader
 from . import icons_rc  # pylint: disable=unused-import
-from ..config import APP, PATH, get_settings_arg
+from ..config import APP, PATH, API, get_settings_arg
 
 
 # The configuration of MainWindow
@@ -46,7 +46,6 @@ class MainWindow(QMainWindow):
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__downloader: ImgDownloader = ImgDownloader(self)
         self.__settings_window: Optional[SettingsWindow] = None
-        self.img_label: QLabel = QLabel()
         # -------------------------------------------------------------
         # ======== draw ui ========
         self.__draw_window_ui()
@@ -61,17 +60,22 @@ class MainWindow(QMainWindow):
         main_layout: QVBoxLayout = QVBoxLayout()
         # -------------------------------------------------------------
         # ======== display the wallpaper ========
+        self.img_label: QLabel = QLabel()
         main_layout.addWidget(self.img_label)
         # -------------------------------------------------------------
         # ======== functional widgets ========
         self.__func_layout: QHBoxLayout = QHBoxLayout()
-        self.__draw_functional_bar()
+        btns_h: int = self.__draw_functional_bar()
         main_layout.addLayout(self.__func_layout)
         # -------------------------------------------------------------
         # ======== status bar ========
         self.__status_bar: QStatusBar = QStatusBar()
         self.__status_bar.setSizeGripEnabled(False)
         main_layout.addWidget(self.__status_bar)
+        # -------------------------------------------------------------
+        # ======== set QLabel size ========
+        img_label_h: int = self.height() - btns_h - self.__status_bar.sizeHint().height()
+        self.img_label.setFixedSize(self.width(), img_label_h)
         # -------------------------------------------------------------
         # ======== main layout styles ========
         main_layout.setContentsMargins(0, 0, 0, 0)
@@ -93,42 +97,46 @@ class MainWindow(QMainWindow):
         if not res:
             self.__logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
         img: QPixmap = QPixmap(PATH["CACHE"] + img_name)
-        if img.isNull():  # if the image can not be found
-            img_h: int = self.height() - self.__func_layout.sizeHint().height() - self.__status_bar.sizeHint().height()
-            self.img_label.setFixedSize(self.width(), img_h)  # fix and keep the layouts the same
         self.img_label.setPixmap(img)
         self.img_label.setScaledContents(True)  # adjust the image size to fit the window
         self.img_label.setAlignment(Qt.AlignCenter)
         self.img_label.repaint()
 
-    def __draw_functional_bar(self) -> None:
+    def __draw_functional_bar(self) -> int:
         """
         Draw some functional widgets.
+        :return : buttons' height
         """
-        # refresh button
+        # ======== refresh button ========
         refresh_btn: QPushButton = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")
         refresh_btn.setIcon(QIcon(":/buttons/refresh.png"))
         refresh_btn.clicked.connect(self.refresh)  # pylint: disable=no-member
         self.__func_layout.addWidget(refresh_btn)
-        # choose button
+        # -------------------------------------------------------------
+        # ======== choose button ========
         choose_btn: QPushButton = QPushButton("Choose")
         choose_btn.setToolTip("set the current picture as desktop wallpaper")
         choose_btn.setIcon(QIcon(":/buttons/choose.png"))
         choose_btn.clicked.connect(self.choose)  # pylint: disable=no-member
         self.__func_layout.addWidget(choose_btn)
-        # download button
+        # -------------------------------------------------------------
+        # ======== download button ========
         download_btn: QPushButton = QPushButton("Download")
         download_btn.setToolTip("download the current picture")
         download_btn.setIcon(QIcon(":/buttons/download.png"))
         download_btn.clicked.connect(self.download)  # pylint: disable=no-member
         self.__func_layout.addWidget(download_btn)
-        # settings button
+        # -------------------------------------------------------------
+        # ======== settings button ========
         settings_btn: QPushButton = QPushButton("Settings")
         settings_btn.setToolTip("open the settings window")
         settings_btn.setIcon(QIcon(":/buttons/settings.png"))
         settings_btn.clicked.connect(self.__open_settings_window)  # pylint: disable=no-member
         self.__func_layout.addWidget(settings_btn)
+        # -------------------------------------------------------------
+        # return buttons' height
+        return settings_btn.sizeHint().height()
 
     @Slot()
     def refresh(self) -> None:
@@ -136,8 +144,9 @@ class MainWindow(QMainWindow):
         Use 'ImgDownloader' to load a previewed image.
         """
         self.show_message("Attempt to fetch a new previewed image.", 0)
-        self.__logger.info("Attempt to fetch a new previewed image.")
-        self.__downloader.send_request()
+        self.__logger.info("The refresh button is clicked.")
+        img_resolution: str = str(self.img_label.size().width()) + "x" + str(self.img_label.size().height())
+        self.__downloader.send_request(API["SOURCE"] + img_resolution)
 
     @Slot()
     def choose(self) -> None:

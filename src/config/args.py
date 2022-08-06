@@ -18,5 +18,5 @@ PATH: dict[str, str] = {
 
 # API for fetching images
 API: dict[str, str] = {
-    "SOURCE": "https://source.unsplash.com/random/" + "960x540",
+    "SOURCE": "https://source.unsplash.com/random/",
 }

@@ -22,14 +22,15 @@ class ImgDownloader(QObject):
         self.__mgr.setAutoDeleteReplies(True)
         self.__mgr.setTransferTimeout(10000)  # 10s
 
-    def send_request(self, api: str = API["SOURCE"]) -> None:
+    def send_request(self, url: str = API["SOURCE"]) -> None:
         """
         Init a network request and send the request to Unsplash api.
-        :param api: Unsplash api url
+        :param url: Unsplash api url
         """
-        req: QNetworkRequest = QNetworkRequest(QUrl(api))
+        req: QNetworkRequest = QNetworkRequest(QUrl(url))
         self.__mgr.finished.connect(self.handle_response)  # pylint: disable=no-member
         self.__mgr.get(req)
+        self.__logger.info("Send a request to '%s' to get an image", url)
 
     @Slot()
     def handle_response(self, reply: QNetworkReply) -> None:

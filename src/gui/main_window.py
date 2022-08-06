@@ -25,17 +25,18 @@ class MainWindow(QMainWindow):
         wallpaper display is on the top side and takes up most of the space,
         with all buttons displayed in a row at the bottom.
 
-        ------------------ 960 -------------------
+                           960
+        ------------------------------------------
         |                                        |
         |                                        |
         |                                        |
         |               wallpaper                |
-        |                                       540
+        |                                        |  540
         |                                        |
         | -------------------------------------- |
-        | refresh | choose | download | settings |
+        | refresh | choose | download | settings | 24
         | -------------------------------------- |
-        |              status bar                |
+        |              status bar                | 19
         ------------------------------------------
         """
         super(MainWindow, self).__init__()
@@ -45,10 +46,11 @@ class MainWindow(QMainWindow):
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__downloader: ImgDownloader = ImgDownloader(self)
         self.__settings_window: Optional[SettingsWindow] = None
+        self.img_label: QLabel = QLabel()
         # -------------------------------------------------------------
         # ======== draw ui ========
-        self.__display_wallpaper()
         self.__draw_window_ui()
+        self.set_image()
         # -------------------------------------------------------------
 
     def __draw_window_ui(self) -> None:
@@ -62,7 +64,9 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.img_label)
         # -------------------------------------------------------------
         # ======== functional widgets ========
-        main_layout.addLayout(self.__draw_functional_bar())
+        self.__func_layout: QHBoxLayout = QHBoxLayout()
+        self.__draw_functional_bar()
+        main_layout.addLayout(self.__func_layout)
         # -------------------------------------------------------------
         # ======== status bar ========
         self.__status_bar: QStatusBar = QStatusBar()
@@ -90,52 +94,41 @@ class MainWindow(QMainWindow):
             self.__logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
         img: QPixmap = QPixmap(PATH["CACHE"] + img_name)
         if img.isNull():  # if the image can not be found
-            self.img_label.setFixedSize(960, 540)  # fix and keep the layouts the same
+            img_h: int = self.height() - self.__func_layout.sizeHint().height() - self.__status_bar.sizeHint().height()
+            self.img_label.setFixedSize(self.width(), img_h)  # fix and keep the layouts the same
         self.img_label.setPixmap(img)
-        self.img_label.repaint()
-
-    def __display_wallpaper(self) -> None:
-        """
-        Draw a QLabel widget for displaying wallpapers.
-        """
-        self.img_label: QLabel = QLabel()
-        self.set_image()
         self.img_label.setScaledContents(True)  # adjust the image size to fit the window
         self.img_label.setAlignment(Qt.AlignCenter)
+        self.img_label.repaint()
 
-    def __draw_functional_bar(self) -> QHBoxLayout:
+    def __draw_functional_bar(self) -> None:
         """
         Draw some functional widgets.
-        :return: QHBoxLayout
         """
-        # layout
-        func_layout: QHBoxLayout = QHBoxLayout()
         # refresh button
         refresh_btn: QPushButton = QPushButton("Refresh")
         refresh_btn.setToolTip("display a new picture")
         refresh_btn.setIcon(QIcon(":/buttons/refresh.png"))
         refresh_btn.clicked.connect(self.refresh)  # pylint: disable=no-member
-        func_layout.addWidget(refresh_btn)
+        self.__func_layout.addWidget(refresh_btn)
         # choose button
         choose_btn: QPushButton = QPushButton("Choose")
         choose_btn.setToolTip("set the current picture as desktop wallpaper")
         choose_btn.setIcon(QIcon(":/buttons/choose.png"))
         choose_btn.clicked.connect(self.choose)  # pylint: disable=no-member
-        func_layout.addWidget(choose_btn)
+        self.__func_layout.addWidget(choose_btn)
         # download button
         download_btn: QPushButton = QPushButton("Download")
         download_btn.setToolTip("download the current picture")
         download_btn.setIcon(QIcon(":/buttons/download.png"))
         download_btn.clicked.connect(self.download)  # pylint: disable=no-member
-        func_layout.addWidget(download_btn)
+        self.__func_layout.addWidget(download_btn)
         # settings button
         settings_btn: QPushButton = QPushButton("Settings")
         settings_btn.setToolTip("open the settings window")
         settings_btn.setIcon(QIcon(":/buttons/settings.png"))
         settings_btn.clicked.connect(self.__open_settings_window)  # pylint: disable=no-member
-        func_layout.addWidget(settings_btn)
-        # return layout
-        return func_layout
+        self.__func_layout.addWidget(settings_btn)
 
     @Slot()
     def refresh(self) -> None:

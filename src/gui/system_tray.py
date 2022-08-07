@@ -20,7 +20,7 @@ class SystemTray(QSystemTrayIcon):
         Set the content of system tray, add multiple functions into the menu.
         :return: None
         """
-        super(SystemTray, self).__init__()
+        super().__init__()
         self.__app: Optional[QCoreApplication] = QCoreApplication.instance()  # get the current QApplication instance
         if self.__app is not None:
             self.__main_window: MainWindow = self.__app.main_window

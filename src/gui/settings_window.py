@@ -19,7 +19,7 @@ class SettingsWindow(QTabWidget):
         Set the layout of SettingsWindow.
         """
         # ======== settings window attributes ========
-        super(SettingsWindow, self).__init__()
+        super().__init__()
         self.setWindowTitle("Settings")
         self.setFixedSize(480, 270)
         self.setWindowFlag(Qt.WindowStaysOnTopHint)  # always stays on top of other windows

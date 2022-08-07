@@ -16,7 +16,7 @@ class ImgDownloader(QObject):
         """
         Init a network access manager.
         """
-        super(ImgDownloader, self).__init__(parent=main_window)
+        super().__init__(parent=main_window)
         self.__logger: logging.Logger = logging.getLogger(__name__)
         self.__mgr: QNetworkAccessManager = QNetworkAccessManager()
         self.__mgr.setAutoDeleteReplies(True)
@@ -50,12 +50,12 @@ class ImgDownloader(QObject):
         img_file: QFile = QFile(img_path)
         if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
             img_file.write(reply.readAll())
+            self.__logger.info("Write an image to: '%s'", img_path)
             if set_settings_arg("PREVIEW", img_name):
                 self.parent().set_image()  # refresh and update an image
                 self.__show_message("")  # clear messages
             else:
                 self.__logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
-            self.__logger.info("Write an image to: '%s'", img_path)
         else:
             self.__show_message("Failed to write an image to cache.")
             self.__logger.error("Failed to write an image to: '%s'", img_path)

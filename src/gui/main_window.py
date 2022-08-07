@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         |              status bar                | 19
         ------------------------------------------
         """
-        super(MainWindow, self).__init__()
+        super().__init__()
         # ======== main window attributes ========
         self.setWindowTitle(APP["NAME"])
         self.setFixedSize(960, 540)

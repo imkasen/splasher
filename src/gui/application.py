@@ -18,7 +18,7 @@ class Application(QApplication):
         """
         Draw the main window and the system tray.
         """
-        super(Application, self).__init__([])  # no command line arguments
+        super().__init__([])  # no command line arguments
         self.setWindowIcon(QIcon(":/logo.png"))  # QResource system
         self.main_window: MainWindow = MainWindow()
         self.tray: SystemTray = SystemTray()

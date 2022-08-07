@@ -26,5 +26,5 @@ def create_folders() -> None:
     log_dir: QDir = QDir("logs")
     if not log_dir.exists():
         if not log_dir.mkpath("."):
-            logging.error("Failed to create folder: 'logs/'")
+            logging.error("Failed to create folder: '%s'", QDir.currentPath() + "/logs/")
     # -------------------------------------------------------------

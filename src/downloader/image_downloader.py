@@ -18,11 +18,11 @@ class ImgDownloader(QObject):
         Init a network access manager.
         """
         super().__init__(parent=main_window)
-        self.__logger: logging.Logger = logging.getLogger(__name__)
-        self.__mgr: QNetworkAccessManager = QNetworkAccessManager(self)
-        self.__reply: Optional[QNetworkReply] = None
-        self.__mgr.setAutoDeleteReplies(True)
-        self.__mgr.setTransferTimeout(10000)  # 10s
+        self.logger: logging.Logger = logging.getLogger(__name__)
+        self.manager: QNetworkAccessManager = QNetworkAccessManager(self)
+        self.reply: Optional[QNetworkReply] = None
+        self.manager.setAutoDeleteReplies(True)
+        self.manager.setTransferTimeout(10000)  # 10s
 
     def send_request(self, url: str = API["SOURCE"]) -> None:
         """
@@ -30,9 +30,9 @@ class ImgDownloader(QObject):
         :param url: Unsplash api url
         """
         req: QNetworkRequest = QNetworkRequest(QUrl(url))
-        self.__reply: QNetworkReply = self.__mgr.get(req)
-        self.__reply.finished.connect(self.handle_response)  # pylint: disable=no-member
-        self.__logger.info("Send a request to '%s' to get an image", url)
+        self.reply: QNetworkReply = self.manager.get(req)
+        self.reply.finished.connect(self.handle_response)  # pylint: disable=no-member
+        self.logger.info("Send a request to '%s' to get an image", url)
 
     @Slot()
     def handle_response(self) -> None:
@@ -42,28 +42,28 @@ class ImgDownloader(QObject):
         reply.url().path(): "/photo-123456789"
         reply.readAll(): binary data
         """
-        if self.__reply.error() != QNetworkReply.NoError:
-            self.__show_message("Failed to fetch an image.", 0)
-            self.__logger.error("QNetworkReply Error: %s", self.__reply.errorString())
+        if self.reply.error() != QNetworkReply.NoError:
+            self.show_message("Failed to fetch an image.", 0)
+            self.logger.error("QNetworkReply Error: %s", self.reply.errorString())
             return
 
-        img_name: str = self.__reply.url().path()[1:] + ".jpg"
+        img_name: str = self.reply.url().path()[1:] + ".jpg"
         img_path: str = PATH["CACHE"] + img_name
         img_file: QFile = QFile(img_path)
         if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
-            img_file.write(self.__reply.readAll())
-            self.__logger.info("Write an image to: '%s'", img_path)
+            img_file.write(self.reply.readAll())
+            self.logger.info("Write an image to: '%s'", img_path)
             if set_settings_arg("PREVIEW", img_name):  # write the image name into 'settings.json'
                 self.parent().set_image()  # refresh and update an image
-                self.__show_message("")  # clear messages
+                self.show_message("")  # clear messages
             else:
-                self.__logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
+                self.logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
         else:
-            self.__show_message("Failed to write an image to cache.")
-            self.__logger.error("Failed to write an image to: '%s'", img_path)
+            self.show_message("Failed to write an image to cache.")
+            self.logger.error("Failed to write an image to: '%s'", img_path)
         img_file.close()
 
-    def __show_message(self, msg: str, timeout: int = 5000) -> None:
+    def show_message(self, msg: str, timeout: int = 5000) -> None:
         """
         Show some messages in the status bar of 'MainWindow' using its show_message() function.
         :param msg: message string.

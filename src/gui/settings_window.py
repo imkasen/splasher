@@ -9,7 +9,7 @@ from ..config import APP
 class SettingsWindow(QTabWidget):
     """
     The SettingsWindow class which contains following functions:
-    1. display and set the file path,
+    1. display and set misc,
     2. update wallpapers regularly and set the resolution of the preview image,
     3. display the app info.
     """
@@ -25,21 +25,20 @@ class SettingsWindow(QTabWidget):
         self.setWindowFlag(Qt.WindowStaysOnTopHint)  # always stays on top of other windows
         # -------------------------------------------------------------
         # ======== tabs design ========
-        self.__draw_path_tab()
-        self.__draw_info_tab()
+        self.draw_misc_tab()
+        self.draw_info_tab()
         # -------------------------------------------------------------
 
-    def __draw_path_tab(self) -> None:
+    def draw_misc_tab(self) -> None:
         """
-        Set the path tab layout,
-        here the paths to files are displayed and can be modified.
+        Set the misc tab layout,
         """
         # ======== declaration and add the tab ========
-        path_tab: QWidget = QWidget()
-        self.addTab(path_tab, QIcon(":/tabs/path.png"), "Path")
+        misc_tab: QWidget = QWidget()
+        self.addTab(misc_tab, QIcon(":/tabs/misc.png"), "misc")
         # -------------------------------------------------------------
 
-    def __draw_info_tab(self) -> None:
+    def draw_info_tab(self) -> None:
         """
         Set the info tab layout,
         here shows the app's information.

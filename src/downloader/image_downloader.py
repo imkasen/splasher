@@ -1,4 +1,5 @@
 import logging
+from typing import Optional
 from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
 from PySide6.QtWidgets import QMainWindow
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
@@ -18,7 +19,8 @@ class ImgDownloader(QObject):
         """
         super().__init__(parent=main_window)
         self.__logger: logging.Logger = logging.getLogger(__name__)
-        self.__mgr: QNetworkAccessManager = QNetworkAccessManager()
+        self.__mgr: QNetworkAccessManager = QNetworkAccessManager(self)
+        self.__reply: Optional[QNetworkReply] = None
         self.__mgr.setAutoDeleteReplies(True)
         self.__mgr.setTransferTimeout(10000)  # 10s
 
@@ -28,30 +30,30 @@ class ImgDownloader(QObject):
         :param url: Unsplash api url
         """
         req: QNetworkRequest = QNetworkRequest(QUrl(url))
-        self.__mgr.finished.connect(self.handle_response)  # pylint: disable=no-member
-        self.__mgr.get(req)
+        self.__reply: QNetworkReply = self.__mgr.get(req)
+        self.__reply.finished.connect(self.handle_response)  # pylint: disable=no-member
         self.__logger.info("Send a request to '%s' to get an image", url)
 
     @Slot()
-    def handle_response(self, reply: QNetworkReply) -> None:
+    def handle_response(self) -> None:
         """
         Read the reply data and write the image to the cache folder.
-        :param reply: download contents and headers.
-            reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
-            reply.url().path(): "/photo-123456789"
-            reply.readAll(): binary data
+        reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
+        reply.url().path(): "/photo-123456789"
+        reply.readAll(): binary data
         """
-        if reply.error() != QNetworkReply.NoError:
+        if self.__reply.error() != QNetworkReply.NoError:
             self.__show_message("Failed to fetch an image.", 0)
-            self.__logger.error("QNetworkReply Error: %s", reply.errorString())
+            self.__logger.error("QNetworkReply Error: %s", self.__reply.errorString())
             return
-        img_name: str = reply.url().path()[1:] + ".jpg"
+
+        img_name: str = self.__reply.url().path()[1:] + ".jpg"
         img_path: str = PATH["CACHE"] + img_name
         img_file: QFile = QFile(img_path)
         if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
-            img_file.write(reply.readAll())
+            img_file.write(self.__reply.readAll())
             self.__logger.info("Write an image to: '%s'", img_path)
-            if set_settings_arg("PREVIEW", img_name):
+            if set_settings_arg("PREVIEW", img_name):  # write the image name into 'settings.json'
                 self.parent().set_image()  # refresh and update an image
                 self.__show_message("")  # clear messages
             else:

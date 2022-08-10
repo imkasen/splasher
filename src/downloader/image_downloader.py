@@ -20,48 +20,75 @@ class ImgDownloader(QObject):
         super().__init__(parent=main_window)
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.manager: QNetworkAccessManager = QNetworkAccessManager(self)
-        self.reply: Optional[QNetworkReply] = None
         self.manager.setAutoDeleteReplies(True)
         self.manager.setTransferTimeout(10000)  # 10s
+        self.reply: Optional[QNetworkReply] = None
+        self.file: Optional[QFile] = None
 
-    def send_request(self, url: str = API["SOURCE"]) -> None:
+    def fetch_image(self, url: str = API["SOURCE"]) -> None:
         """
         Init a network request and send the request to Unsplash api.
         :param url: Unsplash api url
         """
-        req: QNetworkRequest = QNetworkRequest(QUrl(url))
-        self.reply: QNetworkReply = self.manager.get(req)
-        self.reply.finished.connect(self.handle_response)  # pylint: disable=no-member
-        self.logger.info("Send a request to '%s' to get an image", url)
+        self.reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
+        self.reply.downloadProgress.connect(self.on_progress)
+        self.reply.requestSent.connect(self.on_request_sent)
+        self.reply.finished.connect(self.on_finished)
+        self.reply.errorOccurred.connect(self.on_error)
 
     @Slot()
-    def handle_response(self) -> None:
+    def on_request_sent(self) -> None:
+        """
+        Add a log to record the request url.
+        """
+        self.logger.info("Send a request to '%s' to get an image", self.reply.request().url().toString())
+
+    @Slot()
+    def on_finished(self) -> None:
         """
         Read the reply data and write the image to the cache folder.
-        reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
-        reply.url().path(): "/photo-123456789"
-        reply.readAll(): binary data
+            reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
+            reply.url().path(): "/photo-123456789"
+            reply.readAll(): binary data
         """
-        if self.reply.error() != QNetworkReply.NoError:
-            self.show_message("Failed to fetch an image.", 0)
-            self.logger.error("QNetworkReply Error: %s", self.reply.errorString())
-            return
+        if self.reply and self.reply.error() == QNetworkReply.NoError:
+            img_name: str = self.reply.url().path()[1:] + ".jpg"
+            img_path: str = PATH["CACHE"] + img_name
+            self.file: QFile = QFile(img_path)
+            if self.file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
+                self.logger.info("Open and write an image file: '%s'", img_path)
+                self.file.write(self.reply.readAll())
 
-        img_name: str = self.reply.url().path()[1:] + ".jpg"
-        img_path: str = PATH["CACHE"] + img_name
-        img_file: QFile = QFile(img_path)
-        if img_file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
-            img_file.write(self.reply.readAll())
-            self.logger.info("Write an image to: '%s'", img_path)
-            if set_settings_arg("PREVIEW", img_name):  # write the image name into 'settings.json'
-                self.parent().set_image()  # refresh and update an image
-                self.show_message("")  # clear messages
+                if set_settings_arg("PREVIEW", img_name):  # write the image name into 'settings.json'
+                    self.parent().set_image()  # refresh and update an image
+                else:
+                    self.logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
             else:
-                self.logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
-        else:
-            self.show_message("Failed to write an image to cache.")
-            self.logger.error("Failed to write an image to: '%s'", img_path)
-        img_file.close()
+                self.show_message("Can not open file when trying to write an image.")
+                self.logger.error("Can not open file '%s' when trying to write an image: '%s'", img_path,
+                                  self.file.errorString())
+            self.file.close()
+            self.reply.deleteLater()
+
+    @Slot(QNetworkReply.NetworkError)
+    def on_error(self, code: QNetworkReply.NetworkError) -> None:
+        """
+        Handle error message.
+        :param code: QNetworkReply::NetworkError Code.
+        """
+        if self.reply:
+            self.show_message("An error occured when fetching an image.", 0)
+            self.logger.error("QNetworkReply NetworkError - Code: %s, Content: %s", code, self.reply.errorString())
+
+    @Slot(int, int)
+    def on_progress(self, bytes_received: int = 0, bytes_total: int = 0) -> None:
+        """
+        Display download progress in status bar when fetching an image.
+        :param bytes_received: default value is 0.
+        :param bytes_total: default value is 0 to prevent exception when network error occurs.
+        """
+        if bytes_total != 0:
+            self.show_message(f"Download progress: {round(bytes_received / bytes_total * 100)}%")
 
     def show_message(self, msg: str, timeout: int = 5000) -> None:
         """

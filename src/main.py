@@ -12,18 +12,18 @@ def main() -> None:
     init_app()
     # -------------------------------------------------------------
     logger: logging.Logger = logging.getLogger(__name__)
-    logger.info("App starts.")
     applock: QLockFile = QLockFile(PATH["APPLOCK"])  # make sure only one program can run
     try:
         app: Application = Application()  # only one QApplication instance per application
+        logger.info("App starts.")
         if applock.tryLock():
             app.display_widgets()
             app.exec()  # start the event loop
         else:
             QMessageBox.warning(None, "Error", "The application is already running!")
             logger.error("The application is already running!")
-    except (RuntimeError, Exception):  # pylint: disable=broad-except
+    except (SystemError, RuntimeError, Exception):  # pylint: disable=broad-except
         logger.exception("Error when running the app.")
     finally:
         applock.unlock()
-    logger.info("App quits.")
+        logger.info("App quits.")

@@ -25,7 +25,7 @@ def create_settings() -> None:
             else:
                 raise IOError
         except IOError:
-            logger.error("Failed to open '%s' when trying to create it", file_path)
+            logger.error("Failed to open '%s'", file_path)
             sys.exit(f"Fail to open {file_path} when trying to create it")
         finally:
             settings_file.close()

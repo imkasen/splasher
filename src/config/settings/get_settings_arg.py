@@ -20,14 +20,14 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
         if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
             stream: QTextStream = QTextStream(settings_file)
             settings_dict: Any = json.loads(stream.readAll())
-            if arg_key in settings_dict:
+            try:
                 res: tuple[bool, str] = (True, settings_dict[arg_key])
-            else:
-                logger.error("Failed to get the argument because the key is not existed")
+            except KeyError:
+                logger.error("Key: %s does not exist in 'settings.json'", arg_key)
         else:
-            logger.error("Failed to open 'settings.json' when trying to read an argument")
+            logger.error("Failed to open 'settings.json'")
         settings_file.close()
         lock.unlock()
     else:
-        logger.error("'settings.json' is not existed when trying to read an argument")
+        logger.error("'settings.json' is not existed")
     return res

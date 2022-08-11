@@ -16,7 +16,8 @@ PATH: dict[str, str] = {
     "CACHE": QDir.homePath() + "/.cache/" + APP["DIR"],
 }
 
-# API for fetching images
-API: dict[str, str] = {
+# API for fetching Unsplash images
+UNSPLASH: dict[str, str] = {
     "SOURCE": "https://source.unsplash.com/random/",
+    "IMAGES": "https://images.unsplash.com/",
 }

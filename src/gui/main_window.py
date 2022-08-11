@@ -6,7 +6,7 @@ from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
 from ..downloader import ImageDownloader
 from . import icons_rc  # pylint: disable=unused-import
-from ..config import APP, PATH, API, get_settings_arg
+from ..config import APP, PATH, UNSPLASH, get_settings_arg
 
 
 # The configuration of MainWindow
@@ -146,15 +146,15 @@ class MainWindow(QMainWindow):
         self.show_message("Attempt to fetch a new image.")
         self.logger.info("The refresh button is clicked.")
         img_resolution: str = str(self.img_label.size().width()) + "x" + str(self.img_label.size().height())
-        self.downloader.fetch_image(API["SOURCE"] + img_resolution)
+        self.downloader.fetch_image(UNSPLASH["SOURCE"] + img_resolution)
 
     @Slot()
     def choose(self) -> None:
         """
         Set the current image as the desktop wallpaper.
         """
-        self.show_message("Set the picture as wallpaper!")
-        self.logger.info("Set the picture as wallpaper.")
+        self.show_message("Attempt to set the current preview as desktop wallpaper.")
+        self.logger.info("The choose button is clicked.")
 
     @Slot()
     def download(self) -> None:
@@ -182,4 +182,5 @@ class MainWindow(QMainWindow):
         :param msg: message string.
         :param timeout: default timeout is 5000 ms.
         """
+        self.status_bar.clearMessage()
         self.status_bar.showMessage(msg, timeout)

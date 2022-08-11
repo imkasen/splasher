@@ -10,7 +10,9 @@ def create_settings() -> None:
     """
     Create 'settings.json' in the configuration folder.(~/.config/<dir>/settings.json)
     """
-    settings: dict[str, str] = {"PREVIEW": ""}
+    settings: dict[str, str] = {
+        "PREVIEW": "",
+    }
 
     logger: logging.Logger = logging.getLogger(__name__)
     file_path: str = PATH["CONFIG"] + "settings.json"

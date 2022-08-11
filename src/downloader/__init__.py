@@ -1,1 +1,1 @@
-from .image_downloader import ImgDownloader
+from .image_downloader import ImageDownloader

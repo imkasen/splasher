@@ -4,7 +4,7 @@ from PySide6.QtCore import Qt, Slot
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar
 from PySide6.QtGui import QPixmap, QIcon
 from .settings_window import SettingsWindow
-from ..downloader import ImgDownloader
+from ..downloader import ImageDownloader
 from . import icons_rc  # pylint: disable=unused-import
 from ..config import APP, PATH, API, get_settings_arg
 
@@ -44,7 +44,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(APP["NAME"])
         self.setFixedSize(960, 540)
         self.logger: logging.Logger = logging.getLogger(__name__)
-        self.downloader: ImgDownloader = ImgDownloader(self)
+        self.downloader: ImageDownloader = ImageDownloader(self)
         self.settings_window: Optional[SettingsWindow] = None
         # -------------------------------------------------------------
         # ======== draw ui ========
@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
 
     def show_message(self, msg: str, timeout: int = 5000) -> None:
         """
-        Show some messages in the status bar.
+        Show messages in the status bar.
         :param msg: message string.
         :param timeout: default timeout is 5000 ms.
         """

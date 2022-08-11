@@ -6,7 +6,7 @@ from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkRe
 from ..config import API, PATH, set_settings_arg
 
 
-class ImgDownloader(QObject):
+class ImageDownloader(QObject):
     """
     The ImgFetcher class which contains following functions:
     1. Send a request using API in order to get a low resolution image.
@@ -88,7 +88,14 @@ class ImgDownloader(QObject):
         :param bytes_total: default value is 0 to prevent exception when network error occurs.
         """
         if bytes_total != 0:
-            self.show_message(f"Download progress: {round(bytes_received / bytes_total * 100)}%")
+            if bytes_received == bytes_total:
+                self.show_message(
+                    f"Download progress: {bytes_received}/{bytes_total} - {round(bytes_received / bytes_total * 100)}%",
+                )
+            else:
+                self.show_message(
+                    f"Download progress: {bytes_received}/{bytes_total} - {round(bytes_received / bytes_total * 100)}%",
+                    0)
 
     def show_message(self, msg: str, timeout: int = 5000) -> None:
         """

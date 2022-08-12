@@ -1,12 +1,12 @@
 import logging
 from typing import Optional
-from PySide6.QtCore import QObject, Slot, QUrl, QFile, QIODevice
+from PySide6.QtCore import QObject, Slot, QFile, QIODevice
 from PySide6.QtWidgets import QMainWindow
-from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from ..config import UNSPLASH, PATH, set_settings_arg
+from PySide6.QtNetwork import QNetworkReply
+from ..config import PATH, set_settings_arg
 
 
-class ImageDownloader(QObject):
+class PreviewFetcher(QObject):
     """
     The ImgFetcher class which contains following functions:
     1. Send a request in order to get a low resolution image.
@@ -19,18 +19,15 @@ class ImageDownloader(QObject):
         """
         super().__init__(parent=main_window)
         self.logger: logging.Logger = logging.getLogger(__name__)
-        self.manager: QNetworkAccessManager = QNetworkAccessManager(self)
-        self.manager.setAutoDeleteReplies(True)
-        self.manager.setTransferTimeout(10000)  # 10s
         self.reply: Optional[QNetworkReply] = None
         self.file: Optional[QFile] = None
 
-    def fetch_image(self, url: str = UNSPLASH["SOURCE"]) -> None:
+    def fetch_image(self, reply: QNetworkReply) -> None:
         """
         Init a network request and send the request to Unsplash api.
-        :param url: Unsplash api url
+        :param reply: qnetworkreply
         """
-        self.reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
+        self.reply: QNetworkReply = reply
         self.reply.downloadProgress.connect(self.on_progress)
         self.reply.requestSent.connect(self.on_request_sent)
         self.reply.finished.connect(self.on_finished)

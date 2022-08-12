@@ -1,1 +1,1 @@
-from .image_downloader import ImageDownloader
+from .preview_fetcher import PreviewFetcher

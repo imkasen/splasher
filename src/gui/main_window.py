@@ -1,10 +1,11 @@
 from typing import Optional
 import logging
-from PySide6.QtCore import Qt, Slot
+from PySide6.QtCore import Qt, Slot, QUrl
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar
 from PySide6.QtGui import QPixmap, QIcon
+from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from .settings_window import SettingsWindow
-from ..downloader import ImageDownloader
+from ..downloader import PreviewFetcher
 from . import icons_rc  # pylint: disable=unused-import
 from ..config import APP, PATH, UNSPLASH, get_settings_arg
 
@@ -44,12 +45,15 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(APP["NAME"])
         self.setFixedSize(960, 540)
         self.logger: logging.Logger = logging.getLogger(__name__)
-        self.downloader: ImageDownloader = ImageDownloader(self)
         self.settings_window: Optional[SettingsWindow] = None
+        self.manager: Optional[QNetworkAccessManager] = None
         # -------------------------------------------------------------
         # ======== draw ui ========
         self.draw_window_ui()
         self.set_image()
+        # -------------------------------------------------------------
+        # ======== network ========
+        self.init_network()
         # -------------------------------------------------------------
 
     def draw_window_ui(self) -> None:
@@ -87,21 +91,6 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(main_widget)
         # -------------------------------------------------------------
 
-    def set_image(self) -> None:
-        """
-        Set a preivew image for QLabel and refresh.
-        """
-        res: bool = False
-        img_name: str = ""
-        res, img_name = get_settings_arg("PREVIEW")
-        if not res:
-            self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
-        img: QPixmap = QPixmap(PATH["CACHE"] + img_name)
-        self.img_label.setPixmap(img)
-        self.img_label.setScaledContents(True)  # adjust the image size to fit the window
-        self.img_label.setAlignment(Qt.AlignCenter)
-        self.img_label.repaint()
-
     def draw_functional_bar(self) -> int:
         """
         Draw some functional widgets.
@@ -138,6 +127,29 @@ class MainWindow(QMainWindow):
         # return buttons' height
         return settings_btn.sizeHint().height()
 
+    def set_image(self) -> None:
+        """
+        Set a preivew image for QLabel and refresh.
+        """
+        res: bool = False
+        img_name: str = ""
+        res, img_name = get_settings_arg("PREVIEW")
+        if not res:
+            self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
+        img: QPixmap = QPixmap(PATH["CACHE"] + img_name)
+        self.img_label.setPixmap(img)
+        self.img_label.setScaledContents(True)  # adjust the image size to fit the window
+        self.img_label.setAlignment(Qt.AlignCenter)
+        self.img_label.repaint()
+
+    def init_network(self) -> None:
+        """
+        Init a QNetworkAccessManager to handle functions related to images.
+        """
+        self.manager: QNetworkAccessManager = QNetworkAccessManager(self)
+        self.manager.setAutoDeleteReplies(True)
+        self.manager.setTransferTimeout(10000)  # 10s
+
     @Slot()
     def refresh(self) -> None:
         """
@@ -146,7 +158,9 @@ class MainWindow(QMainWindow):
         self.show_message("Attempt to fetch a new image.")
         self.logger.info("The refresh button is clicked.")
         img_resolution: str = str(self.img_label.size().width()) + "x" + str(self.img_label.size().height())
-        self.downloader.fetch_image(UNSPLASH["SOURCE"] + img_resolution)
+        fetcher: PreviewFetcher = PreviewFetcher(self)
+        reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(UNSPLASH["SOURCE"] + img_resolution)))
+        fetcher.fetch_image(reply)
 
     @Slot()
     def choose(self) -> None:

@@ -8,24 +8,24 @@ from ..config import PATH, set_settings_arg
 
 class PreviewFetcher(QObject):
     """
-    The ImgFetcher class which contains following functions:
-    1. Send a request in order to get a low resolution image.
+    The ImgFetcher class contains the following functions:
+    1. Bind the reply passed from MainWindow to different handler functions.
     2. Write the image to cache and update ui to show it.
     """
 
-    def __init__(self, main_window: QMainWindow) -> None:
+    def __init__(self, parent: QMainWindow) -> None:
         """
-        Init a network access manager.
+        Create some variables that will be used later and initialize them to none.
         """
-        super().__init__(parent=main_window)
+        super().__init__(parent)
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.reply: Optional[QNetworkReply] = None
         self.file: Optional[QFile] = None
 
     def fetch_image(self, reply: QNetworkReply) -> None:
         """
-        Init a network request and send the request to Unsplash api.
-        :param reply: qnetworkreply
+        Receive the network reply and bind the reply to the handler functions.
+        :param reply: QNetworkReply
         """
         self.reply: QNetworkReply = reply
         self.reply.downloadProgress.connect(self.on_progress)
@@ -37,6 +37,7 @@ class PreviewFetcher(QObject):
     def on_request_sent(self) -> None:
         """
         Add a log to record the request url.
+        The request will be send twice, because the url will be redirected.
         """
         self.logger.info("Send a request to '%s' to get an image", self.reply.request().url().toString())
 
@@ -44,9 +45,11 @@ class PreviewFetcher(QObject):
     def on_finished(self) -> None:
         """
         Read the reply data and write the image to the cache folder.
-            reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
-            reply.url().path(): "/photo-123456789"
-            reply.readAll(): binary data
+        The 'settings.json' will be modified and the QLabel in 'MainWindow' will be repainted.
+
+        reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
+        reply.url().path(): "/photo-123456789"
+        reply.readAll(): binary data
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
@@ -71,7 +74,7 @@ class PreviewFetcher(QObject):
     @Slot(QNetworkReply.NetworkError)
     def on_error(self, code: QNetworkReply.NetworkError) -> None:
         """
-        Handle error message.
+        Handle error messages.
         :param code: QNetworkReply::NetworkError Code.
         """
         if self.reply:
@@ -82,7 +85,7 @@ class PreviewFetcher(QObject):
     @Slot(int, int)
     def on_progress(self, bytes_received: int = 0, bytes_total: int = 0) -> None:
         """
-        Display download progress in status bar when fetching an image.
+        Display the download progress in status bar when fetching an image.
         :param bytes_received: default value is 0.
         :param bytes_total: default value is 0 to prevent exception when network error occurs.
         """

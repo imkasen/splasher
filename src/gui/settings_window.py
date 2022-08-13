@@ -8,7 +8,7 @@ from ..config import APP
 # The configuration of SettingsWindow
 class SettingsWindow(QTabWidget):
     """
-    The SettingsWindow class which contains following functions:
+    The SettingsWindow class contains following functions:
     1. display and set misc,
     2. update wallpapers regularly and set the resolution of the preview image,
     3. display the app info.

@@ -10,7 +10,7 @@ from ..config import APP
 # The configuration of SystemTray
 class SystemTray(QSystemTrayIcon):
     """
-    The SystemTray class which contains following functions:
+    The SystemTray class contains following functions:
     1. show the app
     2. quit the app
     """
@@ -42,7 +42,7 @@ class SystemTray(QSystemTrayIcon):
         menu.addAction(quit_act)
         # -------------------------------------------------------------
 
-    @Slot()
+    @Slot(QSystemTrayIcon.ActivationReason)
     def handle_mouse_click(self, reason: QSystemTrayIcon.ActivationReason) -> None:
         """
         Handle the mouse click, left click to open the main window;

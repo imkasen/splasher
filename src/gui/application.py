@@ -9,7 +9,7 @@ from . import icons_rc  # pylint: disable=unused-import
 # The configuration of Application
 class Application(QApplication):
     """
-    The Application class which contains following functions:
+    The Application class contains following functions:
     1. draw the main window
     2. draw the system tray
     """

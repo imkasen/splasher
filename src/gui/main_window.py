@@ -14,7 +14,7 @@ from ..config import APP, PATH, UNSPLASH, get_settings_arg
 # The configuration of MainWindow
 class MainWindow(QMainWindow):
     """
-    The MainWindow class which contains following functions:
+    The MainWindow class contains following functions:
     1. display a wallpaper,
     2. refresh, choose and download the displayed wallpaper,
     3. go to the settings window,
@@ -155,14 +155,15 @@ class MainWindow(QMainWindow):
     def refresh(self) -> None:
         """
         Use 'PreviewFetcher' to load a previewed image.
+        Create a network request and use 'get' function to precess the response.
         The image's resolution is based on the QLabel's size.
         """
         self.show_message("Attempt to fetch a new image.")
         self.logger.info("The refresh button is clicked.")
 
         img_resolution: str = f"{self.img_label.size().width()}x{self.img_label.size().height()}"  # 960x497
-        fetcher: PreviewFetcher = PreviewFetcher(self)
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(UNSPLASH["SOURCE"] + img_resolution)))
+        fetcher: PreviewFetcher = PreviewFetcher(self)
         fetcher.fetch_image(reply)
 
     @Slot()
@@ -172,8 +173,8 @@ class MainWindow(QMainWindow):
         The image's resolution is based on the primary screen's resolution.
         Please refer to the documentation for the construction of the url path:
             https://unsplash.com/documentation#dynamically-resizable-images
-            https://docs.imgix.com/apis/rendering
-            args:
+
+        The request url args:
             w: image width
             h: image height
             fit: resize fit mode
@@ -200,8 +201,7 @@ class MainWindow(QMainWindow):
         screen_w: int = screen.size().width()
         screen_h: int = screen.size().height()
         api: str = UNSPLASH["IMAGES"]
-        crop: str = "faces,edges,entropy"
-        url: str = f"{api}{img_name}?w={screen_w}&h={screen_h}&fit=crop&crop={crop}&fm=jpg&q=95&dpr={ratio}&cs=srgb"
+        url: str = f"{api}{img_name}?w={screen_w}&h={screen_h}&fit=crop&crop=entropy&fm=jpg&q=95&dpr={ratio}&cs=srgb"
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
 
     @Slot()

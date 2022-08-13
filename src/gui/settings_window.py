@@ -1,8 +1,9 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, QLabel
-from PySide6.QtGui import QPixmap, QIcon
-from . import icons_rc  # pylint: disable=unused-import
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QTabWidget, QVBoxLayout, QWidget
+
 from ..config import APP
+from . import icons_rc  # pylint: disable=unused-import
 
 
 # The configuration of SettingsWindow

@@ -1,5 +1,7 @@
 import logging
+
 from PySide6.QtCore import QDir
+
 from .args import PATH
 
 

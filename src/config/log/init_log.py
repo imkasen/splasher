@@ -1,6 +1,7 @@
+import json
 import logging
 import logging.config
-import json
+
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 
 

@@ -1,8 +1,10 @@
 import logging
 from typing import Optional
-from PySide6.QtCore import QObject, Slot, QFile, QIODevice
-from PySide6.QtWidgets import QMainWindow
+
+from PySide6.QtCore import QFile, QIODevice, QObject, Slot
 from PySide6.QtNetwork import QNetworkReply
+from PySide6.QtWidgets import QMainWindow
+
 from ..config import PATH, set_settings_arg
 
 

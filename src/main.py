@@ -1,8 +1,10 @@
 import logging
+
 from PySide6.QtCore import QLockFile
 from PySide6.QtWidgets import QMessageBox
-from .gui import Application
+
 from .config import PATH, init_app
+from .gui import Application
 
 
 def main() -> None:

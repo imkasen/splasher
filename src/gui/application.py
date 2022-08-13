@@ -1,9 +1,11 @@
 import logging
-from PySide6.QtWidgets import QApplication
+
 from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication
+
+from . import icons_rc  # pylint: disable=unused-import
 from .main_window import MainWindow
 from .system_tray import SystemTray
-from . import icons_rc  # pylint: disable=unused-import
 
 
 # The configuration of Application

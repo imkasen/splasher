@@ -1,14 +1,16 @@
-from typing import Optional
-from math import ceil
 import logging
-from PySide6.QtCore import Qt, Slot, QUrl
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar
-from PySide6.QtGui import QPixmap, QIcon, QGuiApplication, QScreen
-from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
-from .settings_window import SettingsWindow
-from ..downloader import PreviewFetcher
-from . import icons_rc  # pylint: disable=unused-import
+from math import ceil
+from typing import Optional
+
+from PySide6.QtCore import Qt, QUrl, Slot
+from PySide6.QtGui import QGuiApplication, QIcon, QPixmap, QScreen
+from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
+from PySide6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QVBoxLayout, QWidget
+
 from ..config import APP, PATH, UNSPLASH, get_settings_arg
+from ..downloader import PreviewFetcher, WallpaperSetter
+from . import icons_rc  # pylint: disable=unused-import
+from .settings_window import SettingsWindow
 
 
 # The configuration of MainWindow
@@ -203,6 +205,7 @@ class MainWindow(QMainWindow):
         api: str = UNSPLASH["IMAGES"]
         url: str = f"{api}{img_name}?w={screen_w}&h={screen_h}&fit=crop&crop=entropy&fm=jpg&q=95&dpr={ratio}&cs=srgb"
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
+        setter: WallpaperSetter = WallpaperSetter(self)
 
     @Slot()
     def download(self) -> None:

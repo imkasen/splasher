@@ -1,10 +1,12 @@
 from typing import Optional
-from PySide6.QtCore import Slot, QCoreApplication
-from PySide6.QtWidgets import QSystemTrayIcon, QMenu
-from PySide6.QtGui import QIcon, QAction
-from .main_window import MainWindow
-from . import icons_rc  # pylint: disable=unused-import
+
+from PySide6.QtCore import QCoreApplication, Slot
+from PySide6.QtGui import QAction, QIcon
+from PySide6.QtWidgets import QMenu, QSystemTrayIcon
+
 from ..config import APP
+from . import icons_rc  # pylint: disable=unused-import
+from .main_window import MainWindow
 
 
 # The configuration of SystemTray

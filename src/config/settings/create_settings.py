@@ -1,7 +1,9 @@
 import json  # QJsonObject is missing in PySide 6.3.1, use dict and json to construct directly.
 import logging
 import sys
+
 from PySide6.QtCore import QFile, QIODevice, QTextStream
+
 from ..args import PATH
 from . import lock
 

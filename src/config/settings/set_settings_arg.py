@@ -1,7 +1,9 @@
-from typing import Optional, Any
-import logging
 import json
-from PySide6.QtCore import QFile, QSaveFile, QIODevice, QTextStream
+import logging
+from typing import Any, Optional
+
+from PySide6.QtCore import QFile, QIODevice, QSaveFile, QTextStream
+
 from ..args import PATH
 from . import lock
 

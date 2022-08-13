@@ -1,8 +1,9 @@
 from typing import Optional
+from math import ceil
 import logging
 from PySide6.QtCore import Qt, Slot, QUrl
 from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStatusBar
-from PySide6.QtGui import QPixmap, QIcon
+from PySide6.QtGui import QPixmap, QIcon, QGuiApplication, QScreen
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkRequest, QNetworkReply
 from .settings_window import SettingsWindow
 from ..downloader import PreviewFetcher
@@ -52,8 +53,8 @@ class MainWindow(QMainWindow):
         self.draw_window_ui()
         self.set_image()
         # -------------------------------------------------------------
-        # ======== network ========
-        self.init_network()
+        # ======== QNetWorkAccessManager ========
+        self.init_manager()
         # -------------------------------------------------------------
 
     def draw_window_ui(self) -> None:
@@ -77,7 +78,7 @@ class MainWindow(QMainWindow):
         self.status_bar.setSizeGripEnabled(False)
         main_layout.addWidget(self.status_bar)
         # -------------------------------------------------------------
-        # ======== set QLabel size ========
+        # ======== set QLabel size ========  # do not move the code
         img_label_h: int = self.height() - btns_h - self.status_bar.sizeHint().height()
         self.img_label.setFixedSize(self.width(), img_label_h)
         # -------------------------------------------------------------
@@ -136,13 +137,13 @@ class MainWindow(QMainWindow):
         res, img_name = get_settings_arg("PREVIEW")
         if not res:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
-        img: QPixmap = QPixmap(PATH["CACHE"] + img_name)
+        img: QPixmap = QPixmap(PATH["CACHE"] + img_name + ".jpg")
         self.img_label.setPixmap(img)
         self.img_label.setScaledContents(True)  # adjust the image size to fit the window
         self.img_label.setAlignment(Qt.AlignCenter)
         self.img_label.repaint()
 
-    def init_network(self) -> None:
+    def init_manager(self) -> None:
         """
         Init a QNetworkAccessManager to handle functions related to images.
         """
@@ -153,11 +154,13 @@ class MainWindow(QMainWindow):
     @Slot()
     def refresh(self) -> None:
         """
-        Use 'ImgDownloader' to load a previewed image.
+        Use 'PreviewFetcher' to load a previewed image.
+        The image's resolution is based on the QLabel's size.
         """
         self.show_message("Attempt to fetch a new image.")
         self.logger.info("The refresh button is clicked.")
-        img_resolution: str = str(self.img_label.size().width()) + "x" + str(self.img_label.size().height())
+
+        img_resolution: str = f"{self.img_label.size().width()}x{self.img_label.size().height()}"  # 960x497
         fetcher: PreviewFetcher = PreviewFetcher(self)
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(UNSPLASH["SOURCE"] + img_resolution)))
         fetcher.fetch_image(reply)
@@ -166,9 +169,40 @@ class MainWindow(QMainWindow):
     def choose(self) -> None:
         """
         Set the current image as the desktop wallpaper.
+        The image's resolution is based on the primary screen's resolution.
+        Please refer to the documentation for the construction of the url path:
+            https://unsplash.com/documentation#dynamically-resizable-images
+            https://docs.imgix.com/apis/rendering
+            args:
+            w: image width
+            h: image height
+            fit: resize fit mode
+            crop: crop mode
+            fm: output format
+            q: output quality
+            dpr: device pixel ratio, based on device pixel ratio
+            cs: color space
         """
         self.show_message("Attempt to set the current preview as desktop wallpaper.")
         self.logger.info("The choose button is clicked.")
+
+        res: bool = False
+        img_name: str = ""
+        res, img_name = get_settings_arg("PREVIEW")
+        if not res:
+            self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
+        screen: QScreen = QGuiApplication.primaryScreen()
+        ratio: int = ceil(screen.devicePixelRatio())  # default is 1 and the max is 5.
+        if ratio <= 0:
+            ratio: int = 1
+        elif ratio > 5:
+            ratio: int = 5
+        screen_w: int = screen.size().width()
+        screen_h: int = screen.size().height()
+        api: str = UNSPLASH["IMAGES"]
+        crop: str = "faces,edges,entropy"
+        url: str = f"{api}{img_name}?w={screen_w}&h={screen_h}&fit=crop&crop={crop}&fm=jpg&q=95&dpr={ratio}&cs=srgb"
+        reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
 
     @Slot()
     def download(self) -> None:

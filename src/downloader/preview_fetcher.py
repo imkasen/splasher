@@ -50,8 +50,8 @@ class PreviewFetcher(QObject):
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
-                img_name: str = self.reply.url().path()[1:] + ".jpg"
-                img_path: str = PATH["CACHE"] + img_name
+                img_name: str = self.reply.url().path()[1:]
+                img_path: str = PATH["CACHE"] + img_name + ".jpg"
                 self.file: QFile = QFile(img_path)
                 if self.file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
                     self.logger.info("Open and write an image file: '%s'", img_path)
@@ -76,7 +76,7 @@ class PreviewFetcher(QObject):
         """
         if self.reply:
             error_message: str = self.reply.errorString()
-            self.show_message(f"An error occured when fetching an image: '{error_message}'.", 0)
+            self.show_message(f"An error occured when fetching an image: '{error_message}'", 0)
             self.logger.error("QNetworkReply NetworkError - Code: %s, Content: %s", code, error_message)
 
     @Slot(int, int)

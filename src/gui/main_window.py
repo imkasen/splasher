@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
         # -------------------------------------------------------------
         # ======== draw ui ========
         self.draw_window_ui()
-        self.set_image()
+        self.set_preview()
         # -------------------------------------------------------------
         # ======== QNetWorkAccessManager ========
         self.init_manager()
@@ -130,7 +130,7 @@ class MainWindow(QMainWindow):
         # return buttons' height
         return settings_btn.sizeHint().height()
 
-    def set_image(self) -> None:
+    def set_preview(self) -> None:
         """
         Set a preivew image for QLabel and refresh.
         """
@@ -160,13 +160,13 @@ class MainWindow(QMainWindow):
         Create a network request and use 'get' function to precess the response.
         The image's resolution is based on the QLabel's size.
         """
-        self.show_message("Attempt to fetch a new image.")
+        self.show_message("Attempt to fetch a new preview.")
         self.logger.info("The refresh button is clicked.")
 
         img_resolution: str = f"{self.img_label.size().width()}x{self.img_label.size().height()}"  # 960x497
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(UNSPLASH["SOURCE"] + img_resolution)))
         fetcher: PreviewFetcher = PreviewFetcher(self)
-        fetcher.fetch_image(reply)
+        fetcher.fetch_preview(reply)
 
     @Slot()
     def choose(self) -> None:
@@ -206,6 +206,7 @@ class MainWindow(QMainWindow):
         url: str = f"{api}{img_name}?w={screen_w}&h={screen_h}&fit=crop&crop=entropy&fm=jpg&q=95&dpr={ratio}&cs=srgb"
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
         setter: WallpaperSetter = WallpaperSetter(self)
+        setter.fetch_wallpaper(reply)
 
     @Slot()
     def download(self) -> None:

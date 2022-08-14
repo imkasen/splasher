@@ -151,7 +151,7 @@ class MainWindow(QMainWindow):
         """
         self.manager: QNetworkAccessManager = QNetworkAccessManager(self)
         self.manager.setAutoDeleteReplies(True)
-        self.manager.setTransferTimeout(10000)  # 10s
+        self.manager.setTransferTimeout(15000)  # 15s
 
     @Slot()
     def refresh(self) -> None:

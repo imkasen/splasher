@@ -17,7 +17,7 @@ def create_settings() -> None:
     }
 
     logger: logging.Logger = logging.getLogger(__name__)
-    file_path: str = PATH["CONFIG"] + "settings.json"
+    file_path: str = f"{PATH['CONFIG']}settings.json"
     settings_file: QFile = QFile(file_path)
     if not settings_file.exists():
         lock.lockForWrite()

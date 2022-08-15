@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import Optional
 
 from PySide6.QtCore import QFile, QIODevice, QObject, Slot
@@ -47,39 +48,45 @@ class PreviewFetcher(QObject):
     @Slot()
     def on_finished(self) -> None:
         """
-        Read the reply data and write the preview to the cache folder.
+        Read the reply data and write the preview to the cache folder.('~/.cache/splasher/picsum/')
         The 'settings.json' will be modified and the QLabel in 'MainWindow' will be repainted.
 
-        reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
-        reply.url().path(): "/photo-123456789"
+        reply.url(): "https://i.picsum.photos/id/6/960/497.jpg?hmac=_qAV99PYZ7WFEIt6KemXSbsRpH8ZuR-oXPdjMZgGxWs"
+        reply.url().path(): "/id/6/960/497.jpg"
         reply.readAll(): binary data
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
-                img_name: str = self.reply.url().path()[1:]
-                img_path: str = PATH["CACHE"] + img_name + ".jpg"
+                # ======== variables ========
+                reply_path: str = self.reply.url().path()
+                img_id: str = re.findall(r"^/id/(\d+)/", reply_path)[0]  # get the image id
+                subfolder: str = "picsum/"
+                img_subpath: str = f"{subfolder}{img_id}"
+                img_fullpath: str = f"{PATH['CACHE']}{img_subpath}.jpg"
                 failed: bool = False
-                self.file: QFile = QFile(img_path)
+                # ======== save the image ========
+                self.file: QFile = QFile(img_fullpath)
                 if self.file.open(QIODevice.WriteOnly | QIODevice.NewOnly):
-                    self.logger.info("Open and write an preview: '%s'", img_path)
-                    if self.file.write(self.reply.readAll()) == -1:  # error
+                    self.logger.info("Open and write an preview: '%s'", img_fullpath)
+                    if self.file.write(self.reply.readAll()) == -1:  # if an error occurred
                         self.show_message("Failed to write a preview")
                         self.logger.error("Failed to write a preview")
                         failed: bool = True
                 else:
                     self.show_message("Can not open file when trying to write a preview.")
-                    self.logger.error("Can not open file '%s' when trying to write a preview: '%s'", img_path,
+                    self.logger.error("Can not open file '%s' when trying to write a preview: '%s'", img_fullpath,
                                       self.file.errorString())
                     failed: bool = True
                 self.file.close()
+                # ======== modify 'settings.json' ========
                 if not failed:
-                    if set_settings_arg("PREVIEW", img_name):  # write the preview name into 'settings.json'
+                    if set_settings_arg("PREVIEW", img_subpath):  # write the preview name into 'settings.json'
                         self.parent().set_preview()  # refresh and update an previw
                     else:
                         self.logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")
                 else:
-                    self.logger.warning("Remove file: %s", img_path)
-                    QFile.remove(img_path)
+                    self.logger.warning("Remove file: %s", img_fullpath)
+                    QFile.remove(img_fullpath)
             self.reply.deleteLater()
 
     @Slot(QNetworkReply.NetworkError)

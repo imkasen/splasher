@@ -16,7 +16,7 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
     """
     logger: logging.Logger = logging.getLogger(__name__)
     res: tuple[bool, str] = (False, "")
-    settings_file: QFile = QFile(PATH["CONFIG"] + "settings.json")
+    settings_file: QFile = QFile(f"{PATH['CONFIG']}settings.json")
     if settings_file.exists():
         lock.lockForRead()
         if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):

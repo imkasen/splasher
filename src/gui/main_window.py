@@ -1,4 +1,5 @@
 import logging
+import re
 from math import ceil
 from typing import Optional
 
@@ -7,7 +8,7 @@ from PySide6.QtGui import QGuiApplication, QIcon, QPixmap, QScreen
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QVBoxLayout, QWidget
 
-from ..config import APP, PATH, UNSPLASH, get_settings_arg
+from ..config import APP, PATH, PICSUM, get_settings_arg
 from ..downloader import PreviewFetcher, WallpaperSetter
 from . import icons_rc  # pylint: disable=unused-import
 from .settings_window import SettingsWindow
@@ -135,11 +136,11 @@ class MainWindow(QMainWindow):
         Set a preivew image for QLabel and refresh.
         """
         res: bool = False
-        img_name: str = ""
-        res, img_name = get_settings_arg("PREVIEW")
+        img_subpath: str = ""
+        res, img_subpath = get_settings_arg("PREVIEW")
         if not res:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
-        img: QPixmap = QPixmap(PATH["CACHE"] + img_name + ".jpg")
+        img: QPixmap = QPixmap(f"{PATH['CACHE']}{img_subpath}.jpg")
         self.img_label.setPixmap(img)
         self.img_label.setScaledContents(True)  # adjust the image size to fit the window
         self.img_label.setAlignment(Qt.AlignCenter)
@@ -163,8 +164,9 @@ class MainWindow(QMainWindow):
         self.show_message("Attempt to fetch a new preview.")
         self.logger.info("The refresh button is clicked.")
 
-        img_resolution: str = f"{self.img_label.size().width()}x{self.img_label.size().height()}"  # 960x497
-        reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(UNSPLASH["SOURCE"] + img_resolution)))
+        img_resolution: str = f"{self.img_label.size().width()}/{self.img_label.size().height()}"  # 960/497
+        url: str = f"{PICSUM}{img_resolution}"
+        reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
         fetcher: PreviewFetcher = PreviewFetcher(self)
         fetcher.fetch_preview(reply)
 
@@ -173,18 +175,6 @@ class MainWindow(QMainWindow):
         """
         Set the current image as the desktop wallpaper.
         The image's resolution is based on the primary screen's resolution.
-        Please refer to the documentation for the construction of the url path:
-            https://unsplash.com/documentation#dynamically-resizable-images
-
-        The request url args:
-            w: image width
-            h: image height
-            fit: resize fit mode
-            crop: crop mode
-            fm: output format
-            q: output quality
-            dpr: device pixel ratio, based on device pixel ratio
-            cs: color space
         """
         self.show_message("Attempt to set the current preview as desktop wallpaper.")
         self.logger.info("The choose button is clicked.")
@@ -192,21 +182,17 @@ class MainWindow(QMainWindow):
         res: bool = False
         img_name: str = ""
         res, img_name = get_settings_arg("PREVIEW")
-        if not res:
+        if res:
+            img_id: str = re.findall(r"/(\d+)", img_name)[0]
+            screen: QScreen = QGuiApplication.primaryScreen()
+            screen_w: int = screen.size().width()
+            screen_h: int = screen.size().height()
+            url: str = f"{PICSUM}id/{img_id}/{screen_w}/{screen_h}"
+            reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
+            setter: WallpaperSetter = WallpaperSetter(self)
+            setter.fetch_wallpaper(reply)
+        else:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
-        screen: QScreen = QGuiApplication.primaryScreen()
-        ratio: int = ceil(screen.devicePixelRatio())  # default is 1 and the max is 5.
-        if ratio <= 0:
-            ratio: int = 1
-        elif ratio > 5:
-            ratio: int = 5
-        screen_w: int = screen.size().width()
-        screen_h: int = screen.size().height()
-        api: str = UNSPLASH["IMAGES"]
-        url: str = f"{api}{img_name}?w={screen_w}&h={screen_h}&fit=crop&crop=entropy&fm=jpg&q=95&dpr={ratio}&cs=srgb"
-        reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
-        setter: WallpaperSetter = WallpaperSetter(self)
-        setter.fetch_wallpaper(reply)
 
     @Slot()
     def download(self) -> None:

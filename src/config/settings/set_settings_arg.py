@@ -18,7 +18,8 @@ def set_settings_arg(arg_key: str, arg_value: str) -> bool:
     :return: bool
     """
     res: bool = False
-    file_path = PATH["CONFIG"] + "settings.json"
+    settings_dict: Optional[dict] = None
+    file_path: str = f"{PATH['CONFIG']}settings.json"
     res, settings_dict = read_settings(file_path)
     if res:
         try:

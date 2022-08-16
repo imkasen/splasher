@@ -1,9 +1,8 @@
 import logging
 import re
-from math import ceil
 from typing import Optional
 
-from PySide6.QtCore import Qt, QUrl, Slot
+from PySide6.QtCore import QFileInfo, Qt, QUrl, Slot
 from PySide6.QtGui import QGuiApplication, QIcon, QPixmap, QScreen
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QVBoxLayout, QWidget
@@ -135,8 +134,6 @@ class MainWindow(QMainWindow):
         """
         Set a preivew image for QLabel and refresh.
         """
-        res: bool = False
-        img_subpath: str = ""
         res, img_subpath = get_settings_arg("PREVIEW")
         if not res:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
@@ -167,20 +164,18 @@ class MainWindow(QMainWindow):
         img_resolution: str = f"{self.img_label.size().width()}/{self.img_label.size().height()}"  # 960/497
         url: str = f"{PICSUM}{img_resolution}"
         reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
-        fetcher: PreviewFetcher = PreviewFetcher(self)
-        fetcher.fetch_preview(reply)
+        PreviewFetcher(self).fetch_preview(reply)
 
     @Slot()
     def choose(self) -> None:
         """
         Set the current image as the desktop wallpaper.
+
         The image's resolution is based on the primary screen's resolution.
         """
         self.show_message("Attempt to set the current preview as desktop wallpaper.")
         self.logger.info("The choose button is clicked.")
 
-        res: bool = False
-        img_name: str = ""
         res, img_name = get_settings_arg("PREVIEW")
         if res:
             img_id: str = re.findall(r"/(\d+)", img_name)[0]
@@ -188,9 +183,23 @@ class MainWindow(QMainWindow):
             screen_w: int = screen.size().width()
             screen_h: int = screen.size().height()
             url: str = f"{PICSUM}id/{img_id}/{screen_w}/{screen_h}"
-            reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
-            setter: WallpaperSetter = WallpaperSetter(self)
-            setter.fetch_wallpaper(reply)
+            # ======== check the image's resolution ========
+            subfolder: str = "picsum/"
+            img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
+            file_info: QFileInfo = QFileInfo(img_fullpath)
+            if file_info.exists() and file_info.isFile():
+                img: QPixmap = QPixmap(img_fullpath)
+                img_w: int = img.size().width()
+                img_h: int = img.size().height()
+                if img_w != screen_w or img_h != screen_h:
+                    # ======== send the request, download and set ========
+                    reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
+                    WallpaperSetter(self).fetch_wallpaper(reply)
+                else:
+                    # ======== set the wallpaper only ========
+                    WallpaperSetter(self).set_wallpaper(img_fullpath)
+            else:
+                self.logger.error("Failed to find the image file: '%s'", img_fullpath)
         else:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
 

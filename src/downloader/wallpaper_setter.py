@@ -1,4 +1,5 @@
 import logging
+import re
 from typing import Optional
 
 from PySide6.QtCore import QIODevice, QObject, QSaveFile, Slot
@@ -40,6 +41,7 @@ class WallpaperSetter(QObject):
     def on_request_sent(self) -> None:
         """
         Add a log to record the request url.
+        The request will be send twice, because the url will be redirected.
         """
         self.logger.info("Send a request to '%s' to get an image", self.reply.request().url().toString())
 
@@ -49,26 +51,32 @@ class WallpaperSetter(QObject):
         Read the reply data and write the wallpaper to the same file in cache folder.
         Set the image as the desktop wallpaper using 'gsettings' command.
         """
-        failed: bool = False
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
-                img_name: str = self.reply.request().url().path()[1:]
-                img_path: str = PATH["CACHE"] + img_name + ".jpg"
-                self.file: QSaveFile = QSaveFile(img_path)
+                # ======== variables ========
+                reply_path: str = self.reply.url().path()
+                img_id: str = re.findall(r"^/id/(\d+)/", reply_path)[0]  # get the image id
+                subfolder: str = "picsum/"
+                img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
+                failed: bool = False
+                # ======== save the wallpaper ========
+                self.file: QSaveFile = QSaveFile(img_fullpath)
                 if self.file.open(QIODevice.WriteOnly):
-                    self.logger.info("Open and write the wallpaper: '%s'", img_path)
-                    if self.file.write(self.reply.readAll()) == -1:  # if an error occured
-                        self.logger.error("Failed to write a wallpaper back to its file.")
+                    self.logger.info("Open and write the wallpaper: '%s'", img_fullpath)
+                    if self.file.write(self.reply.readAll()) == -1:  # if an error occurred
+                        self.show_message("Failed to write a wallpaper back to its preview file.")
+                        self.logger.error("Failed to write a wallpaper back to its preview file.")
                         failed: bool = True
                 else:
                     self.show_message("Can not open file when trying to write a wallpaper.")
-                    self.logger.error("Can not open file '%s' when trying to write a wallpaper: '%s'", img_path,
+                    self.logger.error("Can not open file '%s' when trying to write a wallpaper: '%s'", img_fullpath,
                                       self.file.errorString())
                     failed: bool = True
                 if failed:
                     self.file.cancelWriting()
+                # ======== set as the desktop wallpaper ========
                 if self.file.commit():
-                    pass
+                    self.set_wallpaper(img_fullpath)
             self.reply.deleteLater()
 
     @Slot(QNetworkReply.NetworkError)
@@ -106,3 +114,10 @@ class WallpaperSetter(QObject):
         :param timeout: default time is 5000 ms.
         """
         self.parent().show_message(msg, timeout)
+
+    def set_wallpaper(self, img_path: str) -> None:
+        """
+        Set the wallpaper using 'gsettings' command
+        :param img_path: the location of wallpaper.
+        """
+        self.logger.info("Set '%s' as the desktop wallpaper", img_path)

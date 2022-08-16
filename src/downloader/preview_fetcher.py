@@ -61,8 +61,7 @@ class PreviewFetcher(QObject):
                 reply_path: str = self.reply.url().path()
                 img_id: str = re.findall(r"^/id/(\d+)/", reply_path)[0]  # get the image id
                 subfolder: str = "picsum/"
-                img_subpath: str = f"{subfolder}{img_id}"
-                img_fullpath: str = f"{PATH['CACHE']}{img_subpath}.jpg"
+                img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
                 failed: bool = False
                 # ======== save the image ========
                 self.file: QFile = QFile(img_fullpath)
@@ -80,7 +79,8 @@ class PreviewFetcher(QObject):
                 self.file.close()
                 # ======== modify 'settings.json' ========
                 if not failed:
-                    if set_settings_arg("PREVIEW", img_subpath):  # write the preview name into 'settings.json'
+                    if set_settings_arg("PREVIEW",
+                                        f"{subfolder}{img_id}"):  # write the preview name into 'settings.json'
                         self.parent().set_preview()  # refresh and update an previw
                     else:
                         self.logger.error("Failed to set the value of 'PREVIEW' from 'settings.json'")

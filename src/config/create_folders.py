@@ -16,19 +16,25 @@ def create_folders() -> None:
     cache_dir: QDir = QDir(PATH["CACHE"])
     if not cache_dir.exists():
         if not cache_dir.mkpath("."):
-            logging.error("Failed to create folder: '%s'", PATH["CACHE"])
+            logging.error("Failed to create folder: '%s'", cache_dir.path())
         if not cache_dir.mkpath("./picsum/"):
-            logging.error("Failed to create folder: '%s'", PATH["CACHE"] + "picsum/")
+            logging.error("Failed to create folder: '%s%s'", cache_dir.path(), "picsum/")
     # -------------------------------------------------------------
-    # ======== create the cache dir ========
+    # ======== create the configuration dir ========
     config_dir: QDir = QDir(PATH["CONFIG"])
     if not config_dir.exists():
         if not config_dir.mkpath("."):
-            logging.error("Failed to create folder: '%s'", PATH["CONFIG"])
+            logging.error("Failed to create folder: '%s'", config_dir.path())
     # -------------------------------------------------------------
     # ======== create the log dir ========
     log_dir: QDir = QDir("logs")
     if not log_dir.exists():
         if not log_dir.mkpath("."):
-            logging.error("Failed to create folder: '%s'", QDir.currentPath() + "/logs/")
+            logging.error("Failed to create folder: '%s%s'", QDir.currentPath(), "/logs/")
+    # -------------------------------------------------------------
+    # ======== create the background dir ========
+    backgound_dir: QDir = QDir(PATH["BACKGROUND"])
+    if not backgound_dir.exists():
+        if not backgound_dir.mkpath("."):
+            logging.error("Failed to create folder: '%s'", backgound_dir.path())
     # -------------------------------------------------------------

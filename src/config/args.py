@@ -11,9 +11,10 @@ APP: dict[str, str] = {
 
 # PATH for storing file
 PATH: dict[str, str] = {
-    "APPLOCK": QDir.tempPath() + "/splasher.lock",
-    "CONFIG": QDir.homePath() + "/.config/" + APP["DIR"],
-    "CACHE": QDir.homePath() + "/.cache/" + APP["DIR"],
+    "APPLOCK": f"{QDir.tempPath()}/splasher.lock",
+    "CONFIG": f"{QDir.homePath()}/.config/{APP['DIR']}",
+    "CACHE": f"{QDir.homePath()}/.cache/{APP['DIR']}",
+    "BACKGROUND": f"{QDir.homePath()}/Pictures/splasher_background/",
 }
 
 # API for fetching images of 'Lorem Picsum'

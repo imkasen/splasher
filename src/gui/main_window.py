@@ -197,7 +197,7 @@ class MainWindow(QMainWindow):
                     WallpaperSetter(self).fetch_wallpaper(reply)
                 else:
                     # ======== set the wallpaper only ========
-                    WallpaperSetter(self).set_wallpaper(img_fullpath)
+                    WallpaperSetter(self).set_wallpaper(img_fullpath, f"{img_id}.jpg")
             else:
                 self.logger.error("Failed to find the image file: '%s'", img_fullpath)
         else:

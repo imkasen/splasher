@@ -1,8 +1,10 @@
 import logging
+import os
 import re
+import subprocess
 from typing import Optional
 
-from PySide6.QtCore import QIODevice, QObject, QSaveFile, Slot
+from PySide6.QtCore import QDir, QFile, QIODevice, QObject, QSaveFile, Slot
 from PySide6.QtNetwork import QNetworkReply
 from PySide6.QtWidgets import QMainWindow
 
@@ -76,7 +78,7 @@ class WallpaperSetter(QObject):
                     self.file.cancelWriting()
                 # ======== set as the desktop wallpaper ========
                 if self.file.commit():
-                    self.set_wallpaper(img_fullpath)
+                    self.set_wallpaper(img_fullpath, f"{img_id}.jpg")
             self.reply.deleteLater()
 
     @Slot(QNetworkReply.NetworkError)
@@ -115,9 +117,44 @@ class WallpaperSetter(QObject):
         """
         self.parent().show_message(msg, timeout)
 
-    def set_wallpaper(self, img_path: str) -> None:
+    def set_wallpaper(self, img_fullpath: str, img_name: str) -> None:
         """
-        Set the wallpaper using 'gsettings' command
-        :param img_path: the location of wallpaper.
+        Set the wallpaper base on the desktop environment.
+        :param img_fullpath: the source full path of wallpaper, the image name is included.
+        :param img_name: the name of wallpaper.
         """
+        dst_path: str = f"{PATH['BACKGROUND']}{img_name}"
+        QFile.remove(dst_path)
+        if QFile.copy(img_fullpath, dst_path):
+            self.logger.info("Copy the wallpaper from '%s' to '%s'", img_fullpath, dst_path)
+
+            # ======== detect KDE/GNOME/XFCE... ========
+            env:str = os.getenv("XDG_CURRENT_DESKTOP")
+            match env:
+                case "KDE":
+                    self.set_wallpaper_kde(dst_path)
+                case "GNOME":
+                    pass
+                case "XFCE":
+                    pass
+                case _:
+                    self.show_message("Unsupported desktop environment.")
+                    self.logger.error("Detect an unsupported desktop environment: %s", env)
+                    return
+        else:
+            self.show_message("Failed to copy the wallpaper")
+            self.logger.error("Failed to copy the wallpaper from '%s' to '%s'", img_fullpath, dst_path)
+
+    def set_wallpaper_kde(self, img_path: str) -> None:
+        """
+        Set the wallpaper on KDE.
+        :param img_path: the copied wallpaper path.
+        """
+        try:
+            subprocess.run(['sh', 'set_wallpaper_kde.sh', img_path], check=True,
+                           cwd=f"{QDir.currentPath()}/src/downloader/")
+        except subprocess.CalledProcessError as err:
+            self.logger.error("An error occurred when running 'set_wallpaper_kde.sh' - Return Code: %s, Output: %s",
+                              err.returncode, err.output)
+            return
         self.logger.info("Set '%s' as the desktop wallpaper", img_path)

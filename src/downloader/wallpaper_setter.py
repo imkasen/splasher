@@ -93,13 +93,13 @@ class WallpaperSetter(QObject):
             self.logger.error("QNetworkReply NetworkError - Code: %s, Content: %s", code, error_message)
 
     @Slot(int, int)
-    def on_progress(self, bytes_received: int = 0, bytes_total: int = 0) -> None:
+    def on_progress(self, bytes_received: int, bytes_total: int) -> None:
         """
         Display the download progress in status bar when fetching an wallpaper.
-        :param bytes_received: default value is 0.
-        :param bytes_total: default value is 0 to prevent exception when network error occurs.
+        :param bytes_received: 0 means no download.
+        :param bytes_total: 0 means no download, -1 means the number of bytes is unknown.
         """
-        if bytes_total != 0:
+        if bytes_total not in (-1, 0):
             if bytes_received == bytes_total:
                 self.show_message(
                     f"Download progress: {bytes_received}/{bytes_total} - {round(bytes_received / bytes_total * 100)}%",
@@ -108,6 +108,10 @@ class WallpaperSetter(QObject):
                 self.show_message(
                     f"Download progress: {bytes_received}/{bytes_total} - {round(bytes_received / bytes_total * 100)}%",
                     0)
+        elif bytes_total == -1:
+            self.show_message(f"Download progress: {bytes_received}/Unknown", 0)
+        elif bytes_total == 0:
+            self.show_message(f"Download progress: {bytes_received}/{bytes_total}", 0)
 
     def show_message(self, msg: str, timeout: int = 5000) -> None:
         """

@@ -26,7 +26,7 @@ class SettingsWindow(QTabWidget):
         self.setWindowFlag(Qt.WindowStaysOnTopHint)  # always stays on top of other windows
         # -------------------------------------------------------------
         # ======== tabs design ========
-        self.draw_misc_tab()
+        # self.draw_misc_tab()
         self.draw_info_tab()
         # -------------------------------------------------------------
 

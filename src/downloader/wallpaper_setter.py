@@ -1,10 +1,9 @@
 import logging
 import os
 import re
-import subprocess
 from typing import Optional
 
-from PySide6.QtCore import QDir, QFile, QIODevice, QObject, QSaveFile, Slot
+from PySide6.QtCore import QFile, QIODevice, QObject, QProcess, QSaveFile, Slot
 from PySide6.QtNetwork import QNetworkReply
 from PySide6.QtWidgets import QMainWindow
 
@@ -138,9 +137,9 @@ class WallpaperSetter(QObject):
                 case "KDE":
                     self.set_wallpaper_kde(dst_path)
                 case "GNOME":
-                    pass
+                    self.set_wallpaper_gnome(dst_path)
                 case "XFCE":
-                    pass
+                    self.set_wallpaper_xfce(dst_path)
                 case _:
                     self.show_message("Unsupported desktop environment.")
                     self.logger.error("Detect an unsupported desktop environment: %s", env)
@@ -153,12 +152,34 @@ class WallpaperSetter(QObject):
         """
         Set the wallpaper on KDE.
         :param img_path: the copied wallpaper path.
+        Ref: https://www.reddit.com/r/linux4noobs/comments/emvwai/change_kde_background_image_through_terminal/
         """
-        try:
-            subprocess.run(['sh', 'set_wallpaper_kde.sh', img_path], check=True,
-                           cwd=f"{QDir.currentPath()}/src/downloader/")
-        except subprocess.CalledProcessError as err:
-            self.logger.error("An error occurred when running 'set_wallpaper_kde.sh' - Return Code: %s, Output: %s",
-                              err.returncode, err.output)
-            return
-        self.logger.info("Set '%s' as the desktop wallpaper", img_path)
+        jscript: str = (
+            f"var allDesktops = desktops();\n"
+            f"for (i=0; i<allDesktops.length; i++) {{\n"
+            f"    d = allDesktops[i];\n"
+            f"    d.wallpaperPlugin = 'org.kde.image';\n"
+            f"    d.currentConfigGroup = Array('Wallpaper','org.kde.image','General');\n"
+            f"    d.writeConfig('Image', 'file://{img_path}');\n"
+            f"}}"
+        )
+        return_code: int = QProcess.execute("qdbus", ["org.kde.plasmashell", "/PlasmaShell",
+                                                      "org.kde.PlasmaShell.evaluateScript", jscript])
+        if return_code == -2:
+            self.logger.error("The process can not be started")
+        elif return_code ==-1:
+            self.logger.error("The process crashed")
+        else:
+            self.logger.info("Set '%s' as the desktop wallpaper, return code: %s", img_path, return_code)
+
+    def set_wallpaper_gnome(self, img_path: str) -> None:
+        """
+        Set the wallpaper on GNOME.
+        :param img_path: the copied wallpaper path.
+        """
+
+    def set_wallpaper_xfce(self, img_path: str) -> None:
+        """
+        Set the wallpaper on XFCE.
+        :param img_path: the copied wallpaper path.
+        """

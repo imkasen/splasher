@@ -1,5 +1,6 @@
 import logging
 import os
+import re
 from typing import Optional
 
 from PySide6.QtCore import QFile, QIODevice, QObject, QProcess, QSaveFile, Slot
@@ -54,7 +55,8 @@ class WallpaperSetter(QObject):
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
                 # ======== variables ========
-                img_id: str = self.reply.request().url().path()[1:]
+                # img_id: str = self.reply.request().url().path()[1:]
+                img_id: str = re.findall(r"photo-[0-9]{13}-[0-9a-z]{12}", self.reply.request().url().path())[0]
                 subfolder: str = PATH["SUBFOLDER"]
                 img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
                 failed: bool = False

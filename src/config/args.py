@@ -22,4 +22,5 @@ PATH: dict[str, str] = {
 UNSPLASH: dict[str, str] = {
     "SOURCE": "https://source.unsplash.com/random/",
     "IMAGES": "https://images.unsplash.com/",
+    "IMAGES-MIRROR": "https://dogefs.s3.ladydaily.com/~/source/unsplash/",
 }

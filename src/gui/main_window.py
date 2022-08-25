@@ -201,7 +201,8 @@ class MainWindow(QMainWindow):
             screen_w: int = screen.size().width()
             screen_h: int = screen.size().height()
             ratio: int = ceil(screen.devicePixelRatio())  # default is 1 and the max is 5.
-            api: str = UNSPLASH["IMAGES"]
+            # api: str = UNSPLASH["IMAGES"]
+            api: str = UNSPLASH["IMAGES-MIRROR"]
             url: str = (f"{api}{img_id}?w={screen_w}&h={screen_h}&fit=crop&crop=faces,edges,entropy"
                         f"&fm=jpg&q=95&dpr={ratio}&cs=srgb")
             # ======== check the image's resolution ========

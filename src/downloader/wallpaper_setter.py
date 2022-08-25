@@ -1,6 +1,5 @@
 import logging
 import os
-import re
 from typing import Optional
 
 from PySide6.QtCore import QFile, QIODevice, QObject, QProcess, QSaveFile, Slot
@@ -50,14 +49,13 @@ class WallpaperSetter(QObject):
     def on_finished(self) -> None:
         """
         Read the reply data and write the wallpaper to the same file in cache folder.
-        Set the image as the desktop wallpaper using 'gsettings' command.
+        Set the image as the desktop wallpaper.
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
                 # ======== variables ========
-                reply_path: str = self.reply.url().path()
-                img_id: str = re.findall(r"^/id/(\d+)/", reply_path)[0]  # get the image id
-                subfolder: str = "picsum/"
+                img_id: str = self.reply.request().url().path()[1:]
+                subfolder: str = PATH["SUBFOLDER"]
                 img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
                 failed: bool = False
                 # ======== save the wallpaper ========

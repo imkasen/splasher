@@ -1,5 +1,4 @@
 import logging
-import re
 from typing import Optional
 
 from PySide6.QtCore import QFile, QIODevice, QObject, Slot
@@ -48,19 +47,18 @@ class PreviewFetcher(QObject):
     @Slot()
     def on_finished(self) -> None:
         """
-        Read the reply data and write the preview to the cache folder.('~/.cache/splasher/picsum/')
+        Read the reply data and write the preview to the cache folder.('~/.cache/splasher/unsplash/')
         The 'settings.json' will be modified and the QLabel in 'MainWindow' will be repainted.
 
-        reply.url(): "https://i.picsum.photos/id/6/960/497.jpg?hmac=_qAV99PYZ7WFEIt6KemXSbsRpH8ZuR-oXPdjMZgGxWs"
-        reply.url().path(): "/id/6/960/497.jpg"
+        reply.url(): "https://images.unsplash.com/photo-123456789?xxx=xxx&xxx=..."
+        reply.url().path(): "/photo-123456789"
         reply.readAll(): binary data
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
                 # ======== variables ========
-                reply_path: str = self.reply.url().path()
-                img_id: str = re.findall(r"^/id/(\d+)/", reply_path)[0]  # get the image id
-                subfolder: str = "picsum/"
+                img_id: str = self.reply.url().path()[1:]
+                subfolder: str = PATH["SUBFOLDER"]
                 img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
                 failed: bool = False
                 # ======== save the image ========

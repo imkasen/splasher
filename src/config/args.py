@@ -15,8 +15,11 @@ PATH: dict[str, str] = {
     "CONFIG": f"{QDir.homePath()}/.config/{APP['DIR']}",
     "CACHE": f"{QDir.homePath()}/.cache/{APP['DIR']}",
     "BACKGROUND": f"{QDir.homePath()}/Pictures/splasher_background/",
+    "SUBFOLDER": "unsplash/",
 }
 
-# API for fetching images of 'Lorem Picsum'
-# https://picsum.photos/
-PICSUM: str = "https://picsum.photos/"
+# API for fetching Unsplash images
+UNSPLASH: dict[str, str] = {
+    "SOURCE": "https://source.unsplash.com/random/",
+    "IMAGES": "https://images.unsplash.com/",
+}

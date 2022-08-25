@@ -17,8 +17,8 @@ def create_folders() -> None:
     if not cache_dir.exists():
         if not cache_dir.mkpath("."):
             logging.error("Failed to create folder: '%s'", cache_dir.path())
-        if not cache_dir.mkpath("./picsum/"):
-            logging.error("Failed to create folder: '%s%s'", cache_dir.path(), "picsum/")
+        if not cache_dir.mkpath(f"./{PATH['SUBFOLDER']}"):
+            logging.error("Failed to create folder: '%s%s'", cache_dir.path(), PATH["SUBFOLDER"])
     # -------------------------------------------------------------
     # ======== create the configuration dir ========
     config_dir: QDir = QDir(PATH["CONFIG"])

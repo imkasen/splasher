@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QMainWindow, QP
                                QWidget)
 
 from ..config import APP, PATH, UNSPLASH, get_settings_arg
-from ..downloader import PreviewFetcher, WallpaperSetter
+from ..downloader import AreaDetector, PreviewFetcher, WallpaperSetter
 from . import icons_rc  # pylint: disable=unused-import
 from .settings_window import SettingsWindow
 
@@ -151,7 +151,11 @@ class MainWindow(QMainWindow):
         """
         self.manager: QNetworkAccessManager = QNetworkAccessManager(self)
         self.manager.setAutoDeleteReplies(True)
-        self.manager.setTransferTimeout(15000)  # 15s
+        self.manager.setTransferTimeout(5000)  # 5s
+        # ======== detect area in order to use mirror site ========
+        request: QNetworkRequest = QNetworkRequest(QUrl("https://www.google.com"))
+        request.setTransferTimeout(500)  # 500ms
+        AreaDetector(self).detect(self.manager.head(request))
 
     @Slot()
     def refresh(self) -> None:
@@ -194,15 +198,15 @@ class MainWindow(QMainWindow):
         self.show_message("Attempt to set the current preview as desktop wallpaper.")
         self.logger.info("The choose button is clicked.")
 
-        res, value = get_settings_arg("PREVIEW")
-        if res and value:
-            img_id: str = re.findall(r"photo-[0-9]{13}-[0-9a-z]{12}", value)[0]
+        res, img_name = get_settings_arg("PREVIEW")
+        _, is_cnm = get_settings_arg("CNM")
+        if res and img_name:
+            img_id: str = re.findall(r"photo-[0-9]{13}-[0-9a-z]{12}", img_name)[0]
             screen: QScreen = QGuiApplication.primaryScreen()
             screen_w: int = screen.size().width()
             screen_h: int = screen.size().height()
             ratio: int = ceil(screen.devicePixelRatio())  # default is 1 and the max is 5.
-            # api: str = UNSPLASH["IMAGES"]
-            api: str = UNSPLASH["IMAGES-MIRROR"]
+            api: str = UNSPLASH["IMAGES-MIRROR"] if is_cnm else UNSPLASH["IMAGES"]
             url: str = (f"{api}{img_id}?w={screen_w}&h={screen_h}&fit=crop&crop=faces,edges,entropy"
                         f"&fm=jpg&q=95&dpr={ratio}&cs=srgb")
             # ======== check the image's resolution ========

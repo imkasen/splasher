@@ -15,7 +15,7 @@ def create_settings() -> None:
     """
     settings: dict[str, Any] = {
         "PREVIEW": "",  # image name, e.g. unsplash/photo-xxx
-        "CN": False,  # use mirror site if in China
+        "CNM": False,  # use mirror site if in mainland China
     }
 
     logger: logging.Logger = logging.getLogger(__name__)

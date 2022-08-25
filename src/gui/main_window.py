@@ -2,10 +2,11 @@ import logging
 import re
 from typing import Optional
 
-from PySide6.QtCore import QFileInfo, Qt, QUrl, Slot
+from PySide6.QtCore import QDir, QFileInfo, Qt, QUrl, Slot
 from PySide6.QtGui import QGuiApplication, QIcon, QPixmap, QScreen
 from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequest
-from PySide6.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QVBoxLayout, QWidget
+from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QVBoxLayout,
+                               QWidget)
 
 from ..config import APP, PATH, PICSUM, get_settings_arg
 from ..downloader import PreviewFetcher, WallpaperSetter
@@ -177,7 +178,7 @@ class MainWindow(QMainWindow):
         self.logger.info("The choose button is clicked.")
 
         res, img_name = get_settings_arg("PREVIEW")
-        if res:
+        if res and img_name:
             img_id: str = re.findall(r"/(\d+)", img_name)[0]
             screen: QScreen = QGuiApplication.primaryScreen()
             screen_w: int = screen.size().width()
@@ -208,8 +209,21 @@ class MainWindow(QMainWindow):
         """
         Download the current image to the user-specified path.
         """
-        self.show_message("Download the wallpaper!")
-        self.logger.info("Download the wallpaper.")
+        self.show_message("Attempt to download the current preview.")
+        self.logger.info("The download button is clicked.")
+
+        img_id: str = "wallpaper"
+        res, img_name = get_settings_arg("PREVIEW")
+        if res and img_name:
+            img_id: str = re.findall(r"/(\d+)", img_name)[0]
+            img_path: str = QFileDialog.getSaveFileName(self,
+                                                        "Save File",
+                                                        f"{QDir.homePath()}/{img_id}.jpg",
+                                                        "Images (*.png *.jpg)",
+                                                        options=QFileDialog.DontResolveSymlinks)[0]
+            self.logger.info(img_path)
+        else:
+            self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
 
     @Slot()
     def open_settings_window(self) -> None:

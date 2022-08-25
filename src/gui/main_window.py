@@ -196,7 +196,7 @@ class MainWindow(QMainWindow):
 
         res, value = get_settings_arg("PREVIEW")
         if res and value:
-            img_id: str = re.findall(r"/(.+)", value)[0]
+            img_id: str = re.findall(r"photo-[0-9]{13}-[0-9a-z]{12}", value)[0]
             screen: QScreen = QGuiApplication.primaryScreen()
             screen_w: int = screen.size().width()
             screen_h: int = screen.size().height()

@@ -8,14 +8,14 @@ from ..args import PATH
 from . import lock
 
 
-def get_settings_arg(arg_key: str) -> tuple[bool, str]:
+def get_settings_arg(arg_key: str) -> tuple[bool, Any]:
     """
     Get the configuration in the settings based on the input string.
     :param arg_key: configuration key
     :return tuple: (bool, configuration value)
     """
     logger: logging.Logger = logging.getLogger(__name__)
-    res: tuple[bool, str] = (False, "")
+    res: tuple[bool, Any] = (False, "")
     settings_file: QFile = QFile(f"{PATH['CONFIG']}settings.json")
     if settings_file.exists():
         lock.lockForRead()
@@ -23,7 +23,7 @@ def get_settings_arg(arg_key: str) -> tuple[bool, str]:
             stream: QTextStream = QTextStream(settings_file)
             settings_dict: Any = json.loads(stream.readAll())
             try:
-                res: tuple[bool, str] = (True, settings_dict[arg_key])
+                res: tuple[bool, Any] = (True, settings_dict[arg_key])
             except KeyError:
                 logger.error("Key: %s does not exist in 'settings.json'", arg_key)
         else:

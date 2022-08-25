@@ -10,15 +10,16 @@ from . import lock
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-def set_settings_arg(arg_key: str, arg_value: str) -> bool:
+def set_settings_arg(arg_key: str, arg_value: Any) -> bool:
     """
     Modify the configuration value in the settings based on the input key.
+    Creating a new pair of key and value is not allowed.
     :param arg_key: the configuration key that needs to be updated
     :param arg_value: the configuration value for update
     :return: bool
     """
     res: bool = False
-    settings_dict: Optional[dict] = None
+    settings_dict: Optional[dict[str, Any]] = None
     file_path: str = f"{PATH['CONFIG']}settings.json"
     res, settings_dict = read_settings(file_path)
     if res:
@@ -30,13 +31,13 @@ def set_settings_arg(arg_key: str, arg_value: str) -> bool:
     return res
 
 
-def read_settings(path: str) -> tuple[bool, Optional[dict]]:
+def read_settings(path: str) -> tuple[bool, Optional[dict[str, Any]]]:
     """
     Read json from 'settings.json' and return it as dictionary.
     :param path: file path of 'settings.json'
     :return tuple: (bool, dictionary | None)
     """
-    tup_res: tuple[bool, Optional[dict]] = (False, None)
+    tup_res: tuple[bool, Optional[dict[str, Any]]] = (False, None)
     lock.lockForRead()
     file: QFile = QFile(path)
     if file.exists():
@@ -44,7 +45,7 @@ def read_settings(path: str) -> tuple[bool, Optional[dict]]:
             stream: QTextStream = QTextStream(file)
             settings_dict: Any = json.loads(stream.readAll())
             if settings_dict:
-                tup_res: tuple[bool, dict] = (True, settings_dict)
+                tup_res: tuple[bool, dict[str, Any]] = (True, settings_dict)
             else:
                 logger.warning("'settings.json' is empty")
         else:
@@ -56,7 +57,7 @@ def read_settings(path: str) -> tuple[bool, Optional[dict]]:
     return tup_res
 
 
-def write_settings(path: str, settings_dict: dict) -> bool:
+def write_settings(path: str, settings_dict: dict[str, Any]) -> bool:
     """
     Write json back to 'settings.json'
     :param path: file path of 'settings.json'

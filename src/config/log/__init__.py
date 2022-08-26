@@ -1,1 +1,1 @@
-from .init_log import init_log
+from .log_initiator import init_log

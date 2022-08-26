@@ -2,6 +2,6 @@ from PySide6.QtCore import QReadWriteLock
 
 lock: QReadWriteLock = QReadWriteLock()
 
-from .create_settings import create_settings
-from .get_settings_arg import get_settings_arg
-from .set_settings_arg import set_settings_arg
+from .settings_arg_getter import get_settings_arg
+from .settings_arg_setter import set_settings_arg
+from .settings_creator import create_settings

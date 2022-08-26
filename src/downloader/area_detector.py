@@ -1,34 +1,23 @@
-import logging
-from typing import Optional
-
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import Slot
 from PySide6.QtNetwork import QNetworkReply
-from PySide6.QtWidgets import QMainWindow
 
 from ..config import set_settings_arg
+from .downloader import Downloader
 
 
-class AreaDetector(QObject):
+class AreaDetector(Downloader):
     """
     This class is used to check network area.
     """
-
-    def __init__(self, parent: QMainWindow) -> None:
-        """
-        Create some variables that will be used later and initialize them to none.
-        :param parent: MainWindow
-        """
-        super().__init__(parent)
-        self.logger: logging.Logger = logging.getLogger(__name__)
-        self.reply: Optional[QNetworkReply] = None
 
     def detect(self, reply: QNetworkReply) -> None:
         """
         Detect whether user is in mainland China in order to use mirror site.
         :param reply: QNetworkReply
         """
-        self.reply: QNetworkReply = reply
+        super().run(reply)
         self.reply.finished.connect(self.on_finished)
+        self.reply.errorOccurred.connect(self.on_error)
 
     @Slot()
     def on_finished(self) -> None:
@@ -44,4 +33,16 @@ class AreaDetector(QObject):
                 self.logger.info("Prepare to use the orignal site, set 'CNM' to 'False'")
             else:
                 self.logger.warning("Unhandled error: %s", self.reply.errorString())
+            self.reply.deleteLater()
+
+    @Slot(QNetworkReply.NetworkError)
+    def on_error(self, code: QNetworkReply.NetworkError) -> None:
+        """
+        Override parent method.
+        Handle error messages.
+        :param code: QNetworkReply.NetworkError Code.
+        """
+        if self.reply:
+            error_message: str = self.reply.errorString()
+            self.logger.error("QNetworkReply NetworkError - Code: %s, Content: %s", code, error_message)
             self.reply.deleteLater()

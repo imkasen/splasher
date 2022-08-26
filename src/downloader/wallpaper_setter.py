@@ -1,56 +1,33 @@
-import logging
 import os
 import re
-from typing import Optional
 
-from PySide6.QtCore import QFile, QIODevice, QObject, QProcess, QSaveFile, Slot
+from PySide6.QtCore import QFile, QIODevice, QProcess, QSaveFile, Slot
 from PySide6.QtNetwork import QNetworkReply
-from PySide6.QtWidgets import QMainWindow
 
 from ..config import PATH
+from .downloader import Downloader
 
 
-class WallpaperSetter(QObject):
+class WallpaperSetter(Downloader):
     """
     The WallpaperSetter class contains the following functions:
-    1. Bind the reply passed from MainWindow to different handler functions.
-    2. Write the image back to the same file and set it as the desktop wallpaper.
+    1. Bind the reply passed to different handler functions.
+    2. Save the image back to the same file and set it as the desktop wallpaper.
     """
-
-    def __init__(self, parent: QMainWindow) -> None:
-        """
-        Create some variables that will be used later and initialize them to none.
-        :param parent: MainWindow
-        """
-        super().__init__(parent)
-        self.logger: logging.Logger = logging.getLogger(__name__)
-        self.reply: Optional[QNetworkReply] = None
-        self.file: Optional[QSaveFile] = None
 
     def fetch_wallpaper(self, reply: QNetworkReply) -> None:
         """
         Receive the network reply and bind the reply to the handler functions.
         :param reply: QNetworkReply
         """
-        self.reply: QNetworkReply = reply
-        self.reply.downloadProgress.connect(self.on_progress)
-        self.reply.requestSent.connect(self.on_request_sent)
+        super().run(reply)
         self.reply.finished.connect(self.on_finished)
-        self.reply.errorOccurred.connect(self.on_error)
-
-    @Slot()
-    def on_request_sent(self) -> None:
-        """
-        Add a log to record the request url.
-        The request will be send twice, because the url will be redirected.
-        """
-        self.logger.info("Send a request to '%s' to get an image", self.reply.request().url().toString())
 
     @Slot()
     def on_finished(self) -> None:
         """
-        Read the reply data and write the wallpaper to the same file in cache folder.
-        Set the image as the desktop wallpaper.
+        Read the replied image data and save the wallpaper back to the same file in the app cache folder,
+        then set the image as the desktop wallpaper.
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.NoError:
@@ -60,69 +37,29 @@ class WallpaperSetter(QObject):
                 img_fullpath: str = f"{PATH['CACHE']}{subfolder}{img_id}.jpg"
                 failed: bool = False
                 # ======== save the wallpaper ========
-                self.file: QSaveFile = QSaveFile(img_fullpath)
-                if self.file.open(QIODevice.WriteOnly):
+                file: QSaveFile = QSaveFile(img_fullpath)
+                if file.open(QIODevice.WriteOnly):
                     self.logger.info("Open and write the wallpaper: '%s'", img_fullpath)
-                    if self.file.write(self.reply.readAll()) == -1:  # if an error occurred
+                    if file.write(self.reply.readAll()) == -1:  # if an error occurred
                         self.show_message("Failed to write a wallpaper back to its preview file.")
                         self.logger.error("Failed to write a wallpaper back to its preview file.")
                         failed: bool = True
                 else:
                     self.show_message("Can not open file when trying to write a wallpaper.")
                     self.logger.error("Can not open file '%s' when trying to write a wallpaper: '%s'", img_fullpath,
-                                      self.file.errorString())
+                                      file.errorString())
                     failed: bool = True
                 if failed:
-                    self.file.cancelWriting()
+                    file.cancelWriting()
                 # ======== set as the desktop wallpaper ========
-                if self.file.commit():
+                if file.commit():
                     self.set_wallpaper(img_fullpath, f"{img_id}.jpg")
             self.reply.deleteLater()
 
-    @Slot(QNetworkReply.NetworkError)
-    def on_error(self, code: QNetworkReply.NetworkError) -> None:
-        """
-        Handle error messages.
-        :param code: QNetworkReply.NetworkError Code
-        """
-        if self.reply:
-            error_message: str = self.reply.errorString()
-            self.show_message(f"An error occured when fetching an image: '{error_message}'", 0)
-            self.logger.error("QNetworkReply NetworkError - Code: %s, Content: %s", code, error_message)
-
-    @Slot(int, int)
-    def on_progress(self, bytes_received: int, bytes_total: int) -> None:
-        """
-        Display the download progress in status bar when fetching an wallpaper.
-        :param bytes_received: 0 means no download.
-        :param bytes_total: 0 means no download, -1 means the number of bytes is unknown.
-        """
-        if bytes_total not in (-1, 0):
-            if bytes_received == bytes_total:
-                self.show_message(
-                    f"Download progress: {bytes_received}/{bytes_total} - {round(bytes_received / bytes_total * 100)}%",
-                )
-            else:
-                self.show_message(
-                    f"Download progress: {bytes_received}/{bytes_total} - {round(bytes_received / bytes_total * 100)}%",
-                    0)
-        elif bytes_total == -1:
-            self.show_message(f"Download progress: {bytes_received}/Unknown", 0)
-        elif bytes_total == 0:
-            self.show_message(f"Download progress: {bytes_received}/{bytes_total}", 0)
-
-    def show_message(self, msg: str, timeout: int = 5000) -> None:
-        """
-        Show some messages in the status bar of 'MainWindow' using its show_message() function.
-        :param msg: message string
-        :param timeout: default time is 5000 ms.
-        """
-        self.parent().show_message(msg, timeout)
-
     def set_wallpaper(self, img_fullpath: str, img_name: str) -> None:
         """
-        Set the wallpaper base on the desktop environment.
-        :param img_fullpath: the source full path of wallpaper, the image name is included.
+        Copy the image to a new folder, then set the wallpaper in different desktop environments.
+        :param img_fullpath: the full path of the source image, the image name is included.
         :param img_name: the name of wallpaper.
         """
         dst_path: str = f"{PATH['BACKGROUND']}{img_name}"
@@ -134,11 +71,11 @@ class WallpaperSetter(QObject):
             env:str = os.getenv("XDG_CURRENT_DESKTOP")
             match env:
                 case "KDE":
-                    self.set_wallpaper_kde(dst_path)
+                    self.set_kde(dst_path)
                 case "GNOME":
-                    self.set_wallpaper_gnome(dst_path)
+                    self.set_gnome(dst_path)
                 case "XFCE":
-                    self.set_wallpaper_xfce(dst_path)
+                    self.set_xfce(dst_path)
                 case _:
                     self.show_message("Unsupported desktop environment.")
                     self.logger.error("Detect an unsupported desktop environment: %s", env)
@@ -147,11 +84,13 @@ class WallpaperSetter(QObject):
             self.show_message("Failed to copy the wallpaper")
             self.logger.error("Failed to copy the wallpaper from '%s' to '%s'", img_fullpath, dst_path)
 
-    def set_wallpaper_kde(self, img_path: str) -> None:
+    def set_kde(self, img_path: str) -> None:
         """
         Set the wallpaper on KDE.
-        :param img_path: the copied wallpaper path.
-        Ref: https://www.reddit.com/r/linux4noobs/comments/emvwai/change_kde_background_image_through_terminal/
+        :param img_path: the new copied wallpaper path.
+
+        Command Reference:
+            https://www.reddit.com/r/linux4noobs/comments/emvwai/change_kde_background_image_through_terminal/
         """
         jscript: str = (
             f"var allDesktops = desktops();\n"
@@ -166,19 +105,19 @@ class WallpaperSetter(QObject):
                                                       "org.kde.PlasmaShell.evaluateScript", jscript])
         if return_code == -2:
             self.logger.error("The process can not be started")
-        elif return_code ==-1:
+        elif return_code == -1:
             self.logger.error("The process crashed")
         else:
             self.logger.info("Set '%s' as the desktop wallpaper, return code: %s", img_path, return_code)
 
-    def set_wallpaper_gnome(self, img_path: str) -> None:
+    def set_gnome(self, img_path: str) -> None:
         """
-        Set the wallpaper on GNOME.
+        Set the wallpaper in GNOME.
         :param img_path: the copied wallpaper path.
         """
 
-    def set_wallpaper_xfce(self, img_path: str) -> None:
+    def set_xfce(self, img_path: str) -> None:
         """
-        Set the wallpaper on XFCE.
+        Set the wallpaper in XFCE.
         :param img_path: the copied wallpaper path.
         """

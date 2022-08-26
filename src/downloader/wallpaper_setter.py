@@ -74,10 +74,8 @@ class WallpaperSetter(Downloader):
                     self.set_kde(dst_path)
                 case "GNOME":
                     self.set_gnome(dst_path)
-                case "XFCE":
-                    self.set_xfce(dst_path)
                 case _:
-                    self.show_message("Unsupported desktop environment.")
+                    self.show_message(f"Unsupported desktop environment: {env}")
                     self.logger.error("Detect an unsupported desktop environment: %s", env)
                     return
         else:
@@ -101,20 +99,39 @@ class WallpaperSetter(Downloader):
             f"    d.writeConfig('Image', 'file://{img_path}');\n"
             f"}}"
         )
-        return_code: int = QProcess.execute("qdbus", ["org.kde.plasmashell", "/PlasmaShell",
-                                                      "org.kde.PlasmaShell.evaluateScript", jscript])
-        if return_code == -2:
-            self.logger.error("The process can not be started")
-        elif return_code == -1:
-            self.logger.error("The process crashed")
-        else:
-            self.logger.info("Set '%s' as the desktop wallpaper, return code: %s", img_path, return_code)
+
+        match QProcess.execute("qdbus", ["org.kde.plasmashell", "/PlasmaShell",
+                                               "org.kde.PlasmaShell.evaluateScript", jscript]):
+            case -2:
+                self.logger.error("The process can not be started")
+            case -1:
+                self.logger.error("The process crashed")
+            case _:
+                self.logger.info("Set '%s' as the desktop wallpaper", img_path)
 
     def set_gnome(self, img_path: str) -> None:
         """
         Set the wallpaper in GNOME.
         :param img_path: the copied wallpaper path.
+
+        Command Reference:
+            https://askubuntu.com/questions/66914/how-to-change-desktop-background-from-command-line-in-unity
         """
+        process: QProcess = QProcess()
+        process.start("gsettings", ["get", "org.gnome.desktop.interface", "color-scheme"])
+        process.waitForFinished()
+        scheme: str = "picture-uri-dark" \
+            if "prefer-dark" in process.readAllStandardOutput().toStdString() else "picture-uri"
+        process.close()
+
+        match QProcess.execute("gsettings", ["set", "org.gnome.desktop.background", scheme, f"file://{img_path}"]):
+            case -2:
+                self.logger.error("The process can not be started")
+            case -1:
+                self.logger.error("The process crashed")
+            case _:
+                self.logger.info("Set '%s' as the desktop wallpaper", img_path)
+
 
     def set_xfce(self, img_path: str) -> None:
         """

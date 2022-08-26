@@ -26,11 +26,12 @@ class AreaDetector(Downloader):
         """
         if self.reply:
             if self.reply.error() == QNetworkReply.OperationCanceledError:
-                set_settings_arg("CNM", True)
+                self.logger.error("Reply Error: '%s'", self.reply.errorString())
                 self.logger.info("Prepare to use mirror, set 'CNM' to 'True' in settings.")
+                set_settings_arg("CNM", True)
             elif self.reply.error() == QNetworkReply.NoError:
-                set_settings_arg("CNM", False)
                 self.logger.info("Prepare to use the orignal site, set 'CNM' to 'False'")
+                set_settings_arg("CNM", False)
             else:
                 self.logger.warning("Unhandled error: %s", self.reply.errorString())
             self.reply.deleteLater()
@@ -38,11 +39,5 @@ class AreaDetector(Downloader):
     @Slot(QNetworkReply.NetworkError)
     def on_error(self, code: QNetworkReply.NetworkError) -> None:
         """
-        Override parent method.
-        Handle error messages.
-        :param code: QNetworkReply.NetworkError Code.
+        Override parent method, do not display any error messages
         """
-        if self.reply:
-            error_message: str = self.reply.errorString()
-            self.logger.error("QNetworkReply NetworkError - Code: %s, Content: %s", code, error_message)
-            self.reply.deleteLater()

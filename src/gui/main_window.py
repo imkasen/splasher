@@ -10,7 +10,7 @@ from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QMainWindow, QP
                                QWidget)
 
 from ..config import APP, PATH, UNSPLASH, get_settings_arg
-from ..downloader import AreaDetector, PreviewFetcher, WallpaperSetter
+from ..downloader import AreaDetector, PreviewFetcher, WallpaperDownloader, WallpaperSetter
 from . import icons_rc  # pylint: disable=unused-import
 from .settings_window import SettingsWindow
 
@@ -237,16 +237,21 @@ class MainWindow(QMainWindow):
         self.show_message("Attempt to download the current preview.")
         self.logger.info("The download button is clicked.")
 
-        img_id: str = "wallpaper"
         res, img_name = get_settings_arg("PREVIEW")
+        _, is_cnm = get_settings_arg("CNM")
         if res and img_name:
-            img_id: str = re.findall(r"/(\d+)", img_name)[0]
+            img_id: str = re.findall(r"photo-[0-9]{13}-[0-9a-z]{12}", img_name)[0]
             img_path: str = QFileDialog.getSaveFileName(self,
-                                                        "Save File",
+                                                        "Save",
                                                         f"{QDir.homePath()}/{img_id}.jpg",
                                                         "Images (*.png *.jpg)",
                                                         options=QFileDialog.DontResolveSymlinks)[0]
-            self.logger.info(img_path)
+            api: str = UNSPLASH["IMAGES-MIRROR"] if is_cnm else UNSPLASH["IMAGES"]
+            url: str = f"{api}{img_id}"
+            # ======== send the request and download ========
+            if img_path:
+                reply: QNetworkReply = self.manager.get(QNetworkRequest(QUrl(url)))
+                WallpaperDownloader(self).download(reply, img_path)
         else:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
 

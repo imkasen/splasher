@@ -2,7 +2,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import QHBoxLayout, QLabel, QTabWidget, QVBoxLayout, QWidget
 
-from ..config import APP
+from splasher.config import APP
+
 from . import icons_rc  # pylint: disable=unused-import
 
 

@@ -1,7 +1,8 @@
 from PySide6.QtCore import QFile, QIODevice, Slot
 from PySide6.QtNetwork import QNetworkReply
 
-from ..config import PATH, set_settings_arg
+from splasher.config import PATH, set_settings_arg
+
 from .downloader import Downloader
 
 

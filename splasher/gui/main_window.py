@@ -9,8 +9,9 @@ from PySide6.QtNetwork import QNetworkAccessManager, QNetworkReply, QNetworkRequ
 from PySide6.QtWidgets import (QFileDialog, QHBoxLayout, QLabel, QMainWindow, QPushButton, QStatusBar, QVBoxLayout,
                                QWidget)
 
-from ..config import APP, PATH, UNSPLASH, get_settings_arg
-from ..downloader import AreaDetector, PreviewFetcher, WallpaperDownloader, WallpaperSetter
+from splasher.config import APP, PATH, UNSPLASH, get_settings_arg
+from splasher.downloader import AreaDetector, PreviewFetcher, WallpaperDownloader, WallpaperSetter
+
 from . import icons_rc  # pylint: disable=unused-import
 from .settings_window import SettingsWindow
 

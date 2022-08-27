@@ -3,8 +3,8 @@ import logging
 from PySide6.QtCore import QLockFile
 from PySide6.QtWidgets import QMessageBox
 
-from .config import PATH, init_app
-from .gui import Application
+from splasher.config import PATH, init_app
+from splasher.gui import Application
 
 
 def main() -> None:
@@ -29,3 +29,7 @@ def main() -> None:
     finally:
         applock.unlock()
         logger.info("App quits.")
+
+
+if __name__ == "__main__":
+    main()

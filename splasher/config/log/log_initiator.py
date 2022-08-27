@@ -5,7 +5,7 @@ import logging.config
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 
 
-def init_log(file_path: str = "src/config/log/log.json") -> None:
+def init_log(file_path: str = "splasher/config/log/log.json") -> None:
     """
     Read the logging configuration.
     :param file_path: the path of 'log.json'

@@ -3,7 +3,7 @@ from PySide6.QtCore import QDir
 # Some information about the application
 APP: dict[str, str] = {
     "NAME": "Splasher",
-    "VERSION": "v0.2.0",
+    "VERSION": "v0.4.0",
     "AUTHOR": "Kasen",
     "ADDR": "https://github.com/imkasen/splasher",
     "DIR": "splasher/",

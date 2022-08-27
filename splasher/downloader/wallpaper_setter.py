@@ -4,7 +4,8 @@ import re
 from PySide6.QtCore import QFile, QIODevice, QProcess, QSaveFile, Slot
 from PySide6.QtNetwork import QNetworkReply
 
-from ..config import PATH
+from splasher.config import PATH
+
 from .downloader import Downloader
 
 

@@ -1,10 +1,12 @@
 import logging
+from typing import Optional
 
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication
 
 from . import icons_rc  # pylint: disable=unused-import
 from .main_window import MainWindow
+from .settings_window import SettingsWindow
 from .system_tray import SystemTray
 
 
@@ -23,6 +25,7 @@ class Application(QApplication):
         super().__init__([])  # no command line arguments
         self.setWindowIcon(QIcon(":/logo.png"))  # QResource system
         self.main_window: MainWindow = MainWindow()
+        self.settings_window: Optional[SettingsWindow] = None
         self.tray: SystemTray = SystemTray()
 
     def display_widgets(self) -> None:
@@ -37,6 +40,5 @@ class Application(QApplication):
             self.setQuitOnLastWindowClosed(False)  # keep app running after closing all windows
             self.tray.show()
         else:
-            self.main_window.show_message("The system tray can not be displayed!", 0)
-            logging.getLogger(__name__).critical("The system tray can not be displayed!")
-        # -------------------------------------------------------------
+            self.main_window.show_message("System tray can not be displayed!", 0)
+            logging.getLogger(__name__).critical("System tray can not be displayed!")

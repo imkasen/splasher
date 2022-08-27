@@ -8,6 +8,7 @@ from splasher.config import APP
 
 from . import icons_rc  # pylint: disable=unused-import
 from .main_window import MainWindow
+from .settings_window import SettingsWindow
 
 
 # The configuration of SystemTray
@@ -27,6 +28,7 @@ class SystemTray(QSystemTrayIcon):
         self.app: Optional[QCoreApplication] = QCoreApplication.instance()  # get the current QApplication instance
         if self.app is not None:
             self.main_window: MainWindow = self.app.main_window
+            self.settings_window: Optional[SettingsWindow] = self.app.settings_window
         # ======== tray attributes ========
         self.setIcon(QIcon(":/logo.png"))
         self.setToolTip(APP["NAME"])
@@ -39,6 +41,10 @@ class SystemTray(QSystemTrayIcon):
         show_act: QAction = QAction("Show", parent=menu)
         show_act.triggered.connect(self.show_app)  # pylint: disable=no-member
         menu.addAction(show_act)
+        # show the settings window
+        set_act: QAction = QAction("Set", parent=menu)
+        set_act.triggered.connect(self.set_app)  # pylint: disable=no-member
+        menu.addAction(set_act)
         # quit the app
         quit_act: QAction = QAction("Quit", parent=menu)
         quit_act.triggered.connect(self.quit_app)  # pylint: disable=no-member
@@ -67,6 +73,18 @@ class SystemTray(QSystemTrayIcon):
         elif not self.main_window.isActiveWindow():  # put the settings window on the top
             self.main_window.activateWindow()
             self.main_window.raise_()
+
+    @Slot()
+    def set_app(self) -> None:
+        """
+        Open the settings window if it does not exist.
+        """
+        if self.settings_window is None \
+                or not self.settings_window.isVisible():
+            self.settings_window = SettingsWindow()
+            self.settings_window.show()
+        elif self.settings_window.isMinimized():
+            self.settings_window.showNormal()
 
     @Slot()
     def quit_app(self) -> None:

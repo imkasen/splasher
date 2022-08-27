@@ -13,7 +13,6 @@ from splasher.config import APP, PATH, UNSPLASH, get_settings_arg
 from splasher.downloader import AreaDetector, PreviewFetcher, WallpaperDownloader, WallpaperSetter
 
 from . import icons_rc  # pylint: disable=unused-import
-from .settings_window import SettingsWindow
 
 
 # The configuration of MainWindow
@@ -41,7 +40,7 @@ class MainWindow(QMainWindow):
         |                                        |  540
         |                                        |
         | -------------------------------------- |
-        | refresh | choose | download | settings | 24
+        |    refresh   |  choose  |   download   | 24
         | -------------------------------------- |
         |              status bar                | 19
         ------------------------------------------
@@ -51,7 +50,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(APP["NAME"])
         self.setFixedSize(960, 540)
         self.logger: logging.Logger = logging.getLogger(__name__)
-        self.settings_window: Optional[SettingsWindow] = None
+        # self.settings_window: Optional[SettingsWindow] = None
         self.manager: Optional[QNetworkAccessManager] = None
         # -------------------------------------------------------------
         # ======== draw ui ========
@@ -123,15 +122,8 @@ class MainWindow(QMainWindow):
         download_btn.clicked.connect(self.download)  # pylint: disable=no-member
         self.func_layout.addWidget(download_btn)
         # -------------------------------------------------------------
-        # ======== settings button ========
-        settings_btn: QPushButton = QPushButton("Settings")
-        settings_btn.setToolTip("open the settings window")
-        settings_btn.setIcon(QIcon(":/buttons/settings.png"))
-        settings_btn.clicked.connect(self.open_settings_window)  # pylint: disable=no-member
-        self.func_layout.addWidget(settings_btn)
-        # -------------------------------------------------------------
         # return buttons' height
-        return settings_btn.sizeHint().height()
+        return refresh_btn.sizeHint().height()
 
     def set_preview(self) -> None:
         """
@@ -255,18 +247,6 @@ class MainWindow(QMainWindow):
                 WallpaperDownloader(self).download(reply, img_path)
         else:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
-
-    @Slot()
-    def open_settings_window(self) -> None:
-        """
-        Open the settings window if it does not exist.
-        """
-        if self.settings_window is None \
-                or not self.settings_window.isVisible():
-            self.settings_window = SettingsWindow()
-            self.settings_window.show()
-        elif self.settings_window.isMinimized():
-            self.settings_window.showNormal()
 
     def show_message(self, msg: str, timeout: int = 5000) -> None:
         """

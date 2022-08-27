@@ -7,14 +7,13 @@
         <file alias="choose.png">icons/buttons/choose.png</file>
         <file alias="download.png">icons/buttons/download.png</file>
         <file alias="refresh.png">icons/buttons/refresh.png</file>
-        <file alias="settings.png">icons/buttons/settings.png</file>
     </qresource>
     <qresource prefix="tabs">
-        <file alias="info.png">icons/tabs/info.png</file>
         <file alias="misc.png">icons/tabs/misc.png</file>
+        <file alias="info.png">icons/tabs/info.png</file>
     </qresource>
 </RCC>
 
 <!--
-$ pyside6-rcc resources/icons.qrc -o src/gui/icons_rc.py
+$ pyside6-rcc resources/icons.qrc -o splasher/gui/icons_rc.py
 -->

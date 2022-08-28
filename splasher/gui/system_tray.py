@@ -42,7 +42,7 @@ class SystemTray(QSystemTrayIcon):
         show_act.triggered.connect(self.show_app)  # pylint: disable=no-member
         menu.addAction(show_act)
         # show the settings window
-        set_act: QAction = QAction("Set", parent=menu)
+        set_act: QAction = QAction("About", parent=menu)
         set_act.triggered.connect(self.set_app)  # pylint: disable=no-member
         menu.addAction(set_act)
         # quit the app

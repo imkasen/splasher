@@ -1,7 +1,7 @@
 # <img width="32px" src="resources/icons/logo.png"> Splasher
 
 <p>
-<img src="https://img.shields.io/badge/Python-3.10.6-3776AB?logo=python&logoColor=white&style=flat-square" />
+<img src="https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white&style=flat-square" />
 <img src="https://img.shields.io/badge/PySide-6.3.1-41CD52?logo=qt&logoColor=white&style=flat-square" />
 <img src="https://img.shields.io/badge/-Linux-FCC624?logo=linux&logoColor=white&style=flat-square" />
 <img src="https://img.shields.io/badge/-KDE-1D99F3?logo=kde&logoColor=white&style=flat-square" />
@@ -17,11 +17,7 @@ An application that modifies your Linux (GNOME/KDE) desktop wallpaper using imag
 <img src="./resources/screenshot/screenshot.png" />
 </div>
 
-## Paths
-
-* Image cache: `$HOME/.cache/splasher/`
-* Application settings: `$HOME/.config/splasher/`
-* Wallpapers: `$HOME/Pictures/splasher_background`
+*Photographer of the image in the screenshot: [@kimny](https://unsplash.com/@kimny)*
 
 ## Notice
 

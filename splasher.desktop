@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Splasher
+Comment=An application that modifies your Linux (GNOME/KDE) desktop wallpaper using images from Unsplash.
+Path=/opt/splasher
+Exec=/opt/splasher/splasher
+Icon=/opt/splasher/logo.png

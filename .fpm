@@ -1,0 +1,6 @@
+-C package
+-s dir
+-t deb
+-n "splasher"
+-v 0.5.0
+-p splasher.deb

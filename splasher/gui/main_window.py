@@ -130,13 +130,14 @@ class MainWindow(QMainWindow):
         Set a preivew image for QLabel and refresh.
         """
         res, img_subpath = get_settings_arg("PREVIEW")
-        if not res:
+        if res and img_subpath:
+            img: QPixmap = QPixmap(f"{PATH['CACHE']}{img_subpath}.jpg")
+            self.img_label.setPixmap(img)
+            self.img_label.setScaledContents(True)  # adjust the image size to fit the window
+            self.img_label.setAlignment(Qt.AlignCenter)
+            self.img_label.repaint()
+        elif not res:
             self.logger.error("Failed to get the value of 'PREVIEW' from 'settings.json'")
-        img: QPixmap = QPixmap(f"{PATH['CACHE']}{img_subpath}.jpg")
-        self.img_label.setPixmap(img)
-        self.img_label.setScaledContents(True)  # adjust the image size to fit the window
-        self.img_label.setAlignment(Qt.AlignCenter)
-        self.img_label.repaint()
 
     def init_manager(self) -> None:
         """

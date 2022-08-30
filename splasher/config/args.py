@@ -1,9 +1,11 @@
 from PySide6.QtCore import QDir
 
+from splasher.__version__ import __version__
+
 # Some information about the application
 APP: dict[str, str] = {
     "NAME": "Splasher",
-    "VERSION": "v0.5.0",
+    "VERSION": __version__,
     "AUTHOR": "Kasen",
     "ADDR": "https://github.com/imkasen/splasher",
     "DIR": "splasher/",

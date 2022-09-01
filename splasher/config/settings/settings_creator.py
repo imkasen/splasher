@@ -1,11 +1,10 @@
 import json  # QJsonObject is missing in PySide 6.3.1, use dict and json to construct directly.
 import logging
 import sys
-from typing import Any
 
 from PySide6.QtCore import QFile, QIODevice, QTextStream
 
-from ..args import PATH
+from ..args import PATH, SETTINGS
 from . import lock
 
 
@@ -13,11 +12,6 @@ def create_settings() -> None:
     """
     Create 'settings.json' in the configuration folder.(~/.config/splasher/settings.json)
     """
-    settings: dict[str, Any] = {
-        "PREVIEW": "",  # image name, e.g. unsplash/photo-xxx
-        "CNM": False,  # use mirror site if in mainland China
-    }
-
     logger: logging.Logger = logging.getLogger(__name__)
     file_path: str = f"{PATH['CONFIG']}settings.json"
     settings_file: QFile = QFile(file_path)
@@ -26,7 +20,7 @@ def create_settings() -> None:
         try:
             if settings_file.open(QIODevice.WriteOnly | QIODevice.Text | QIODevice.NewOnly):
                 stream: QTextStream = QTextStream(settings_file)
-                stream << json.dumps(settings, indent=2)  # pylint: disable=expression-not-assigned
+                stream << json.dumps(SETTINGS, indent=2)  # pylint: disable=expression-not-assigned
                 logger.info("Create '%s'", file_path)
             else:
                 raise IOError

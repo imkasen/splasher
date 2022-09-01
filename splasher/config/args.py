@@ -1,3 +1,5 @@
+from typing import Any
+
 from PySide6.QtCore import QDir
 
 from splasher.__version__ import __version__
@@ -18,6 +20,12 @@ PATH: dict[str, str] = {
     "CACHE": f"{QDir.homePath()}/.cache/{APP['DIR']}",
     "BACKGROUND": f"{QDir.homePath()}/Pictures/splasher_background/",
     "SUBFOLDER": "unsplash/",
+}
+
+# default configurations in 'settings.json'
+SETTINGS: dict[str, Any] = {
+    "PREVIEW": "",  # image name, e.g. unsplash/photo-xxx
+    "CNM": False,  # use a mirror site if users are in mainland China
 }
 
 # API for fetching Unsplash images

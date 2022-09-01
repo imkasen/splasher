@@ -59,7 +59,7 @@
     }
   },
   "loggers": {
-    "src": {
+    "splasher": {
       "level": "INFO",
       "handlers": [
         "app_info",

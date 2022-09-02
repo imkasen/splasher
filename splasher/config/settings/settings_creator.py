@@ -8,12 +8,11 @@ from ..args import PATH, SETTINGS
 from . import lock
 
 
-def create_settings() -> None:
+def create_settings(file_path: str = f"{PATH['CONFIG']}settings.json") -> None:
     """
     Create 'settings.json' in the configuration folder.(~/.config/splasher/settings.json)
     """
     logger: logging.Logger = logging.getLogger(__name__)
-    file_path: str = f"{PATH['CONFIG']}settings.json"
     settings_file: QFile = QFile(file_path)
     if not settings_file.exists():
         lock.lockForWrite()

@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from PySide6.QtCore import QDir
 
@@ -15,8 +16,10 @@ def create_folder(dir_path: str, subfolder_name: str = "") -> None:
     if not directory.exists():
         if not directory.mkpath("."):
             logging.error("Failed to create folder: '%s'", directory.path())
+            sys.exit(f"Failed to create folder: {directory.path()}")
         if subfolder_name and not directory.mkpath(f"./{subfolder_name}"):
             logging.error("Failed to create folder: '%s/%s'", directory.path(), subfolder_name)
+            sys.exit(f"Failed to create folder: {directory.path()}/{subfolder_name}")
 
 
 def create_folders() -> None:

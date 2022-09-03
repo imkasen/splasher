@@ -24,7 +24,7 @@ def create_settings(file_path: str = f"{PATH['CONFIG']}settings.json") -> None:
             else:
                 raise IOError
         except IOError:
-            logger.error("Failed to open '%s'", file_path)
+            logger.error("Failed to open '%s': %s", file_path, settings_file.errorString())
             sys.exit(f"Fail to open {file_path} when trying to create it")
         finally:
             settings_file.close()

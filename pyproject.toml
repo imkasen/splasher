@@ -7,6 +7,7 @@ readme = "README.md"
 requires-python = ">=3.9,<3.11"
 license = { text = "GPL-3.0-only" }
 dependencies = ["PySide6>=6.3.1"]
+[project.optional-dependencies]
 
 [build-system]
 requires = ["pdm-pep517>=1.0.0"]
@@ -16,6 +17,9 @@ build-backend = "pdm.pep517.api"
 version = { source = "file", path = "splasher/__version__.py" }
 
 [tool.pdm.dev-dependencies]
-test = ["pytest>=7.1.2"]
+test = [
+    "pytest>=7.1.2",
+    "pytest-order>=1.0.1",
+]
 code = ["pylint>=2.14.5", "yapf>=0.32.0", "isort>=5.10.1"]
 build = ["PyInstaller>=5.3"]

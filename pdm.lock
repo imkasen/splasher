@@ -201,6 +201,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "pytest-order"
+version = "1.0.1"
+requires_python = ">=3.6"
+summary = "pytest plugin to run your tests in a specific order"
+dependencies = [
+    "pytest>=5.0; python_version < \"3.10\"",
+    "pytest>=6.2.4; python_version >= \"3.10\"",
+]
+
+[[package]]
 name = "pywin32-ctypes"
 version = "0.2.0"
 summary = "UNKNOWN"
@@ -248,7 +258,7 @@ summary = "A formatter for Python code."
 
 [metadata]
 lock_version = "4.0"
-content_hash = "sha256:27b0d74e2dd266490f3342b712c3565556bdcc03110a31c3df0860d5b95d1871"
+content_hash = "sha256:d22cee9db6958a4401e4b077f8c49a5e21285e29c277dce0f2aeb475669ea738"
 
 [metadata.files]
 "altgraph 0.17.2" = [
@@ -394,6 +404,10 @@ content_hash = "sha256:27b0d74e2dd266490f3342b712c3565556bdcc03110a31c3df0860d5b
 "pytest 7.1.2" = [
     {url = "https://mirror.sjtu.edu.cn/pypi-packages/4e/1f/34657c6ac56f3c58df650ba41f8ffb2620281ead8e11bcdc7db63cf72a78/pytest-7.1.2.tar.gz", hash = "sha256:a06a0425453864a270bc45e71f783330a7428defb4230fb5e6a731fde06ecd45"},
     {url = "https://mirror.sjtu.edu.cn/pypi-packages/fb/d0/bae533985f2338c5d02184b4a7083b819f6b3fc101da792e0d96e6e5299d/pytest-7.1.2-py3-none-any.whl", hash = "sha256:13d0e3ccfc2b6e26be000cb6568c832ba67ba32e719443bfe725814d3c42433c"},
+]
+"pytest-order 1.0.1" = [
+    {url = "https://mirror.sjtu.edu.cn/pypi-packages/03/e7/fc6934462f6b68a98561032243f3d9241bb5aa61fc79469288dc4a353353/pytest_order-1.0.1-py3-none-any.whl", hash = "sha256:bbe6e63a8e23741ab3e810d458d1ea7317e797b70f9550512d77d6e9e8fd1bbb"},
+    {url = "https://mirror.sjtu.edu.cn/pypi-packages/15/a5/4afa19f7c88f1574a9ec75fa644dac3c3478acedc79d5242fd5573f209f2/pytest-order-1.0.1.tar.gz", hash = "sha256:5dd6b929fbd7eaa6d0ee07586f65c623babb0afe72b4843c5f15055d6b3b1b1f"},
 ]
 "pywin32-ctypes 0.2.0" = [
     {url = "https://mirror.sjtu.edu.cn/pypi-packages/7a/7d/0dbc4c99379452a819b0fb075a0ffbb98611df6b6d59f54db67367af5bc0/pywin32-ctypes-0.2.0.tar.gz", hash = "sha256:24ffc3b341d457d48e8922352130cf2644024a4ff09762a2261fd34c36ee5942"},

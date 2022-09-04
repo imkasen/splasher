@@ -21,9 +21,11 @@ def get_settings_arg(arg_key: str, file_path: str = f"{PATH['CONFIG']}settings.j
     lock.lockForRead()
     if settings_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
         stream: QTextStream = QTextStream(settings_file)
-        settings_dict: Any = json.loads(stream.readAll())
         try:
+            settings_dict: Any = json.loads(stream.readAll())
             res: tuple[bool, Any] = (True, settings_dict[arg_key])
+        except json.JSONDecodeError:
+            logger.warning("'%s' is empty", file_path)
         except KeyError:
             logger.error("Key: %s does not exist in '%s'", arg_key, file_path)
     else:

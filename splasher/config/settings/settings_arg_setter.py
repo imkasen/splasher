@@ -10,7 +10,7 @@ from . import lock
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-def set_settings_arg(arg_key: str, arg_value: Any) -> bool:
+def set_settings_arg(arg_key: str, arg_value: Any, file_path: str = f"{PATH['CONFIG']}settings.json") -> bool:
     """
     Modify the configuration value in the settings based on the input key.
     Creating a new pair of key and value is not allowed.
@@ -20,14 +20,16 @@ def set_settings_arg(arg_key: str, arg_value: Any) -> bool:
     """
     res: bool = False
     settings_dict: Optional[dict[str, Any]] = None
-    file_path: str = f"{PATH['CONFIG']}settings.json"
     res, settings_dict = read_settings(file_path)
-    if res:
+    if res and settings_dict is not None:
+        res: bool = False
         try:
+            if not arg_key in settings_dict:
+                raise KeyError
             settings_dict[arg_key] = arg_value
             res: bool = write_settings(file_path, settings_dict)
         except KeyError:
-            logger.error("Key: %s does not exist in 'settings.json'", arg_key)
+            logger.error("Key: %s does not exist in '%s'", arg_key, file_path)
     return res
 
 
@@ -40,18 +42,17 @@ def read_settings(path: str) -> tuple[bool, Optional[dict[str, Any]]]:
     tup_res: tuple[bool, Optional[dict[str, Any]]] = (False, None)
     lock.lockForRead()
     file: QFile = QFile(path)
-    if file.exists():
-        if file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
-            stream: QTextStream = QTextStream(file)
+
+    if file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
+        stream: QTextStream = QTextStream(file)
+        try:
             settings_dict: Any = json.loads(stream.readAll())
-            if settings_dict:
-                tup_res: tuple[bool, dict[str, Any]] = (True, settings_dict)
-            else:
-                logger.warning("'settings.json' is empty")
-        else:
-            logger.error("Failed to open 'settings.json'")
+            tup_res: tuple[bool, dict[str, Any]] = (True, settings_dict)
+        except json.JSONDecodeError:
+            logger.warning("'%s' is empty", path)
     else:
-        logger.error("'settings.json' is not existed")
+        logger.error("Failed to open '%s': %s", path, file.errorString())
+
     file.close()
     lock.unlock()
     return tup_res
@@ -73,7 +74,7 @@ def write_settings(path: str, settings_dict: dict[str, Any]) -> bool:
         res: bool = True
     else:
         file.cancelWriting()
-        logger.error("Failed to open 'settings.json'")
+        logger.error("Failed to open '%s'", path)
     file.commit()
     lock.unlock()
     return res

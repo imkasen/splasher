@@ -3,10 +3,13 @@ import random
 import shutil
 import string
 
+import pytest
+
 from splasher.config import PATH
 from splasher.config.folders_creator import create_folder, create_folders
 
 
+@pytest.mark.order(before="settings/settings_creator_test.py::test_create_settings")
 class TestFolderCreator:
     """
     A class to test functions in "splasher/config/folders_creator.py"

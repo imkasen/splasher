@@ -32,5 +32,4 @@ def create_folders() -> None:
     """
     create_folder(PATH["CACHE"], PATH["SUBFOLDER"])
     create_folder(PATH["CONFIG"])
-    create_folder(f"{QDir.currentPath()}/logs/")
     create_folder(PATH["BACKGROUND"])

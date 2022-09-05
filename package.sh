@@ -11,11 +11,12 @@ pyinstaller splasher.spec
 if [ -d package/ ]; then
     rm -rf package/
 fi
+
 mkdir -p package/opt
 mkdir -p package/usr/share/applications
 
 # Copy files
-cp -r dist/splasher package/opt/splasher
+cp -r dist/splasher package/opt
 cp splasher.desktop package/usr/share/applications
 
 # Change permissions
@@ -29,14 +30,14 @@ if [ -e .fpm ]; then
     rm .fpm
 fi
 
-version=$(< splasher/__version__.py cut -d '"' -f 2)
+VERSION=$(< splasher/__version__.py cut -d '"' -f 2)
 
 {
     echo "-C package"
     echo "-s dir"
     echo "-t deb"
     echo "-n 'splasher'"
-    echo "-v $version"
+    echo "-v $VERSION"
     echo "-p splasher.deb"
 } >> ".fpm"
 

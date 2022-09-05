@@ -2,25 +2,28 @@ import json
 import logging
 import logging.config
 
-from PySide6.QtCore import QFile, QIODevice, QTextStream
+from PySide6.QtCore import QDir, QFile, QFileInfo, QIODevice, QTextStream
+
+from ..folders_creator import create_folder
 
 
-def init_log(file_path: str = "splasher/config/log/log.json") -> None:
+def init_log(file_path: str = "log.json") -> None:
     """
     Read the logging configuration.
-    :param file_path: the path of 'log.json'
+    :param file_path: the path of 'log.json' (/opt/splasher/log.json)
     """
-    log_file: QFile = QFile(file_path)
-    if log_file.exists():
-        if log_file.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
-            stream: QTextStream = QTextStream(log_file)
-            context: str = stream.readAll()
-            logging.config.dictConfig(json.loads(context))
-        else:
-            fallback_config(f"Failed to open the configuration file: '{file_path}', using default configuration.")
+    file: QFileInfo = QFileInfo(file_path)
+    if not file.exists():
+        file_path: str = "splasher/config/log/dev_log.json"  # the path of 'log.json' in dev mode
+        create_folder(f"{QDir.currentPath()}/logs/")
+    log_config: QFile = QFile(file_path)
+    if log_config.open(QIODevice.ReadOnly | QIODevice.Text | QIODevice.ExistingOnly):
+        stream: QTextStream = QTextStream(log_config)
+        context: str = stream.readAll()
+        logging.config.dictConfig(json.loads(context))
     else:
-        fallback_config(f"Failed to find the configuration file: '{file_path}', using default configuration.")
-    log_file.close()
+        fallback_config(f"Failed to open the configuration file: '{file_path}', using default configuration.")
+    log_config.close()
 
 
 def fallback_config(msg: str) -> None:

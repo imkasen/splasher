@@ -8,7 +8,10 @@ a = Analysis(
     ['splasher/main.py'],
     pathex=[],
     binaries=[],
-    datas=[('./resources/icons/logo.png', '.')],
+    datas=[
+        ('resources/icons/logo.png', '.'),
+        ('splasher/config/log/log.json', '.')
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

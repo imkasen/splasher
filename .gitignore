@@ -4,6 +4,7 @@
 
 !splasher.spec
 package/
+logs/
 *.deb
 .fpm
 

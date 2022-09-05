@@ -51,10 +51,6 @@ class TestFolderCreator:
         tmp_config: str = f"/tmp/{self.random_str()}"
         if os.path.isdir(PATH["CONFIG"]):
             shutil.move(PATH["CONFIG"], tmp_config)
-        tmp_log: str = f"/tmp/{self.random_str()}"
-        cur_log: str = f"{os.getcwd()}/logs/"
-        if os.path.isdir(cur_log):
-            shutil.move(cur_log, tmp_log)
         tmp_background: str = f"/tmp/{self.random_str()}"
         if os.path.isdir(PATH["BACKGROUND"]):
             shutil.move(PATH["BACKGROUND"], tmp_background)
@@ -63,7 +59,6 @@ class TestFolderCreator:
         assert os.path.isdir(PATH["CACHE"]) is True
         assert os.path.isdir(f"{PATH['CACHE']}{PATH['SUBFOLDER']}") is True
         assert os.path.isdir(PATH["CONFIG"]) is True
-        assert os.path.isdir(cur_log) is True
         assert os.path.isdir(PATH["BACKGROUND"]) is True
         # move back
         if os.path.isdir(tmp_cache):
@@ -72,9 +67,6 @@ class TestFolderCreator:
         if os.path.isdir(tmp_config):
             shutil.rmtree(PATH["CONFIG"])
             shutil.move(tmp_config, PATH["CONFIG"])
-        if os.path.isdir(tmp_log):
-            shutil.rmtree(cur_log)
-            shutil.move(tmp_log, cur_log)
         if os.path.isdir(tmp_background):
             shutil.rmtree(PATH["BACKGROUND"])
             shutil.move(tmp_background, PATH["BACKGROUND"])
